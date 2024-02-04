@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect} from "react";
+import Navbar from './Components/navBar/navbar.tsx';
+import Header from './Components/Header/header.tsx';
+import SideBar from "./Components/SideBar/sidebar.tsx";
+import Settings from "./Components/Settings/settings.tsx";
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <BrowserRouter>
+       <div className="App">
+         <SideBar />
+         <Routes>
+           <Route path="/" element={
+             <>
+               <Navbar />
+                <Header />
+              </>
+           } />
+           <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
   );
 }
 

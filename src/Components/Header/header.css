@@ -1,0 +1,91 @@
+.header_text-wrapper,
+.header_container,
+.desc-wrapper,
+.Bibleverse_action_container,
+.Cross-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header {
+    width: 100%;
+    height: 90vh;
+}
+
+
+
+.header_container {
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 8vh;
+    flex-direction: column;
+}
+
+.header_text-wrapper {
+    width: 60%;
+    text-align: center;
+    margin-bottom: 6vh;
+    gap: 2vh;
+    flex-direction: column;
+}
+
+.title-wrapper {
+    position: relative;
+}
+
+.title-wrapper:after,
+.Bibleverse_chapter:after {
+    content: "";
+    position: absolute;
+    width: 140%;
+    height: 2px;
+    top: 100%;
+    left: -20%;
+    background: rgb(27,27,27);
+    background: radial-gradient(circle, rgba(27,27,27,1) 0%, rgba(40,40,40,0) 100%);
+    z-index: -5;
+    transition: all 300ms ease;
+}
+
+.title-wrapper:hover:after {
+    width: 180%;
+    left: -40%;
+}
+
+
+.desc-wrapper {
+    position: relative;
+    flex-direction: column;
+    gap: 6vh;
+}
+
+.Bibleverse {
+}
+
+.Bibleverse_chapter {
+    position: relative;
+    padding-bottom: 6px;
+}
+
+.Bibleverse_chapter:after {
+    width: 180%;
+    left: -40%;
+}
+
+.Bibleverse_action_container {
+    width: 50%;
+    flex-direction: column;
+
+}
+
+.action-wrapper {
+    border: 4px solid black;
+    border-radius: 0px;
+    padding: 12px;
+}
+
+.action-wrapper:hover {
+    background-color: #1b1b1b;
+    color: hsl(30, 45%, 91%);
+}
