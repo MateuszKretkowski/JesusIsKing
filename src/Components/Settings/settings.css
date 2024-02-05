@@ -1,0 +1,105 @@
+.settings {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+.settings_container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    padding: 2% 2%;
+}
+
+.account-wrapper-settings {
+    width: 70%;
+    height: 50%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2%;
+    margin: 2% 2%;
+}
+
+.avatar-wrapper-settings {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-settings {
+    width: 40%;
+    border-radius: 24px;
+}
+
+.desc-wrapper-account-settings {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    padding: 2% 0;
+}
+
+.links-wrapper {
+    display: flex;
+    justify-content: space-around;
+    gap: 10%;
+    width: 80%;
+    margin-top: 3%;
+}
+
+.title-settings {
+    font-weight: 900;
+}
+
+.link-settings {
+    font-weight: 900;
+}
+
+.where {
+    font-weight: 900;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.where:hover {
+    letter-spacing: 4px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.helper-wrapper {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 30%;
+    margin: 0 2%;
+}
+
+.edit-wrapper {
+    border: none;
+}
+
+.edit {
+    letter-spacing: 6px;
+    font-weight: 900;
+}
+
+.edit:hover {
+    letter-spacing: 10px;
+    cursor: pointer;
+}
+
+.edit:active {
+    letter-spacing: 1px;
+}

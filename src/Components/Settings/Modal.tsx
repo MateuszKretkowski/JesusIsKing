@@ -5,7 +5,12 @@ import { db, auth } from '../Google Signin/config.js';
 import { useNavigate } from 'react-router-dom';
 import "./Modal.css";
 
-const Modal = ({  showModal, setShowModal }) => {
+type ModalProps = {
+    showModal: boolean;
+    setShowModal: (show: boolean) => void;
+};
+const Modal = ({ showModal, setShowModal }: ModalProps) => {
+
     const navigate = useNavigate();
 
     const backdrop = {

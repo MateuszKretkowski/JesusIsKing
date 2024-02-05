@@ -27,7 +27,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 export function signInWithGoogle() {
-  return signInWithRedirect(auth, new GoogleAuthProvider()) + window.location.reload;
+  return signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
 export function isUserLoggedIn() {
@@ -39,7 +39,7 @@ export function isUserLoggedIn() {
 
 export function signOutUser() {
   console.log(auth.currentUser)
-  return auth.signOut() + window.location.reload();
+  return auth.signOut();
 }
 
 // CLOUD FIRESTORE
