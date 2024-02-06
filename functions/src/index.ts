@@ -1,18 +1,20 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  console.log("hello");
-  response.send("Hello from Młynek");
+admin.initializeApp();
+exports.createUserDocument = functions.auth.user().onCreate((user) => {
+  const db = admin.firestore();
+
+  // Użyj user.uid jako ID dokumentu
+  return db.collection("Users").doc(user.uid).set({
+    id: user.uid,
+    email: user.email,
+    name: user.displayName || "DEFAULT",
+    description: "DEAFULT_DESCRIPTION",
+    link: "JESUSISKING.COM",
+    from: "LOCATION",
+  });
 });

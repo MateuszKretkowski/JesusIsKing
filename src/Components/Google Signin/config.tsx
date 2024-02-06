@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged, updateProfile, signInWithPopup, } from "firebase/auth"
-import { getFirestore, Firestore, collection, doc, setDoc, addDoc, getDocs } from 'firebase/firestore';
+import { getFirestore, Firestore, collection, doc, setDoc, addDoc, getDocs, getDoc, DocumentData } from 'firebase/firestore';
 import { useEffect } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -30,11 +30,7 @@ export function signInWithGoogle() {
   return signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
-export function isUserLoggedIn() {
-  const isLoggedIn = auth.currentUser !== null; // Jeśli currentUser istnieje, isLoggedIn = true
-  console.log(isLoggedIn);
-  return isLoggedIn;
-}
+
 
 
 export function signOutUser() {
@@ -53,5 +49,29 @@ export function readUsers() {
   });
 }
 
-// FIREBASE FUNCTIONS
+interface User {
+  id: string,
+  name: string,
+  description: string,
+  from: string,
+  link: string,
+  email: string,
+}
 
+export async function readCurrentUser(user: User): Promise<DocumentData | undefined> {
+  const db = getFirestore();
+  const docRef = doc(db, "Users", user.id);
+
+  try {
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data(); // Zwraca dane dokumentu, jeśli istnieje
+    } else {
+      console.log("No such document!");
+      return undefined; // Zwraca undefined, jeśli dokument nie istnieje
+    }
+  } catch (error) {
+    console.error("Error getting document:", error);
+    throw error; // Rzucenie błędu do dalszego obsłużenia
+  }
+}
