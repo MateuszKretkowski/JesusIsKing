@@ -30,7 +30,17 @@ export function signInWithGoogle() {
   return signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
-
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Użytkownik jest zalogowany.
+    console.log('Zalogowany użytkownik:', user);
+    // Tutaj możesz również przechodzić do innej strony, ładować dane użytkownika itp.
+  } else {
+    // Użytkownik jest wylogowany.
+    console.log('Użytkownik jest wylogowany');
+    // Możesz tutaj na przykład przekierować do strony logowania.
+  }
+});
 
 
 export function signOutUser() {
