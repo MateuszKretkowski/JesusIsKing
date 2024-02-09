@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./settings.css";
 import { motion, AnimatePresence, animate, stagger, useAnimation } from "framer-motion";
 import Modal from './Modal.tsx';
-import { isUserLoggedIn } from '../Google Signin/config.tsx';
+import { isUserLoggedIn, readUser } from '../Google Signin/config.tsx';
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
@@ -34,12 +34,15 @@ function Settings() {
   })
 
   const [userData, setUserData] = useState({
-    name: '',
-    description: '',
-    links: '',
-    location: '',
+    id: "",
+    name: "",
+    description: "",
+    from: "",
+    link: "",
   });
-  
+  useEffect(() => {
+    const unsub = readUser(setUserData); // Subscribe to user updates
+  }, []);
 
   return (
     <div className="settings">
@@ -56,13 +59,13 @@ function Settings() {
                 variants={variantsText}
                 initial={controls}
                 animate={controls}
-                exit={controls}></motion.h3>
+                exit={controls}>{userData.name}</motion.h3>
             <motion.h2 className=""
                 variants={variantsText}
                 initial={controls}
                 animate={controls}
                 exit={controls}
-            ></motion.h2>
+            >{userData.description}</motion.h2>
             <div className="links-wrapper">
               <motion.a className="desc link-settings"
                             variants={variantsText}
@@ -70,7 +73,7 @@ function Settings() {
                 animate={controls}
                 exit={controls}
               >
-                <h5 className="where"></h5>
+                <h5 className="where">{userData.link}</h5>
               </motion.a>
               <motion.a className="desc link-settings"
                               variants={variantsText}
@@ -86,7 +89,7 @@ function Settings() {
                 animate={controls}
                 exit={controls}
               >
-              <motion.h5 className="where"></motion.h5>
+              <motion.h5 className="where">{userData.from}</motion.h5>
               </motion.a>
             </div>
           </div>

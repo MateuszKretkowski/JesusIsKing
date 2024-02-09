@@ -1,8 +1,15 @@
 // Import the functions you need from the SDKs you need
-import * as firebase from 'firebase/app';
+import * as firebase from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged, updateProfile, signInWithPopup, } from "firebase/auth"
-import { getFirestore, Firestore, collection, doc, setDoc, addDoc, getDocs, getDoc, DocumentData } from 'firebase/firestore';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  onAuthStateChanged,
+  updateProfile,
+  signInWithPopup,
+} from "firebase/auth";
+import { doc, onSnapshot, getFirestore } from "firebase/firestore";
 import { useEffect, useState } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -11,12 +18,13 @@ import { useEffect, useState } from "react";
 const firebaseConfig = {
   apiKey: "AIzaSyCKSENADRJbScBhkqtj0lafN6nVx5bXfVI",
   authDomain: "jesusisking-fb576.firebaseapp.com",
-  databaseURL: "https://jesusisking-fb576-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL:
+    "https://jesusisking-fb576-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "jesusisking-fb576",
   storageBucket: "jesusisking-fb576.appspot.com",
   messagingSenderId: "402878700894",
   appId: "1:402878700894:web:dd7941f0b1b151a281c3cf",
-  measurementId: "G-E027LNF97N"
+  measurementId: "G-E027LNF97N",
 };
 
 // Initialize Firebase
@@ -30,7 +38,11 @@ export function signInWithGoogle() {
 }
 
 interface User {
-  id: string 
+  id: string;
+  name: string;
+  description: string;
+  link: string;
+  from: string;
 }
 
 export function isUserLoggedIn() {
@@ -40,6 +52,33 @@ export function isUserLoggedIn() {
 }
 
 export function signOutUser() {
-  console.log(auth.currentUser)
+  console.log(auth.currentUser);
   return auth.signOut();
+}
+
+// CLOUD FIRESTORE
+const db = getFirestore(app);
+
+export function readUser(setUserData: (userData: User) => void) {
+  const userId = auth.currentUser ? auth.currentUser.uid : null;
+
+  const unsub = onSnapshot(
+    doc(db, "Users", auth.currentUser ? auth.currentUser.uid : "none"),
+    (doc) => {
+      const data = doc.data();
+      if (data) {
+        const user: User = {
+          id: userId,
+          name: data.name || "",
+          description: data.description || "",
+          from: data.from || "",
+          link: data.link || "",
+        };
+        setUserData(user);
+        return user;
+      } else {
+        return console.log("User has no Values");
+      };
+    }
+  );
 }
