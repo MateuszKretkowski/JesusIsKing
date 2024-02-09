@@ -33,6 +33,14 @@ function Settings() {
     console.log(isVisible)
   })
 
+  const [userData, setUserData] = useState({
+    name: '',
+    description: '',
+    links: '',
+    location: '',
+  });
+  
+
   return (
     <div className="settings">
       <div className="settings_container">

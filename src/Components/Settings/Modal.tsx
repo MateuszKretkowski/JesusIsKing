@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { doc, getDoc, updateDoc } from "firebase/firestore"; 
-import { db, auth } from '../Google Signin/config.js';
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { useNavigate } from 'react-router-dom';
+import { app } from '../Google Signin/config.tsx';
 import "./Modal.css";
 
 type ModalProps = {
@@ -20,6 +21,40 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
     const modal = {
         hidden: { y: "-100vh", opacity: 0 },
         visible: { y: 0, opacity: 1 },
+    };
+
+    interface FormData {
+        name: string;
+        description: string;
+        link: string;
+        from: string;
+    }
+
+    const [formData, setFormData] = useState<FormData>({
+        name: '',
+        description: '',
+        link: '',
+        from: ''
+    })
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target; // Destructuring, aby uzyskać `name` i `value` z elementu, który wywołał zdarzenie
+        setFormData(prevState => ({
+            ...prevState, // Kopiowanie istniejących wartości stanu
+            [name]: value // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
+        }));
+    };
+    const functions = getFunctions();
+    const handleSubmit = async () => {
+        try {
+            var updateUser = httpsCallable(functions, "updateUser");
+            const result = await updateUser(formData);
+            console.log(result.data);
+            setShowModal(false);
+            
+        } catch (error) {
+            console.error("Error updating User: ", error);
+        }
     };
 
     return (
@@ -45,6 +80,8 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     <motion.input 
                                     type='text'
                                     name='name'
+                                    value={formData.name}
+                                    onChange={handleChange}
                                     className='settings-input'
                                     />
                                 </motion.div>
@@ -55,6 +92,8 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     <motion.input 
                                     type='text'
                                     name='description'
+                                    value={formData.description}
+                                    onChange={handleChange}
                                     className='settings-input'
                                     />
                                 </motion.div>
@@ -64,7 +103,9 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     
                                     <motion.input 
                                     type='text'
-                                    name='links'
+                                    name='link'
+                                    value={formData.link}
+                                    onChange={handleChange}
                                     className='settings-input'
                                     />
                                 </motion.div>
@@ -75,13 +116,15 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     <motion.input 
                                     type='text'
                                     name='from'
+                                    value={formData.from}
+                                    onChange={handleChange}
                                     className='settings-input'
                                     />
                                 </motion.div>
                             </motion.div>
 
                             <motion.div className='modal_action-wrapper'>
-                                <motion.button>APPLY CHANGES</motion.button>
+                                <motion.button onClick={handleSubmit}>APPLY CHANGES</motion.button>
                             </motion.div>
                         </motion.div>
                     </motion.div>

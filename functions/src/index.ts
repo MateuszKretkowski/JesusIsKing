@@ -1,13 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import {
-  onDocumentWritten,
-  onDocumentCreated,
-  onDocumentUpdated,
-  onDocumentDeleted,
-  Change,
-  FirestoreEvent,
-} from "firebase-functions/v2/firestore";
+// import {
+//   onDocumentUpdated,
+// } from "firebase-functions/v2/firestore";
 
 
 // Start writing functions
@@ -28,24 +23,25 @@ exports.createUserDocument = functions.auth.user().onCreate((user) => {
   });
 });
 
-exports.readUser = onDocumentUpdated("users/{id}", (event) => {
-  const userValues =  event.data.after.data();
-});
+exports.updateUser = functions.https.onCall((data, context) => {
+  if (!context.auth) {
+    throw new functions.
+      https.
+      HttpsError("failed-precondition", "while authenticated.");
+  }
 
-
-export default function updateUser (name: string){
-
-  return( onDocumentUpdated("users/{id}", (event) => {
-      const data = event.data.after.data();
-      const previousData = event.data.before.data();
-
-      if (data == previousData) {
-        return null;
-      }
-
-      return data.after.ref.set({
-        
-      })
+  // Pobierz dane przesłane z formularza
+  const userId = context.auth.uid;
+  const userData = data;
+  console.log(userData, userId);
+  // Aktualizacja danych użytkownika w Firestore
+  return admin.firestore().collection("Users").doc(userId).update(userData)
+    .then(() => {
+      console.log("user updated");
+      return {result: "User updated successfully!"};
     })
-  )
-}
+    .catch((error) => {
+      throw new functions.https.
+        HttpsError("internal", "not update user:"+error.message);
+    });
+});

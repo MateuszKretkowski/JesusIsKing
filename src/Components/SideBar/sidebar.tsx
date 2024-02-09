@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
-import { signInWithGoogle, signOutUser, isUserLoggedIn, } from "../Google Signin/config.tsx";
+import { signInWithGoogle, signOutUser} from "../Google Signin/config.tsx";
+import { isUserLoggedIn } from "../Google Signin/config.tsx";
 import "./sidebar.css";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");

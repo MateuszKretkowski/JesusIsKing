@@ -1,12 +1,11 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import * as firebase from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged, updateProfile, signInWithPopup, } from "firebase/auth"
 import { getFirestore, Firestore, collection, doc, setDoc, addDoc, getDocs, getDoc, DocumentData } from 'firebase/firestore';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -21,7 +20,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = firebase.initializeApp(firebaseConfig);
 
 // AUTHENTICATION
 const auth = getAuth(app);
@@ -30,58 +29,17 @@ export function signInWithGoogle() {
   return signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Użytkownik jest zalogowany.
-    console.log('Zalogowany użytkownik:', user);
-    // Tutaj możesz również przechodzić do innej strony, ładować dane użytkownika itp.
-  } else {
-    // Użytkownik jest wylogowany.
-    console.log('Użytkownik jest wylogowany');
-    // Możesz tutaj na przykład przekierować do strony logowania.
-  }
-});
+interface User {
+  id: string 
+}
 
+export function isUserLoggedIn() {
+  const isLoggedIn = auth.currentUser !== null; // Jeśli currentUser istnieje, isLoggedIn = true
+  console.log(isLoggedIn);
+  return isLoggedIn;
+}
 
 export function signOutUser() {
   console.log(auth.currentUser)
   return auth.signOut();
-}
-
-// CLOUD FIRESTORE
-const db = getFirestore(app);
-const firestore = new Firestore();
-
-export function readUsers() {
-  const querySnapshot = getDocs(collection(db, "users"));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`);
-  });
-}
-
-interface User {
-  id: string,
-  name: string,
-  description: string,
-  from: string,
-  link: string,
-  email: string,
-}
-
-export async function readCurrentUser(user: User): Promise<DocumentData | undefined> {
-  const db = getFirestore();
-  const docRef = doc(db, "Users", user.id);
-
-  try {
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data(); // Zwraca dane dokumentu, jeśli istnieje
-    } else {
-      console.log("No such document!");
-      return undefined; // Zwraca undefined, jeśli dokument nie istnieje
-    }
-  } catch (error) {
-    console.error("Error getting document:", error);
-    throw error; // Rzucenie błędu do dalszego obsłużenia
-  }
 }
