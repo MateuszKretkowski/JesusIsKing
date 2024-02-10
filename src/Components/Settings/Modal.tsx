@@ -19,8 +19,8 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
         hidden: { opacity: 0 },
     };
     const modal = {
-        hidden: { y: "-100vh", opacity: 0 },
-        visible: { y: 0, opacity: 1 },
+        hidden: { y: "-200vh", opacity: 0 },
+        visible: { y: "-50vh", opacity: 1 },
     };
 
     interface FormData {
@@ -37,13 +37,17 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
         from: ''
     })
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target; // Destructuring, aby uzyskać `name` i `value` z elementu, który wywołał zdarzenie
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const { name, value } = event.target; // Destrukturyzacja, aby uzyskać `name` i `value`
         setFormData(prevState => ({
-            ...prevState, // Kopiowanie istniejących wartości stanu
-            [name]: value // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
+          ...prevState, // Kopiowanie istniejących wartości stanu
+          [name]: value // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
         }));
-    };
+
+        const textarea = event.target;
+        textarea.style.height = 'auto'; // Reset wysokości
+        textarea.style.height = textarea.scrollHeight + 'px';
+      };
     const functions = getFunctions();
     const handleSubmit = async () => {
         try {
@@ -67,11 +71,12 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                 animate="visible"
                 exit="hidden"
                 >
-                    <motion.div className='modal' variants={modal}>
+                    <motion.div 
+                    className='modal' 
+                    variants={modal}
+                    transition={{type: "spring", bounce: 0.5}}
+                    >
                         <motion.div className='modal_container'>
-                            <motion.div className='avatar-wrapper-settings'>
-                                <motion.img />
-                            </motion.div>
                             <motion.div className='text-wrapper'>
 
                                 <motion.div className='input-wrapper'>
@@ -83,18 +88,20 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     className='settings-input'
+                                    maxlength="30" minlength="10"
                                     />
                                 </motion.div>
 
                                 <motion.div className='input-wrapper'>
                                     <motion.h2 className='input-title'>DESCRIPTION</motion.h2>
                                     
-                                    <motion.input 
+                                    <motion.textarea 
                                     type='text'
                                     name='description'
                                     value={formData.description}
                                     onChange={handleChange}
-                                    className='settings-input'
+                                    className='settings-input settings-input-description'
+                                    maxlength="120" minlength="10"
                                     />
                                 </motion.div>
 
@@ -107,6 +114,7 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     value={formData.link}
                                     onChange={handleChange}
                                     className='settings-input'
+                                    maxlength="20" minlength="1"
                                     />
                                 </motion.div>
 
@@ -119,12 +127,13 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     value={formData.from}
                                     onChange={handleChange}
                                     className='settings-input'
+                                    maxlength="20" minlength="1"
                                     />
                                 </motion.div>
                             </motion.div>
 
                             <motion.div className='modal_action-wrapper'>
-                                <motion.button onClick={handleSubmit}>APPLY CHANGES</motion.button>
+                                <motion.button onClick={handleSubmit} className='action-wrapper'><h2>APPLY CHANGES</h2></motion.button>
                             </motion.div>
                         </motion.div>
                     </motion.div>

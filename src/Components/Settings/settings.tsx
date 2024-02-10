@@ -8,6 +8,7 @@ import {
   useAnimation,
 } from "framer-motion";
 import Modal from "./Modal.tsx";
+import handleSubmit from "./Modal.tsx";
 import { isUserLoggedIn, readUser } from "../Google Signin/config.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -157,19 +158,17 @@ function Settings() {
           </div>
           </div>
         </div>
-        {isUserLoggedIn() ? (
-          <div className="helper-wrapper">
-            <motion.button
-              className="action-wrapper settings_action-wrapper"
-              style={{ opacity: showModal ? 0 : 1 }}
-            >
-              <h5 className="edit">OPEN POSTS</h5>
-            </motion.button>
-          </div>
-        ) : (
-          <h1></h1>
-        )}
         <Modal showModal={showModal} setShowModal={setShowModal} />
+          <motion.button
+          className="action-wrapper settings_action-wrapper"
+          variants={variantsDescription}
+          initial={controls}
+          animate={controls}
+          exit={controls}
+          transition={{delay: 1}}
+          >
+          <h5 className="edit">OPEN POSTS</h5>
+        </motion.button>
       </div>
     </div>
   );

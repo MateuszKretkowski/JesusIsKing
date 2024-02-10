@@ -68,13 +68,6 @@ h5 {
 }
 
 input {
-  background-color: transparent;
-  border: 2px solid black;
-  border-radius: 4px;
-  width: 30%;
-  height: 50%;
-  overflow: scroll;
-  text-align: center;
 }
 
 button {
