@@ -1,24 +1,20 @@
 .settings {
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: end;
-    align-items: end;
 }
 
 .settings_container {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
     flex-direction: column;
     padding: 2% 2%;
 }
 
 .account-wrapper-settings {
-    width: 70%;
-    height: 50%;
+    width: 70vw;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -53,17 +49,34 @@
 .links-wrapper {
     display: flex;
     justify-content: space-around;
-    gap: 10%;
-    width: 80%;
-    margin-top: 3%;
+    align-content: center;
+    width: 100%;
+    margin-top: 4%;
+}
+
+.title-settings-wrapper {
+    position: relative;
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
 }
 
 .title-settings {
+    position: relative;
     font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .link-settings {
     font-weight: 900;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .where {
@@ -86,20 +99,21 @@
     margin: 0 2%;
 }
 
-.edit-wrapper {
-    border: none;
-}
-
 .edit {
     letter-spacing: 6px;
     font-weight: 900;
 }
 
-.edit:hover {
+.settings_action-wrapper {
     letter-spacing: 10px;
     cursor: pointer;
 }
 
+
 .edit:active {
     letter-spacing: 1px;
+}
+
+span {
+    content: "";
 }

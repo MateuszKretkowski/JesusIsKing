@@ -81,3 +81,7 @@ button {
   background-color: transparent;
   background-color: transparent;
 }
+
+span {
+  all: revert;
+}
