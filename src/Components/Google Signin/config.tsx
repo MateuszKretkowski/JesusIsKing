@@ -9,7 +9,7 @@ import {
   updateProfile,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, onSnapshot, getFirestore } from "firebase/firestore";
+import { doc, onSnapshot, getFirestore, Timestamp, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -51,6 +51,17 @@ export function isUserLoggedIn() {
   return isLoggedIn;
 }
 
+export async function isUserAnAdmin() {
+  const q = query(collection(db, "Users"), where("admin", "==", true));
+  const querySnapshot = await getDocs(q);
+  const adminUsers: string[] = [];
+
+  querySnapshot.forEach((doc) => {
+    adminUsers.push(doc.data().id);
+  });
+  return console.log(adminUsers);
+}
+
 export function signOutUser() {
   console.log(auth.currentUser);
   return auth.signOut();
@@ -59,6 +70,8 @@ export function signOutUser() {
 // CLOUD FIRESTORE
 const db = getFirestore(app);
 
+
+// READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER
 export function readUser(setUserData: (userData: User) => void) {
   const userId = auth.currentUser ? auth.currentUser.uid : null;
 
@@ -82,3 +95,5 @@ export function readUser(setUserData: (userData: User) => void) {
     }
   );
 }
+
+// READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG
