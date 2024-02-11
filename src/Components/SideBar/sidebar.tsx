@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { signInWithGoogle, signOutUser} from "../Google Signin/config.tsx";
 import { isUserLoggedIn } from "../Google Signin/config.tsx";
 import "./sidebar.css";
+import { readUser } from "../Google Signin/config.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -11,8 +12,8 @@ function SideBar() {
 
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
-    animate(".arrow", { rotate: isOpen ? 90 : 0 }, { duration: 0.2 });
-    
+    animate(".arrow", { rotate: isOpen ? 45 : -45 }, { duration: 0.2 });
+    animate(".arrow2", { rotate: isOpen ? -45 : 45 }, { duration: 0.2 });
   });
   useEffect(() => {
     animate(".sidebar", { width: isOpen ? 300 : 50 },       {
@@ -37,6 +38,30 @@ useEffect(() => {
   isOpen ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'unset';
 })
 
+const [userData, setUserData] = useState({
+  id: "",
+  name: "",
+  description: "",
+  from: "",
+  link: "",
+});
+useEffect(() => {
+  const unsub = readUser(setUserData);
+}, []);
+
+// DESCRIPTION SHORTENING
+const [isShortened, setIsShortened] = useState(true);
+const toggleDescription = () => {
+  setIsShortened(!isShortened);
+};
+const displayDescription = () => {
+  const words = userData.description.split(' ');
+  if (words.length > 10) {
+    return isShortened ? `${words.slice(0, 10).join(' ')}...` : userData.description;
+  }
+  return userData.description;
+};
+
 const [ isSettingsOpen, setIsSettingsOpen ] = useState(false)
 const location = useLocation();
 useEffect(() => {
@@ -52,20 +77,19 @@ useEffect(() => {
     <motion.div className="sidebar">
       <motion.div className="stripe" />
       <motion.div className="arrow" onClick={() => setIsOpen(!isOpen)} />
+      <motion.div className="arrow arrow2" onClick={() => setIsOpen(!isOpen)} />
         <motion.div className="sidebar_container">
           <div className="account-wrapper">
             <div className="avatar-wrapper">
               <img className="avatar"  src={defaultAvatar} />
             </div>
-            {isUserLoggedIn ?
             <div className="desc-wrapper-account">
-              <h2 className="name"></h2>
-              <h2 className="name desc"></h2>
-              <h2 className="name from"></h2>
+              <h2 className="name">{userData.name}</h2>
+              <div className="link-wrapper">
+              <h5 className="where white">{userData.link}</h5>
+              <h5 className="where white">{userData.from}</h5>
+              </div>
             </div>
-            :
-            <h1>Siema</h1>
-            }
           </div>
           <div className="login-wrapper">
             {isUserLoggedIn() ? (
@@ -82,9 +106,9 @@ useEffect(() => {
     <h1></h1>
   )}
           {isUserLoggedIn() ?
-          <button onClick={signOutUser} >SIGN OUT</button>
+          <button className="login_btn" onClick={signOutUser} >SIGN OUT</button>
           :
-          <button onClick={signInWithGoogle} >SIGN IN WITH GOOGLE</button>
+          <button className="login_btn" onClick={signInWithGoogle} >SIGN IN WITH GOOGLE</button>
           }
           </div>
           

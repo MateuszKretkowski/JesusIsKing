@@ -37,7 +37,7 @@
 
 
 .name {
-    font-size: 100%;
+    font-size: 20px;
     color: #f1f0ea;
     margin-bottom: 5%;
     font-weight: 900;
@@ -50,7 +50,14 @@
 }
 
 .where {
-    font-size: 14px;
+    font-size: 12px !important;
+}
+
+.link-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10%;
 }
 
 
@@ -71,10 +78,12 @@
     font-weight: 900;
     padding: 10% 0;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
 }
 
 .login_btn:hover {
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .arrow {
@@ -83,18 +92,19 @@
     top: 50%;
     left: 116%;
     width: 24px;
-    height: 6px;
+    height: 4px;
     z-index: 1000;
     background-color: black;
-    border-radius: 4px;
-    transform: scale(1);
+    border-radius: 2px;
+    transform: rotate(45deg);
     transition: all 300ms ease;
-    z-index: 10000000000;
+}
+
+.arrow2 {
+    top: 48.5% !important;
 }
 
 .arrow:hover {
-    transform: scale(1.2);
-    
 }
 
 

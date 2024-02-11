@@ -78,3 +78,7 @@ button {
 span {
   all: revert;
 }
+
+.white {
+  color: #f1f0ea;
+}
