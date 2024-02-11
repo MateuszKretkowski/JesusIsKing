@@ -19,6 +19,7 @@ font-family: 'Roboto', sans-serif;
   height: 100%;
   font-family: 'Inter', sans-serif;
   z-index: 0;
+  overflow-x: hidden;
 }
 
 .App:after {
@@ -81,4 +82,9 @@ span {
 
 .white {
   color: #f1f0ea;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 900 !important;
 }

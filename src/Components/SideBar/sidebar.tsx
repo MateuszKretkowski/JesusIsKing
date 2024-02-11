@@ -49,18 +49,6 @@ useEffect(() => {
   const unsub = readUser(setUserData);
 }, []);
 
-// DESCRIPTION SHORTENING
-const [isShortened, setIsShortened] = useState(true);
-const toggleDescription = () => {
-  setIsShortened(!isShortened);
-};
-const displayDescription = () => {
-  const words = userData.description.split(' ');
-  if (words.length > 10) {
-    return isShortened ? `${words.slice(0, 10).join(' ')}...` : userData.description;
-  }
-  return userData.description;
-};
 
 const [ isSettingsOpen, setIsSettingsOpen ] = useState(false)
 const location = useLocation();
