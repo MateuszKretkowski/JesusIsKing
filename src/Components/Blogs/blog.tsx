@@ -8,43 +8,75 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
+import { readBlogs } from "../Google Signin/config";
 const defaultAvatar = require("../../Images/avatar.webp");
 const blogImageTest = require("../../Images/blogtestimage.jpg");
+interface Blog {
+  id: string, 
+  author: string, 
+  authorId: string, 
+  date: string, 
+  description: string, 
+  name: string
+}
 
-function Blog() {
+function Blog({ id, author, authorId, date, description, name }: Blog) {
+  const [showModal, setShowModal] = useState(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false });
   const [isHovered, setIsHovered] = useState(false);
   const controls = useAnimation();
   useEffect(() => {
-    isHovered ? controls.start("visible") : controls.start("hidden");
+    showModal ? controls.start("modal") : controls.start(isHovered ? "visible" : "hidden");
   });
 
   const titleVariants = {
     hidden: { opacity: 0, scale: 0, y: 50, x: 0 },
     visible: { opacity: 1, scale: 1, y: 0, x: 0 },
+    modal: { opacity: 1, scale: 1, y: -100, x: -50 },
     exit: { opacity: 0, scale: 0, y: 50, x: 0 },
   };
 
   const avatarVariants = {
     hidden: { opacity: 0, scale: 1, y: 0, x: -50 },
     visible: { opacity: 1, scale: 1, y: 0, x: 0 },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0 },
     exit: { opacity: 0, scale: 1, y: 0, x: -50 },
   };
 
   const dateVariants = {
     hidden: { opacity: 0, scale: 1, y: 0, x: 50 },
     visible: { opacity: 1, scale: 1, y: 0, x: 0 },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0 },
+    exit: { opacity: 0, scale: 1, y: 0, x: 50 },
+  };
+
+  const imgVariants = {
+    hidden: { opacity: 0, scale: 1, y: 0, x: 50 },
+    visible: { opacity: 1, scale: 1, y: 0, x: 0 },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0 },
+    exit: { opacity: 0, scale: 1, y: 0, x: 50 },
+  };
+
+  const descriptionVariants = {
+    hidden: { opacity: 0, scale: 1, y: 0, x: 50 },
+    visible: { opacity: 1, scale: 1, y: 0, x: 0 },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0 },
     exit: { opacity: 0, scale: 1, y: 0, x: 50 },
   };
 
   const [blogData, setBlogData] = useState({
-    id: "",
-    name: "This Is The First Blog",
-    description: "",
-    authorId: "",
-    link: "",
+    id: id,
+    name: name,
+    description: description,
+    authorId: authorId,
+    author: author,
+    date: date,
   });
+
+  useEffect(() => {
+    const unsub = readBlogs();
+  }, []);
 
   function wrapBlogWordsInSpan(name: string): JSX.Element[] {
     const words = name.split(" ");
@@ -57,7 +89,7 @@ function Blog() {
             animate={controls}
             exit={controls}
             transition={{
-                delay: 0.05 * wordIndex, // opóźnienie dla każdego słowa
+                delay: 0.05 * wordIndex,
                 type: "ease",
                 bounce: 0.4,
                 damping: 10,
@@ -70,11 +102,16 @@ function Blog() {
   }
   const blogNameMAPPED = wrapBlogWordsInSpan(blogData.name);
 
+  useEffect(() => {
+    console.log(blogData)
+  }, [])
+
   return (
     <motion.div
       className="blog"
       ref={ref}
       style={{opacity: isInView ? 1 : 0, transform: isInView ? "translateY(0px)" : "translateY(50px)"}}
+      onClick={() => {setShowModal(!showModal)}}
       onHoverStart={() => {
         setIsHovered(!isHovered);
       }}
@@ -103,7 +140,7 @@ function Blog() {
               exit={controls}
               transition={{ delay: 0.2 }}
             >
-              Author
+              {blogData.author}
             </motion.h5>
           </motion.div>
           <motion.div className="date-wrapper">
@@ -115,7 +152,7 @@ function Blog() {
               exit={controls}
               transition={{ delay: 0.6 }}
             >
-              11.02.24
+              {blogData.date}
             </motion.h5>
           </motion.div>
         </motion.div>

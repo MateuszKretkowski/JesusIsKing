@@ -12,7 +12,6 @@ admin.initializeApp();
 exports.createUserDocument = functions.auth.user().onCreate((user) => {
   const db = admin.firestore();
 
-  // Użyj user.uid jako ID dokumentu
   return db.collection("Users").doc(user.uid).set({
     id: user.uid,
     email: user.email,
@@ -30,12 +29,46 @@ exports.updateUser = functions.https.onCall((data, context) => {
       HttpsError("failed-precondition", "while authenticated.");
   }
 
-  // Pobierz dane przesłane z formularza
   const userId = context.auth.uid;
   const userData = data;
   console.log(userData, userId);
-  // Aktualizacja danych użytkownika w Firestore
   return admin.firestore().collection("Users").doc(userId).update(userData)
+    .then(() => {
+      console.log("user updated");
+      return {result: "User updated successfully!"};
+    })
+    .catch((error) => {
+      throw new functions.https.
+        HttpsError("internal", "not update user:"+error.message);
+    });
+});
+
+exports.createBlog = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.
+      https.
+      HttpsError("failed-precondition", "while authenticated.");
+  }
+
+  const userId = context.auth.uid;
+  const userRef = admin.firestore().collection("Users").doc(userId);
+  const userDoc = await userRef.get();
+  const user = userDoc.data();
+
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.
+    getUTCFullYear()}-${currentDate.
+    getUTCMonth() + 1}-${currentDate.getUTCDate()}`;
+  const blogData = {
+    ...data,
+    name: data.name,
+    description: data.description,
+    authorId: userId,
+    author: user ? user.name : "UNKNOWN",
+    date: formattedDate,
+  };
+  console.log(blogData, userId);
+  return admin.firestore().collection("Blogs").add(blogData)
     .then(() => {
       console.log("user updated");
       return {result: "User updated successfully!"};

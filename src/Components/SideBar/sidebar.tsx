@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
-import { signInWithGoogle, signOutUser} from "../Google Signin/config.tsx";
+import { signInWithGoogle, signOutUser, auth} from "../Google Signin/config.tsx";
+import { onAuthStateChanged } from "firebase/auth";
 import { isUserLoggedIn } from "../Google Signin/config.tsx";
 import "./sidebar.css";
 import { readUser } from "../Google Signin/config.tsx";
@@ -46,8 +47,26 @@ const [userData, setUserData] = useState({
   link: "",
 });
 useEffect(() => {
-  const unsub = readUser(setUserData);
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, call readUser to fetch the user data.
+      readUser(setUserData);
+    } else {
+      // No user is signed in, reset the user data.
+      setUserData({
+        id: "",
+        name: "",
+        description: "",
+        from: "",
+        link: "",
+      });
+    }
+  });
+
+  // Cleanup subscription on unmount
+  return () => unsubscribe();
 }, []);
+
 
 
 const [ isSettingsOpen, setIsSettingsOpen ] = useState(false)
@@ -82,11 +101,11 @@ useEffect(() => {
           <div className="login-wrapper">
           {isUserLoggedIn() ? (
     isSettingsOpen ? (
-      <Link to="/admin">
+      <Link to="/adminpanel">
         <motion.button className="login_btn link" onClick={() => setIsOpen(!isOpen)}>ADMIN PANEL</motion.button>
       </Link>
     ) : (
-      <Link to="/admin">
+      <Link to="/adminpanel">
         <motion.button className="login_btn link" onClick={() => setIsOpen(!isOpen)}>ADMIN PANEL</motion.button>
       </Link>
     )

@@ -31,7 +31,7 @@ const firebaseConfig = {
 export const app = firebase.initializeApp(firebaseConfig);
 
 // AUTHENTICATION
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
 export function signInWithGoogle() {
   return signInWithRedirect(auth, new GoogleAuthProvider());
@@ -95,5 +95,25 @@ export function readUser(setUserData: (userData: User) => void) {
     }
   );
 }
+
+export async function readBlogs() {
+  try {
+    const blogsCollectionRef = collection(db, 'Blogs');
+    const querySnapshot = await getDocs(blogsCollectionRef);
+    const blogs = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      author: doc.data().author,
+      authorId: doc.data().authorId,
+      date: doc.data().date,
+      description: doc.data().description,
+      name: doc.data().name,
+      ...doc.data()
+    }));
+    return blogs;
+  } catch (error) {
+    console.error("Error fetching blogs: ", error);
+    return [];
+  }
+};
 
 // READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG

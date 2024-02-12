@@ -9,7 +9,8 @@ import {
 } from "framer-motion";
 import Modal from "./Modal.tsx";
 import handleSubmit from "./Modal.tsx";
-import { isUserLoggedIn, readUser } from "../Google Signin/config.tsx";
+import { isUserLoggedIn, readUser, auth } from "../Google Signin/config.tsx";
+import { onAuthStateChanged } from "firebase/auth";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
@@ -53,8 +54,26 @@ function Settings() {
     link: "",
   });
   useEffect(() => {
-    const unsub = readUser(setUserData);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, call readUser to fetch the user data.
+        readUser(setUserData);
+      } else {
+        // No user is signed in, reset the user data.
+        setUserData({
+          id: "",
+          name: "",
+          description: "",
+          from: "",
+          link: "",
+        });
+      }
+    });
+  
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
+  
 
   function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
     const words = name.split(" ");

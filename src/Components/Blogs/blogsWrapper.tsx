@@ -9,10 +9,35 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
+import { readBlogs } from "../Google Signin/config";
 
 function BlogsWrapper() {
+  interface Blog {
+    id: string;
+    author: string;
+    authorId: string;
+    date: string;
+    description: string;
+    name: string;
+    // Inne właściwości, które mogą być potrzebne
+  }
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false });
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const blogsData = await readBlogs();
+        setBlogs(blogsData);
+      } catch (error) {
+        console.error("Error fetching Blogs: ", error);
+        setBlogs([]);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   return (
     <div className="blogs"
@@ -26,9 +51,9 @@ function BlogsWrapper() {
         </div>
         <div className="blogs_wrapper_container">
           <div className="blogs-wrapper">
-              <Blog />
-              <Blog />
-              <Blog />
+              {blogs.map(blog => (
+                <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
+              ))}
           </div>
         </div>
         <div className="buttons-wrapper">
