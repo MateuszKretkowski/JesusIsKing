@@ -1,16 +1,20 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useNavigate } from 'react-router-dom';
 import { app } from '../Google Signin/config.tsx';
+import isCDE from "./adminPanel.tsx";
 import "./adminModal.css";
 
 type ModalProps = {
     showModal: boolean;
     setShowModal: (show: boolean) => void;
+    isCDE: number;
+    setIsCDE: (cde: number) => void;
 };
-const AdminModal = ({ showModal, setShowModal }: ModalProps) => {
+const AdminModal = ({ showModal, setShowModal, isCDE, setIsCDE }: ModalProps) => {
+
 
     const navigate = useNavigate();
 
@@ -63,6 +67,26 @@ const AdminModal = ({ showModal, setShowModal }: ModalProps) => {
         }
     };
 
+    const [nameBlog, setNameBlog] = useState(formData.name);
+    useEffect(() => {
+        setNameBlog(formData.name);
+      }, [formData.name]);
+      const handleExit = async () => {
+        if (!nameBlog) {
+          console.error("Blog ID is empty.");
+          return;
+        }
+        try {
+          var exitBlog = httpsCallable(functions, "exitBlog");
+          const result = await exitBlog({ name: nameBlog }); // Ensure you're passing an object with a name property
+          console.log(result.data);
+          alert('Successfully exited Blog.');
+          setShowModal(false);
+        } catch (error) {
+          console.error("Error exit blog: ", error);
+        }
+      };
+
     return (
         <AnimatePresence>
             {showModal && (
@@ -95,8 +119,9 @@ const AdminModal = ({ showModal, setShowModal }: ModalProps) => {
                                 </motion.div>
 
                                 <motion.div className='input-wrapper'>
+                                    {(isCDE === 1 || isCDE === 3) && 
                                     <motion.h2 className='input-title'>DESCRIPTION</motion.h2>
-                                    
+                                    &&
                                     <motion.textarea 
                                     type='text'
                                     name='description'
@@ -104,13 +129,13 @@ const AdminModal = ({ showModal, setShowModal }: ModalProps) => {
                                     onChange={handleChange}
                                     className='settings-input settings-input-description'
                                     maxlength="120" minlength="10"
-                                    />
+                                    />}
                                 </motion.div>
 
                             </motion.div>
 
                             <motion.div className='modal_action-wrapper'>
-                                <motion.button onClick={handleSubmit} className='action-wrapper'><h2>APPLY CHANGES</h2></motion.button>
+                                <motion.button onClick={isCDE == 1 ? handleSubmit : isCDE == 2 ? handleExit : undefined} className='action-wrapper'><h2>APPLY CHANGES</h2></motion.button>
                             </motion.div>
                         </motion.div>
                     </motion.div>
