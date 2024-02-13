@@ -23,6 +23,7 @@ const BlogModal = ({ showModal, setShowModal }: ModalProps) => {
     visible: { y: "0vh", opacity: 1 },
   };
 
+
   return (
     <AnimatePresence>
       <motion.div className="modal_blog">

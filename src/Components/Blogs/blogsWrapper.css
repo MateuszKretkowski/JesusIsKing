@@ -1,6 +1,7 @@
 .blogs {
     width: 120vw;
-    height: 60vh;
+    height: auto;
+    max-height: 60vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,38 +26,19 @@
 
 .blogs_wrapper_container {
     height: 60%;
-    margin: 2% 0%;
     display: flex;
     justify-content: end;
     align-items: center;
-}
-
-.blogs-wrapper {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 4%;
-    height: 100%;
     flex-direction: row-reverse;
 }
 
-.buttons-wrapper {
-    width:20%;
+.blogs-wrapper {
+    overflow-x: scroll;    
+}
+
+.blogs-wrapper-wrapper {
     display: flex;
     justify-content: start;
-    align-items: center;
-    gap: 10%;
-}
-
-.blog_button-left {
-    width: 44px;
-    height: 44px;
-    border-radius: 40%;
-    border: 2px solid black;
-}
-
-.blog_button-right {
-    width: 44px;
-    height: 44px;
-    border-radius: 40%;
-    border: 2px solid black;
+    flex-wrap: nowrap;
+    height: 100%;
 }
