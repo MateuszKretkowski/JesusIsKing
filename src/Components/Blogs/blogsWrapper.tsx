@@ -49,13 +49,15 @@ function BlogsWrapper() {
             style={{opacity: isInView ? 1 : 0}}
             >BLOGS</motion.h1>
         </div>
-        <div className="blogs_wrapper_container">
-          <div className="blogs-wrapper">
+        <motion.div className="blogs_wrapper_container">
+          <motion.div className="blogs-wrapper"
+          layout 
+          >
               {blogs.map(blog => (
                 <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
               ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
         <div className="buttons-wrapper">
           <div className="blog_button-left" />
 

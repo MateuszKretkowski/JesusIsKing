@@ -71,21 +71,21 @@ const AdminModal = ({ showModal, setShowModal, isCDE, setIsCDE }: ModalProps) =>
     useEffect(() => {
         setNameBlog(formData.name);
       }, [formData.name]);
-      const handleExit = async () => {
-        if (!nameBlog) {
-          console.error("Blog ID is empty.");
-          return;
-        }
-        try {
-          var exitBlog = httpsCallable(functions, "exitBlog");
-          const result = await exitBlog({ name: nameBlog }); // Ensure you're passing an object with a name property
-          console.log(result.data);
-          alert('Successfully exited Blog.');
-          setShowModal(false);
-        } catch (error) {
-          console.error("Error exit blog: ", error);
-        }
-      };
+    //   const handleExit = async () => {
+    //     // Use the actual document ID here instead of the blog name
+    //     // For example, `const blogId = 'YVQFs9v1oNfoqJd5HwWC';`
+    //     // const blogId = ;
+      
+    //     try {
+    //       var exitBlog = httpsCallable(functions, "exitBlog");
+    //       const result = await exitBlog({ blogId: blogId });
+    //       console.log(result.data);
+    //       alert('Successfully exited Blog.');
+    //       setShowModal(false);
+    //     } catch (error) {
+    //       console.error("Error exit blog: ", error);
+    //     }
+    //   };
 
     return (
         <AnimatePresence>

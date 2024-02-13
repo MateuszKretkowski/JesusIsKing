@@ -9,7 +9,7 @@ import {
   updateProfile,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, onSnapshot, getFirestore, Timestamp, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { doc, onSnapshot, getFirestore, Timestamp, getDoc, collection, query, where, getDocs, orderBy, } from "firebase/firestore";
 import { useEffect, useState } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -96,19 +96,19 @@ export function readUser(setUserData: (userData: User) => void) {
   );
 }
 
+
 export async function readBlogs() {
   try {
     const blogsCollectionRef = collection(db, 'Blogs');
-    const querySnapshot = await getDocs(blogsCollectionRef);
+    // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
+    const q = query(blogsCollectionRef, orderBy('date', 'desc'));
+
+    const querySnapshot = await getDocs(q);
     const blogs = querySnapshot.docs.map(doc => ({
       id: doc.id,
-      author: doc.data().author,
-      authorId: doc.data().authorId,
-      date: doc.data().date,
-      description: doc.data().description,
-      name: doc.data().name,
       ...doc.data()
     }));
+    console.log("returned blogs: ", blogs);
     return blogs;
   } catch (error) {
     console.error("Error fetching blogs: ", error);

@@ -30,48 +30,77 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
   const controls = useAnimation();
   useEffect(() => {
     showModal
-    ? controls.start("modal")
-    : controls.start(isHovered ? "visible" : "hidden");
+      ? controls.start("modal")
+      : controls.start(isHovered ? "visible" : "hidden");
   });
-  
-  const [scopeAuthor, animate] = useAnimate();
 
   const titleVariants = {
-    hidden: { opacity: 0, scale: 0, y: 50, x: 0 },
-    visible: { opacity: 1, scale: 1, y: 0, x: 0 },
-    modal: { opacity: 1, scale: 1, y: 0, x: 0 },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0,},
+    visible: { opacity: 1, scale: 1, y: 0, x: 0,},
+    modal: { opacity: 1, scale: 1, y: 0, x: 0,},
     exit: { opacity: 0, scale: 0, y: 50, x: 0 },
   };
 
   const avatarVariants = {
-    hidden: { opacity: 0, scale: 1, y: -50, x: 10, transition: {delay: 0}  },
-    modal: { opacity: 1, scale: 1, y: 0, x: 10, transition: {delay: 0.6} },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0 },
+    modal: { opacity: 1, scale: 1, y: 0, x: 10, transition: { delay: 0.6 } },
+    visible: { opacity: 1, scale: 1, y: 0, x: 10, transition: { delay: 0.6 } },
     exit: { opacity: 0, scale: 1, y: 0, x: -50 },
   };
 
   const avatarVariantsName = {
-    hidden: { opacity: 0, scale: 1, y: -50, x: 10, transition: {delay: 0}  },
-    modal: { opacity: 1, scale: 1, y: 0, x: 10, transition: {delay: 0.9} },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0 },
+    visible: { opacity: 1, scale: 1, y: 0, x: 10, transition: { delay: 0.9 } },
+    modal: { opacity: 1, scale: 1, y: 0, x: 10, transition: { delay: 0.9 } },
     exit: { opacity: 0, scale: 1, y: 0, x: -50 },
   };
 
   const dateVariants = {
-    hidden: { opacity: 0, scale: 1, y: 0, x: 50 },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0 },
     visible: { opacity: 1, scale: 1, y: 0, x: 0 },
     modal: { opacity: 1, scale: 1, y: 0, x: 0 },
     exit: { opacity: 0, scale: 1, y: 0, x: 50 },
   };
 
   const imgVariants = {
-    hidden: { opacity: 1, scale: 1, filter: "blur(1px) brightness(1)", y: 0, x: 0,},
-    visible: { opacity: 1, scale: 1, filter: "blur(1px) brightness(0.8)", y: 0, x: 0, transition: {delay: 0.3}  },
-    modal: { opacity: 1, scale: 1, filter: "none", "border-radius-top-right": "0%", "border-radius-bottom-right": "0%", y: 0, x: -550 },
+    hidden: {
+      opacity: 1,
+      scale: 1,
+      filter: "blur(1px) brightness(1)",
+      y: 0,
+      x: 0,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      filter: "blur(1px) brightness(0.8)",
+      y: 0,
+      x: 0,
+      transition: { delay: 0.3 },
+    },
+    modal: {
+      opacity: 1,
+      scale: 1,
+      filter: "none",
+      "border-radius-top-right": "0%",
+      "border-radius-bottom-right": "0%",
+      y: 0,
+      x: "-98%",
+    },
   };
+  const [scope, animate] = useAnimate();
+  async function descriptionAnimation() {
+    await animate(scope.current, { height: "100%",});
+    await animate(scope.current, { opacity: 1, scale: 1, y: 0, x: 0, transition: { delay: 5 } });
+  }
+
+  useEffect(() => {
+    showModal ? descriptionAnimation() : console.log("not show modal animation description");
+  });
 
   const descriptionVariants = {
-    hidden: { opacity: 0, scale: 1, y: 0, x: 0, transition: {delay: 0.4}  },
-    visible: { opacity: 0, scale: 1, y: 0, x: 0, transition: {delay: 0.4} },
-    modal: { opacity: 1, scale: 1, y: 0, x: 0, transition: {delay: 0.6}  },
+    hidden: { opacity: 0, scale: 1, y: 0, x: 0, height: "0%", transition: { delay: 0.4 } },
+    visible: { opacity: 0, scale: 0, y: 0, x: 0, height: "0%", transition: { delay: 0.4 } },
   };
 
   const blogVariants = {
@@ -98,20 +127,13 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
 
     return words.map((word, wordIndex) => (
       <motion.h2
-        className="title white"
         variants={titleVariants}
         initial={controls}
         animate={controls}
         exit={controls}
-        transition={{
-          delay: 0.1 * wordIndex,
-          type: "ease",
-          bounce: 0.4,
-          damping: 10,
-          mass: 0.2,
-        }}
+        className="blog_title"
       >
-        {word}
+        {word.toUpperCase()}
       </motion.h2>
     ));
   }
@@ -146,64 +168,50 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
         }
       }}
     >
-      <motion.img
-        src={blogImageTest}
-        className="blog_image"
-        variants={imgVariants}
-        initial={controls}
-        animate={controls}
-        exit={controls}
-      />
       <motion.div className="blog_container">
-        <motion.div className="upper-wrapper">
-          <motion.div className="author-wrpaper"
-          >
+        <motion.div className="blog_title-wrapper">{blogNameMAPPED}</motion.div>
+        <motion.div
+          className="description-wrapper"
+          variants={descriptionVariants}
+          initial={controls}
+          animate={controls}
+          exit={controls}
+          ref={scope}
+        >
+          <motion.h3 className="blog_description">
+            {blogData.description.toUpperCase()}
+          </motion.h3>
+        </motion.div>
+        <motion.div className="blog_lower-wrapper">
+          <motion.div className="blog_author-wrapper">
             <motion.img
-              className="author-avatar"
               src={defaultAvatar}
+              className="author-avatar"
               variants={avatarVariants}
               initial={controls}
               animate={controls}
               exit={controls}
-              transition={{ delay: 0.3 }}
             />
             <motion.h5
-              className="white"
               variants={avatarVariantsName}
               initial={controls}
               animate={controls}
               exit={controls}
-              transition={{ delay: 0.9 }}
             >
               {blogData.author}
             </motion.h5>
           </motion.div>
-          <motion.div className="date-wrapper"
-            ref={scopeAuthor}
-          >
+          <motion.div className="blog_date-wrapper">
             <motion.h5
-              className="white"
+              className="date"
               variants={dateVariants}
               initial={controls}
               animate={controls}
               exit={controls}
-              transition={{ delay: 0.6 }}
             >
               {blogData.date}
             </motion.h5>
           </motion.div>
-        </motion.div>
-        <motion.div className="lower-wrapper">
-        <motion.div
-            className="description-wrapper"
-            variants={descriptionVariants}
-            initial={controls}
-            animate={controls}
-            exit={controls}
-          >
-            {showModal && <h2 className="description grey">{blogData.description}</h2>}
-          </motion.div>
-          <h2 className="description">{blogNameMAPPED}</h2>
         </motion.div>
       </motion.div>
     </motion.div>
