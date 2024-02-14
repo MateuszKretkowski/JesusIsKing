@@ -1,0 +1,36 @@
+.blogsSite {
+    width: 100vw;
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blogs_modal-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.blogsSite_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1% 1%;
+}
+
+.sectionSite-title {
+    margin-bottom: 5%;
+}
+
+.blogsSite_blogs-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

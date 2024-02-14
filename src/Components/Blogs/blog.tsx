@@ -100,14 +100,14 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
   });
 
   const descriptionVariants = {
-    hidden: { opacity: 0, scale: 1, y: 0, x: 0, height: "0%", transition: { delay: 0.4 } },
-    visible: { opacity: 0, scale: 0, y: 0, x: 0, height: "0%", transition: { delay: 0.4 } },
+    hidden: { opacity: 0, scale: 1, y: 0, x: 0, height: "0px", transition: { delay: 0.4 } },
+    visible: { opacity: 0, scale: 0, y: 0, x: 0, height: "0px", transition: { delay: 0.4 } },
   };
     // max-width: 42vw;
   const blogVariants = {
-    hidden: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "27vw" },
-    visible: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "27vw" },
-    modal: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "42vw" },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "37vw" },
+    visible: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "37vw" },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "62vw" },
   };
 
   const [blogData, setBlogData] = useState({
@@ -178,6 +178,7 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
           animate={controls}
           exit={controls}
           ref={scope}
+          transition={{delay: 1}}
         >
           <motion.h3 className="blog_description">
             {blogData.description.toUpperCase()}

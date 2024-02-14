@@ -1,12 +1,21 @@
-.modal_blogs {
-    content: "";
-    top: 0;
-    left: 0;
-    position: absolute;
+.modal_blog {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: black;
 }
+
+.backdrop_blog {
+    z-index: 1000; /* Wysoki z-index */
+    position: fixed; /* Aby pokryć całą stronę */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5); /* Półprzezroczyste tło */
+    display: flex; /* Aby wycentrować modal */
+    justify-content: center;
+    align-items: center;
+  }

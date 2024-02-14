@@ -71,21 +71,26 @@ const AdminModal = ({ showModal, setShowModal, isCDE, setIsCDE }: ModalProps) =>
     useEffect(() => {
         setNameBlog(formData.name);
       }, [formData.name]);
-    //   const handleExit = async () => {
-    //     // Use the actual document ID here instead of the blog name
-    //     // For example, `const blogId = 'YVQFs9v1oNfoqJd5HwWC';`
-    //     // const blogId = ;
-      
-    //     try {
-    //       var exitBlog = httpsCallable(functions, "exitBlog");
-    //       const result = await exitBlog({ blogId: blogId });
-    //       console.log(result.data);
-    //       alert('Successfully exited Blog.');
-    //       setShowModal(false);
-    //     } catch (error) {
-    //       console.error("Error exit blog: ", error);
-    //     }
-    //   };
+      const handleExit = async () => {
+        // Ensure that blogId is being set from somewhere, e.g., formData.id
+        const blogId = formData.id; // This should be the ID of the blog to exit
+    
+        try {
+          // Create a callable function reference
+          var exitBlog = httpsCallable(functions, "exitBlog");
+    
+          // Call the function with the blogId
+          const result = await exitBlog({ name: nameBlog }); // Pass the name of the blog to the function
+    
+          // Log and alert the user upon success
+          console.log(result.data);
+          alert('Successfully exited Blog.');
+          setShowModal(false); // Assuming you want to close a modal upon success
+        } catch (error) {
+          // Log any errors that occur during the function invocation
+          console.error("Error exit blog: ", error);
+        }
+      };
 
     return (
         <AnimatePresence>

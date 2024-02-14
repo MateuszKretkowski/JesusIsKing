@@ -83,32 +83,29 @@ exports.exitBlog = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.
       https.
-      HttpsError("failed-precondition", "while authenticated.");
+      HttpsError("unauthenticated", "The function while auth.");
   }
 
   try {
-    const blogName = data.name; // Przekazana wartość name z danych wejściowych
-    const blogsRef = admin.firestore().collection('Blogs');
-    const snapshot = await blogsRef.where('name', '==', blogName).get();
+    const blogName = data.name;
+    const blogsRef = admin.firestore().collection("Blogs");
+    const snapshot = await blogsRef.where("name", "==", blogName).get();
+
     if (snapshot.empty) {
-      return { result: "No matching documents found to delete." };
+      return {result: "No matching documents found to delete."};
     }
 
-    // Usunięcie wszystkich pasujących dokumentów
     const batch = admin.firestore().batch();
     snapshot.docs.forEach((doc) => batch.delete(doc.ref));
     await batch.commit();
-    console.log(`Blog with ID ${snapshot} deleted`);
-    return {result: "Blog deleted successfully"};
-  } catch (error: unknown) {
+
+    console.log(`Blogs with name ${blogName} deleted`);
+    return {result: "Blogs deleted successfully"};
+  } catch (error) {
     if (error instanceof Error) {
-      throw new functions.
-        https.
-        HttpsError("internal", "cannot delete blog: " + error.message);
+      throw new functions.https.HttpsError("internal", error.message);
     } else {
-      throw new functions.
-        https.
-        HttpsError("internal", "Could not delete blog & not instanceofblog");
+      throw new functions.https.HttpsError("internal", "An error occurred");
     }
   }
 });

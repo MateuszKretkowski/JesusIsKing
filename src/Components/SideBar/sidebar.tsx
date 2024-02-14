@@ -123,28 +123,29 @@ function SideBar() {
           </div>
         </div>
         <div className="login-wrapper">
-          {isUserLoggedIn() ? (
-            isSettingsOpen ? (
-              <Link to="/adminpanel">
+        {isUserLoggedIn() ? (
+              <Link to="/blogs">
                 <motion.button
                   className="login_btn link"
                   onClick={() => setIsOpen(!isOpen)}
                 >
-                  ADMIN PANEL
+                  BLOGS
                 </motion.button>
               </Link>
-            ) : (
-              <Link to="/adminpanel">
-                <motion.button
-                  className="login_btn link"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  ADMIN PANEL
-                </motion.button>
-              </Link>
-            )
           ) : (
-            <h1></h1>
+            null
+          )}
+          {isUserLoggedIn() ? (
+              <Link to="/adminpanel">
+                <motion.button
+                  className="login_btn link"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  ADMIN PANEL
+                </motion.button>
+              </Link>
+          ) : (
+            null
           )}
           {isUserLoggedIn() ? (
             isSettingsOpen ? null : (

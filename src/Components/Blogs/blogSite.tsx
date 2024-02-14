@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./blogsWrapper.css";
+import "./blogSite.css";
 import Blog from "./blog";
 import {
   motion,
@@ -9,9 +9,11 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
+import BlogModal from "./BlogModal";
+import { Link, useLocation } from "react-router-dom";
 import { readBlogs } from "../Google Signin/config";
 
-function BlogsWrapper() {
+function BlogSite() {
   interface Blog {
     id: string;
     author: string;
@@ -38,30 +40,32 @@ function BlogsWrapper() {
 
     fetchBlogs();
   }, []);
+  
 
   return (
-    <div className="blogs"
-    ref={ref}
-    >
-      <div className="blogs_container">
-        <div className="section-title">
-            <motion.h1 className="title"
-            style={{opacity: isInView ? 1 : 0}}
-            >NEWEST BLOGS</motion.h1>
+    <div className="blogsSite" ref={ref}>
+      <div className="blogsSite_container">
+        <div className="sectionSite-title">
+          <motion.h1 className="title" style={{ opacity: isInView ? 1 : 0 }}>
+            BLOGS
+          </motion.h1>
         </div>
-        <motion.div className="blogs_wrapper_container">
-          <motion.div className="blogs-wrapper"
-          >
-            <div className="blogs-wrapper-wrapper">
-            {blogs.slice(0, 2).map(blog => (
-  <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
-))}
-                </div>
-          </motion.div>
-        </motion.div>
+        <div className="blogsSite_blogs-wrapper">
+        {blogs.map((blog) => (
+            <Blog
+            key={blog.id}
+            id={blog.id}
+            authorId={blog.authorId}
+            author={blog.author}
+            date={blog.date}
+            description={blog.description}
+            name={blog.name}
+            />
+            ))}
+            </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default BlogsWrapper;
+export default BlogSite;
