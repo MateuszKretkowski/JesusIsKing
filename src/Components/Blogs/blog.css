@@ -1,8 +1,7 @@
 .blog {
     position: relative;
     width: 100%;
-    max-width: 24vw;
-    margin: 2% 4%;
+    margin-right: 6%;
     z-index: 2;
     flex-shrink: 0;
   }
@@ -10,7 +9,7 @@
 .blog_container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     flex-direction: column;
     width: 100%;
     height: 100%;
@@ -33,6 +32,7 @@
 .blog_title-wrapper {
     display: flex;
     align-items: end;
+    justify-content: start;
     flex-wrap: wrap;
     margin-bottom: 4%;
     gap: 2%;

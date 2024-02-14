@@ -48,6 +48,7 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
     exit: { opacity: 0, scale: 1, y: 0, x: -50 },
   };
 
+
   const avatarVariantsName = {
     hidden: { opacity: 1, scale: 1, y: 0, x: 0 },
     visible: { opacity: 1, scale: 1, y: 0, x: 10, transition: { delay: 0.9 } },
@@ -102,11 +103,11 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
     hidden: { opacity: 0, scale: 1, y: 0, x: 0, height: "0%", transition: { delay: 0.4 } },
     visible: { opacity: 0, scale: 0, y: 0, x: 0, height: "0%", transition: { delay: 0.4 } },
   };
-
+    // max-width: 42vw;
   const blogVariants = {
-    hidden: { opacity: 1, scale: 1, y: 0, x: 0 },
-    visible: { opacity: 1, scale: 1, y: 0, x: 0 },
-    modal: { opacity: 1, scale: 1, y: 0, x: 0 },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "27vw" },
+    visible: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "27vw" },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "42vw" },
   };
 
   const [blogData, setBlogData] = useState({

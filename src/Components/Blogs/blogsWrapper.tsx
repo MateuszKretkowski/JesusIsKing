@@ -48,14 +48,15 @@ function BlogsWrapper() {
             <motion.h1 className="title"
             style={{opacity: isInView ? 1 : 0}}
             >BLOGS</motion.h1>
+            <button className="action-wrapper blogs-action"><h1 className="title-action">VIEW ALL BLOGS</h1></button>
         </div>
         <motion.div className="blogs_wrapper_container">
           <motion.div className="blogs-wrapper"
           >
             <div className="blogs-wrapper-wrapper">
-              {blogs.map(blog => (
-                <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
-                ))}
+            {blogs.slice(0, 3).map(blog => (
+  <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
+))}
                 </div>
           </motion.div>
         </motion.div>
