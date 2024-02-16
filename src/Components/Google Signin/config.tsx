@@ -34,34 +34,7 @@ export const app = firebase.initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 export function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  
-  signInWithPopup(auth, provider).then((result) => {
-    // Token ID można uzyskać z obiektu result.user
-    result.user.getIdToken().then((idToken) => {
-      // Tutaj wysyłasz token ID do backendu
-      fetch('/sessionLogin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idToken }),
-        credentials: 'include', // potrzebne do wysyłania cookies
-      }).then(response => {
-        // Możesz tutaj obsłużyć odpowiedź od serwera
-        console.log('Session login response', response);
-      }).catch(error => {
-        // Obsługa błędów po stronie sieci
-        console.error('Session login error', error);
-      });
-    }).catch(error => {
-      // Obsługa błędów getIdToken
-      console.error('Get ID Token error', error);
-    });
-  }).catch((error) => {
-    // Obsługa błędów signInWithPopup
-    console.error('Sign in with Google error', error);
-  });
+  return signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
 interface User {
@@ -72,20 +45,11 @@ interface User {
   from: string;
 }
 
-export async function isUserLoggedIn(req:any, res:any, next:any) {
-  const sessionCookie = req.cookies.session || '';
-  
-  try {
-    // Weryfikacja tokena sesji
-    const decodedClaims = await admin.auth().verifySessionCookie(sessionCookie, true);
-    req.user = decodedClaims;
-    next();
-  } catch (error) {
-    // Jeśli weryfikacja nie powiedzie się, możesz wylogować użytkownika,
-    // przekierować na stronę logowania, lub zwrócić błąd
-    res.status(401).send('You are not authorized');
-  }
-};
+export function isUserLoggedIn() {
+  const isLoggedIn = auth.currentUser !== null; // Jeśli currentUser istnieje, isLoggedIn = true
+  console.log(isLoggedIn);
+  return isLoggedIn;
+}
 
 export async function isUserAnAdmin() {
   const q = query(collection(db, "Users"), where("admin", "==", true));

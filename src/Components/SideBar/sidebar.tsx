@@ -124,9 +124,23 @@ function SideBar() {
         </div>
         <div className="login-wrapper">
         {isUserLoggedIn() ? (
+              <Link to="/">
+                <motion.button
+                  className="login_btn link"
+                  style={{opacity: isHomeOpen ? 0 : 1}}
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  HOME
+                </motion.button>
+              </Link>
+          ) : (
+            null
+          )}
+        {isUserLoggedIn() ? (
               <Link to="/blogs">
                 <motion.button
                   className="login_btn link"
+                  style={{opacity: location.pathname === "/blogs" ? 0 : 1}}
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   BLOGS
@@ -139,6 +153,7 @@ function SideBar() {
               <Link to="/adminpanel">
                 <motion.button
                   className="login_btn link"
+                  style={{opacity: location.pathname === "/adminpanel" ? 0 : 1}}
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   ADMIN PANEL
@@ -148,33 +163,19 @@ function SideBar() {
             null
           )}
           {isUserLoggedIn() ? (
-            isSettingsOpen ? null : (
               <Link to="/settings">
                 <motion.button
                   className="login_btn link"
+                  style={{opacity: isSettingsOpen ? 0 : 1}}
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   PROFILE
                 </motion.button>
               </Link>
-            )
           ) : (
             <h1></h1>
           )}
-                    {isUserLoggedIn() ? (
-            isHomeOpen ? null : (
-              <Link to="/">
-                <motion.button
-                  className="login_btn link"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  HOME
-                </motion.button>
-              </Link>
-            )
-          ) : (
-            null
-          )}
+              
           {isUserLoggedIn() ? (
             <button className="login_btn" onClick={signOutUser}>
               SIGN OUT
