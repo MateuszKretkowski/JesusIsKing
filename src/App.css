@@ -92,3 +92,24 @@ span {
 .grey {
   color: white;
 }
+
+/* Dostosowanie paska przewijania */
+::-webkit-scrollbar {
+  width: 12px; /* szerokość */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #00000000; 
+}
+
+/* Kolor cienia paska przewijania */
+::-webkit-scrollbar-thumb {
+  background: #cfcfcf; 
+  border-radius: 12px;
+}
+
+/* Gdy kursor najedzie na pasek przewijania */
+::-webkit-scrollbar-thumb:hover {
+  background: #b4b4b4; 
+}

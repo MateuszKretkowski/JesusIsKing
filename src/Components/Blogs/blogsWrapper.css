@@ -66,22 +66,3 @@
     border: none;
 
 }
-
-/* Stylowanie poziomego paska przewijania dla WebKit przeglądarek */
-::-webkit-scrollbar {
-    height: 8px; /* Ustaw wysokość poziomego paska przewijania */
-}
-
-::-webkit-scrollbar-track {
-    background: transparent; /* Ustaw kolor tła ścieżki przewijania */
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgb(207, 207, 207);
-    border-radius: 12px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgb(192, 192, 192);
-    border-radius: 12px;
-}
