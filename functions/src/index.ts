@@ -109,3 +109,51 @@ exports.exitBlog = functions.https.onCall(async (data, context) => {
     }
   }
 });
+
+exports.createPost = functions.https.onCall((data, context) => {
+  if (!context.auth) {
+    throw new functions.
+      https.
+      HttpsError("failed-precondition", "while authenticated.");
+  }
+  console.log(context.auth.uid);
+  const userRef = admin.firestore().collection("Users").doc(context.auth.uid);
+  return userRef.get()
+    .then((userDoc) => {
+      if (!userDoc.exists) {
+        throw new functions.
+          https.
+          HttpsError("not-found", "User data not found");
+      }
+      const userData = userDoc.data();
+      if (!userData) {
+        throw new functions.
+          https.
+          HttpsError("internal", "User data is undefined");
+      }
+      if (!context.auth) {
+        throw new functions.
+          https.
+          HttpsError("failed-precondition", "while authenticated.");
+      }
+      const postData = {
+        name: data.name,
+        description: data.description,
+        author: userData.name,
+        authorId: context.auth.uid,
+        numberOfLikes: 0,
+        numberOfReplies: 0,
+        numberOfReposts: 0,
+      };
+      const docRef = admin.firestore().collection("Posts").doc(data.name);
+      return docRef.set(postData)
+        .then(() => {
+          console.log("Post Created with id: ", data.name);
+          return {result: "Post Created successfully!"};
+        })
+        .catch((error) => {
+          throw new functions.https.
+            HttpsError("internal", "not create post:"+error.message);
+        });
+    });
+});

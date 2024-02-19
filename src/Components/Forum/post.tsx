@@ -13,6 +13,9 @@ import SideBar from "../SideBar/sidebar";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Post() {
+
+  
+
   return (
     <motion.div className='post'>
       <motion.div className="post_container">
@@ -28,7 +31,7 @@ function Post() {
             <motion.h2 className="post_description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem fuga eligendi debitis pariatur asdkljadljkasdjkl.</motion.h2>
         </motion.div>
         <motion.div className="post_action_container">
-                <motion.button className="post_action action_line"><motion.h3 className="post_action-text">REPLIES</motion.h3></motion.button>
+                <motion.button className="post_action action_line" style={{marginRight: "6%"}} ><motion.h3 className="post_action-text">REPLIES</motion.h3></motion.button>
                 <motion.button className="post_action action_line"><motion.h3 className="post_action-text">LIKE</motion.h3></motion.button>
                 <motion.button className="post_action action_line"><motion.h3 className="post_action-text">REPOST</motion.h3></motion.button>
         </motion.div>
