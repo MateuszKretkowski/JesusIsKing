@@ -116,4 +116,22 @@ export async function readBlogs() {
   }
 };
 
+export async function readPosts() {
+  try {
+    const postsCollectionRef = collection(db, 'Posts');
+    // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
+    const q = query(postsCollectionRef, orderBy('date'));
+
+    const querySnapshot = await getDocs(q);
+    const posts = querySnapshot.docs.map(doc => ({
+      name: doc.id,
+      ...doc.data()
+    }));
+    console.log("returned posts: ", posts);
+    return posts;
+  } catch (error) {
+    console.error("Error fetching posts: ", error);
+    return [];
+  }
+};
 // READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG

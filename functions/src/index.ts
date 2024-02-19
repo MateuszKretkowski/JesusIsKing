@@ -118,6 +118,10 @@ exports.createPost = functions.https.onCall((data, context) => {
   }
   console.log(context.auth.uid);
   const userRef = admin.firestore().collection("Users").doc(context.auth.uid);
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.
+    getUTCFullYear()}-${currentDate.
+    getUTCMonth() + 1}-${currentDate.getUTCDate()}`;
   return userRef.get()
     .then((userDoc) => {
       if (!userDoc.exists) {
@@ -141,6 +145,7 @@ exports.createPost = functions.https.onCall((data, context) => {
         description: data.description,
         author: userData.name,
         authorId: context.auth.uid,
+        date: formattedDate,
         numberOfLikes: 0,
         numberOfReplies: 0,
         numberOfReposts: 0,
