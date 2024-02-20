@@ -32,11 +32,18 @@
 }
 
 .post_author-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.post_author-wrapper-wrapper {
+  padding: 5px;
   display: flex;
   justify-content: center;
   align-items: end;
   gap: 10px;
-  padding: 5px;
 }
 
 .author_img {
@@ -52,6 +59,7 @@
 }
 
 .post_title-wrapper {
+  position: relative;
   padding: 5px;
 }
 
@@ -60,7 +68,9 @@
 }
 
 .post_description-wrapper {
+  position: relative;
   padding: 5px;
+  width: 100%;
 }
 
 .post_action_container {
@@ -88,10 +98,6 @@
 }
 
 .post_bottom_gradient {
-  position: relative;
-}
-
-.post_bottom_gradient:after {
   content: "";
   position: absolute;
   top: 100%;

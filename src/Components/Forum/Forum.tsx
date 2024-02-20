@@ -111,7 +111,6 @@ function Forum() {
           <div className="addpost_container">
               <div className="addpost_title-wrapper"
               >
-              {!isApplied && (
                 <motion.textarea
                   name="name"
                   value={postData.name}
@@ -126,7 +125,6 @@ function Forum() {
                   transition={{duration: 0.5}}
                   placeholder="WHAT'S ON YOUR MIND TODAY?"
                 ></motion.textarea>
-                  )}
                 <motion.div
                   className="bottom_gradient"
                   variants={gradientVariants}
