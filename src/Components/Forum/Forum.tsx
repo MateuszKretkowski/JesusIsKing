@@ -19,6 +19,10 @@ function Forum() {
   const [isFocused, setIsFocused] = useState(false);
   const [isEven, setIsEven] = useState(false);
   const [isApplied, setIsApplied] = useState(false);
+  const [isAppliedAddPost, setIsAppliedAddPost] = useState(false);
+  const [firstPostTitle, setFirstPostTitle] = useState("");
+const [firstPostDescription, setFirstPostDescription] = useState("");
+
 
   interface PostData {
     name: string;
@@ -58,6 +62,16 @@ function Forum() {
       const result = await createPost(postData);
       console.log(result.data);
       await setIsApplied(true);
+      await setIsAppliedAddPost(true);
+  
+      setTimeout(() => {
+        setFirstPostTitle(postData.name);
+        setFirstPostDescription(postData.description);
+        // Resetujemy stan `postData` i `isAppliedAddPost`
+        setPostData(prevData => ({ ...prevData, name: "", description: "" }));
+        setIsAppliedAddPost(false);
+  
+      }, 1000);
     } catch (error) {
       console.error("Error creating Post: ", error);
     }
@@ -121,9 +135,10 @@ function Forum() {
                   rows="1"
                   cols="50"
                   layout="position"
-                  layoutId={"post_title"}
+                  // layoutId={"post_title"}
                   transition={{duration: 0.5}}
                   placeholder="WHAT'S ON YOUR MIND TODAY?"
+                  style={{opacity: isAppliedAddPost ? 0 : 1}}
                 ></motion.textarea>
                 <motion.div
                   className="bottom_gradient"
@@ -137,15 +152,14 @@ function Forum() {
                 name="description"
                 value={postData.description}
                 onChange={handleChange}
-                layout="position"
                 className="forum_addpost_title forum_addpost_description"
                 maxLength="400"
                 minLength="1"
                 rows="6"
                 cols="50"
                 layout="position"
-                layoutId={"post_description"}
-                style={{ height: isFocused ? "100px" : "30px" }}
+                // layoutId={"post_description"}
+                style={{ height: isFocused ? "100px" : "30px", opacity: isAppliedAddPost ? 0 : 1 }}
                 transition={{ type: "spring" }}
                 onFocus={() => {
                   setIsFocused(true);
@@ -182,6 +196,8 @@ function Forum() {
                   isApplied={isApplied}
                   localName={postData.name}
                   localDescription={postData.description}
+                  firstPostTitle={firstPostTitle}
+                  firstPostDescription={firstPostDescription}
                 />
               ))}
           </div>

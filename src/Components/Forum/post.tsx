@@ -26,6 +26,8 @@ interface Post {
   isApplied: boolean;
   localName: string;
   localDescription: string;
+  firstPostTitle: string;
+  firstPostDescription: string;
 }
 const Post = ({
   index,
@@ -40,6 +42,8 @@ const Post = ({
   isApplied,
   localName,
   localDescription,
+  firstPostTitle,
+  firstPostDescription,
 }: Post) => {
   const [isEven, setIsEven] = useState(false);
   useEffect(() => {
@@ -50,79 +54,66 @@ const Post = ({
     <motion.div
       className="post"
       style={{
-        marginLeft: isEven ? "400px" : "0%",
-        marginRight: isEven ? "0%" : "400px",
+        marginLeft: isEven ? "0px" : "250px",
+        marginRight: isEven ? "250px" : "0px",
       }}
     >
       <motion.div
         className="post_container"
-        style={{ alignItems: isEven ? "end" : "start" }}
+        style={{ alignItems: isEven ? "start" : "end" }}
       >
         <motion.div
           className="post_line"
-          style={{ left: isEven ? "100%" : "0%" }}
+          style={{ left: isEven ? "0%" : "100%" }}
         />
         <motion.div
           className="post_author-wrapper"
-          style={{ justifyContent: isEven ? "end" : "start" }}
+          style={{ justifyContent: isEven ? "start" : "end" }}
         >
           <motion.div
             className="post_author-wrapper-wrapper"
-            style={{ flexDirection: isEven ? "row-reverse" : "row" }}
+            style={{ flexDirection: isEven ? "row" : "row-reverse" }}
           >
             <motion.img src={defaultAvatar} className="author_img" />
             <motion.h5 className="author_name">{author}</motion.h5>
           </motion.div>
           <motion.div
             className="post_bottom_gradient"
-            style={{ scaleX: isEven ? "-1" : "1" }}
+            style={{ scaleX: isEven ? "1" : "-1" }}
           />
         </motion.div>
         <motion.div className="post_title-wrapper">
-          {!isApplied && <motion.h1 className="post_title">{name}</motion.h1>}
-          {isApplied && (
             <motion.h1
               layout="position"
               className="post_title"
               layoutId={index === 0 ? "post_title" : ""}
               transition={{ duration: 0.7 }}
+              style={{ opacity: isApplied ? 1 : 0 }}
             >
-              {index === 0 ? localName : name}
+              {index === 0 ? firstPostTitle : name}
             </motion.h1>
-          )}
           <motion.div
             className="post_bottom_gradient"
-            style={{ scaleX: isEven ? "-1" : "1" }}
+            style={{ scaleX: isEven ? "1" : "-1" }}
           />
         </motion.div>
         <motion.div
           className="post_description-wrapper"
-          style={{ textAlign: isEven ? "end" : "start" }}
+          style={{ textAlign: isEven ? "start" : "end" }}
         >
-          <motion.h2
-            className="post_description"
-            style={{
-              opacity: isApplied ? (index === 0 ? 0 : 1) : 1,
-              height: isApplied ? (index === 0 ? 0 : "100%") : "100%",
-            }}
-          >
-            {description}
-          </motion.h2>
-          {isApplied && index === 0 && (
             <motion.h2
               layout="position"
               className="post_description"
               layoutId={index === 0 ? "post_description" : ""}
               transition={{ duration: 0.7 }}
-              style={{height: "100%"}}
+              style={{ height: "100%", opacity: isApplied ? 1 : 0 }}
             >
-              {index === 0 ? localDescription : description}
+              {index === 0 ? firstPostDescription : description}
             </motion.h2>
-          )}
         </motion.div>
         <motion.div
           className="post_action_container"
-          style={{ justifyContent: isEven ? "end" : "start" }}
+          style={{ justifyContent: isEven ? "start" : "end" }}
         >
           <motion.button
             className="post_action action_line"
