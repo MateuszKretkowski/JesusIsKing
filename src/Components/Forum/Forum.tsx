@@ -21,8 +21,7 @@ function Forum() {
   const [isApplied, setIsApplied] = useState(false);
   const [isAppliedAddPost, setIsAppliedAddPost] = useState(false);
   const [firstPostTitle, setFirstPostTitle] = useState("");
-const [firstPostDescription, setFirstPostDescription] = useState("");
-
+  const [firstPostDescription, setFirstPostDescription] = useState("");
 
   interface PostData {
     name: string;
@@ -63,15 +62,7 @@ const [firstPostDescription, setFirstPostDescription] = useState("");
       console.log(result.data);
       await setIsApplied(true);
       await setIsAppliedAddPost(true);
-  
-      setTimeout(() => {
-        setFirstPostTitle(postData.name);
-        setFirstPostDescription(postData.description);
-        // Resetujemy stan `postData` i `isAppliedAddPost`
-        setPostData(prevData => ({ ...prevData, name: "", description: "" }));
-        setIsAppliedAddPost(false);
-  
-      }, 1000);
+
     } catch (error) {
       console.error("Error creating Post: ", error);
     }
@@ -105,14 +96,41 @@ const [firstPostDescription, setFirstPostDescription] = useState("");
     fetchPosts();
   }, []);
 
-
+  const addPostTitleVariants = {
+    hidden: { color: "#333333" },
+    visible: { color: "#000000" },
+  };
+  const addPostDescriptionVariants = {
+    hidden: { color: "#333333" },
+    visible: { color: "#000000" },
+  };
+  const addPostActionContainerVariants = {
+    hidden: { opacity: "0", top: 100 },
+    visible: { opacity: "1", top: 0, transition: { staggerChildren: 0.5 } },
+  };
+  const addPostActionVariants = {
+    hidden: { opacity: "0", top: 100 },
+    visible: { opacity: "1", top: 0 },
+  };
+  const addPostAuthorContainerVariants = {
+    hidden: { opacity: "0", top: -100, height: "0%" },
+    visible: { opacity: "1", top: 0, height: "100%",  transition: { staggerChildren: 0.5 } },
+  };
+  const addPostAuthorVariants = {
+    hidden: { opacity: "0", top: -100, height: "0%", },
+    visible: { opacity: "1", top: 0, height: "100%", },
+  };
+  const addPostPostVariants = {
+    hidden: { opacity: "1" },
+    visible: { opacity: "0" },
+  };
   const gradientVariants = {
     hidden: { width: "0%" },
     visible: { width: "100%" },
   };
   const controls = useAnimation();
   useEffect(() => {
-    isApplied ? controls.start("hidden") : controls.start("visible");
+    isApplied ? controls.start("visible") : controls.start("hidden");
   }, [isApplied]);
 
   return (
@@ -123,52 +141,157 @@ const [firstPostDescription, setFirstPostDescription] = useState("");
         </div>
         <div className="forum_content">
           <div className="addpost_container">
-              <div className="addpost_title-wrapper"
+            <motion.div
+              className="post_author-wrapper"
+              style={{ justifyContent: isEven ? "end" : "start" }}
+            >
+              <motion.div
+                className="post_author-wrapper-wrapper"
+                style={{ flexDirection: isEven ? "row-reverse" : "row" }}
+                variants={addPostAuthorContainerVariants}
+                initial={controls}
+                animate={controls}
               >
-                <motion.textarea
-                  name="name"
-                  value={postData.name}
-                  onChange={handleChange}
-                  className="forum_addpost_title"
-                  maxLength="40"
-                  minLength="1"
-                  rows="1"
-                  cols="50"
-                  layout="position"
-                  // layoutId={"post_title"}
-                  transition={{duration: 0.5}}
-                  placeholder="WHAT'S ON YOUR MIND TODAY?"
-                  style={{opacity: isAppliedAddPost ? 0 : 1}}
-                ></motion.textarea>
-                <motion.div
-                  className="bottom_gradient"
-                  variants={gradientVariants}
-                  initial={"hidden"}
-                  animate={"visible"}
+                <motion.img
+                  src={defaultAvatar}
+                  className="author_img"
+                  variants={addPostAuthorVariants}
+                  initial={controls}
+                  animate={controls}
                 />
-              </div>
+                <motion.h5
+                  className="author_name"
+                  variants={addPostAuthorVariants}
+                  initial={controls}
+                  animate={controls}
+                >
+                  {postData.author}
+                </motion.h5>
+              </motion.div>
+              <motion.div
+                                variants={gradientVariants}
+                                initial={controls}
+                                animate={controls}
+                className="post_bottom_gradient"
+                style={{ scaleX: isEven ? "-1" : "1" }}
+              />
+            </motion.div>
             <div className="addpost_title-wrapper">
+              {!isApplied ? (
               <motion.textarea
+              name="name"
+              value={postData.name}
+              onChange={handleChange}
+              className="forum_addpost_title"
+              variants={addPostTitleVariants}
+              initial={controls}
+              animate={controls}
+              maxLength="40"
+              minLength="1"
+              rows="1"
+              cols="50"
+              layout="position"
+              // layoutId={"post_title"}
+              transition={{ duration: 0.5 }}
+              placeholder="WHAT'S ON YOUR MIND TODAY?"
+              style={{ height: "100%" }}
+              ></motion.textarea>
+              ) : (
+              <motion.h1
+              className="forum_addpost_title"
+              variants={addPostTitleVariants}
+              initial={controls}
+              animate={controls}
+              >
+              {postData.name}
+              </motion.h1>
+              )
+              }
+              <motion.div
+                className="bottom_gradient"
+                variants={gradientVariants}
+                initial={"hidden"}
+                animate={"visible"}
+              />
+            </div>
+            <div className="addpost_title-wrapper">
+              {!isApplied ? (
+
+                <motion.textarea
                 name="description"
                 value={postData.description}
                 onChange={handleChange}
                 className="forum_addpost_title forum_addpost_description"
+                variants={addPostDescriptionVariants}
+                initial={controls}
+                animate={controls}
                 maxLength="400"
                 minLength="1"
                 rows="6"
                 cols="50"
                 layout="position"
                 // layoutId={"post_description"}
-                style={{ height: isFocused ? "100px" : "30px", opacity: isAppliedAddPost ? 0 : 1 }}
+                style={{ height: isFocused ? "200px" : "30px" }}
                 transition={{ type: "spring" }}
                 onFocus={() => {
                   setIsFocused(true);
                 }}
                 placeholder="Could You maybe describe it?"
-              ></motion.textarea>
-            </div>
+                ></motion.textarea>
+                ) : (
+                  <motion.h2
+                  className="forum_addpost_title forum_addpost_description"
+                  variants={addPostDescriptionVariants}
+                  initial={controls}
+                  animate={controls}
+                  >
+                    {postData.description}
+                  </motion.h2>
+                )
+              }
+                </div>
             <div className="addpost_action">
-              <button className="forum_addpost_button">
+              <motion.div
+                className="post_action_container"
+                variants={addPostActionContainerVariants}
+                initial={controls}
+                animate={controls}
+                style={{ justifyContent: isEven ? "end" : "start" }}
+              >
+                <motion.button
+                  className="post_action action_line"
+                  style={{ marginRight: "6%" }}
+                  variants={addPostActionVariants}
+                  initial={controls}
+                  animate={controls}
+                  transition={{ delay: 1 }}
+                >
+                  <motion.h3 className="post_action-text">REPLY (0)</motion.h3>
+                </motion.button>
+                <motion.button
+                  className="post_action action_line"
+                  variants={addPostActionVariants}
+                  initial={controls}
+                  animate={controls}
+                  transition={{ delay: 2 }}
+                >
+                  <motion.h3 className="post_action-text">LIKE (0)</motion.h3>
+                </motion.button>
+                <motion.button
+                  className="post_action action_line"
+                  variants={addPostActionVariants}
+                  initial={controls}
+                  animate={controls}
+                  transition={{ delay: 3 }}
+                >
+                  <motion.h3 className="post_action-text">REPOST (0)</motion.h3>
+                </motion.button>
+              </motion.div>
+              <motion.button className="forum_addpost_button"
+                                variants={addPostPostVariants}
+                                initial={controls}
+                                animate={controls}
+              >
                 <h3
                   className="forum_addpost_button-text"
                   onClick={() => {
@@ -177,7 +300,7 @@ const [firstPostDescription, setFirstPostDescription] = useState("");
                 >
                   POST IT
                 </h3>
-              </button>
+              </motion.button>
             </div>
           </div>
           <div className="posts_container">

@@ -148,14 +148,24 @@ exports.createPost = functions.https.onCall((data, context) => {
         name: data.name,
         description: data.description,
         author: userData.name,
+        authorDescription: userData.description,
+        authorFrom: userData.from,
+        authorLink: userData.link,
         authorId: context.auth.uid,
         date: formattedDate,
         numberOfLikes: 0,
         numberOfReplies: 0,
         numberOfReposts: 0,
       };
+      const userRef = admin
+        .firestore()
+        .collection("Users")
+        .doc(context.auth.uid);
+      const userPostRef = userRef.collection("UserPosts").doc(postData.name);
       const docRef = admin.firestore().collection("Posts").doc(data.name);
-      return docRef.set(postData)
+      const savePostPromise = docRef.set(postData);
+      const saveUserPostPromise = userPostRef.set({id: postData.name});
+      return Promise.all([savePostPromise, saveUserPostPromise])
         .then(() => {
           console.log("Post Created with id: ", data.name);
           return {result: "Post Created successfully!"};

@@ -25,14 +25,14 @@
 
 .addpost_container {
   position: relative;
-  width: 28vw;
+  width: 36vw;
   height: auto;
   min-height: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: start;
   flex-direction: column;
-  margin-bottom: 10%;
+  margin: 6% 250px 5% 0%;
 }
 
 .bottom_gradient {
@@ -80,6 +80,7 @@
 
 .addpost_title-wrapper {
   width: 100%;
+  height: 100%;
 }
 
 .addpost_action {
@@ -87,11 +88,13 @@
   justify-content: end;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
 .forum_addpost_button {
   border: none;
   margin: 1% 1%;
+  width: 20%;
 }
 
 .forum_addpost_button-text:after {
@@ -116,7 +119,16 @@ background: radial-gradient(circle, rgba(40,40,40,1) 16%, rgba(40,40,40,0) 100%)
 }
 
 .forum_addpost_title {
-  font-size: 20px; /* Ustawia wielkość czcionki */
+  font-size: 2rem; /* Ustawia wielkość czcionki */
+  font-weight: 900;
+  resize: none;
+  border: none;
+  background-color: transparent;
+  width: 100%;
+}
+
+.forum_addpost_description {
+  font-size: 24px; /* Ustawia wielkość czcionki */
   font-weight: 800;
   color: #333333; /* Ustawia kolor czcionki */
   resize: none;
