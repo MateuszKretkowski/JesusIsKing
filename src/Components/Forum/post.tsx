@@ -77,6 +77,9 @@ const Post = ({
             <motion.img src={defaultAvatar} className="author_img" />
             <motion.h5 className="author_name">{author}</motion.h5>
           </motion.div>
+          <motion.div className="author_description">
+
+          </motion.div>
           <motion.div
             className="post_bottom_gradient"
             style={{ scaleX: isEven ? "-1" : "1" }}
@@ -129,6 +132,12 @@ const Post = ({
               REPOST: {noReposts}
             </motion.h3>
           </motion.button>
+        </motion.div>
+        <motion.div
+          className="post_date_container"
+          style={{ justifyContent: isEven ? "end" : "start" }}
+        >
+          <motion.h5 className="post_date-text">{date}</motion.h5>
         </motion.div>
       </motion.div>
     </motion.div>

@@ -9,18 +9,58 @@ import {
 } from "framer-motion";
 import Modal from "./Modal.tsx";
 import handleSubmit from "./Modal.tsx";
-import { isUserLoggedIn, readUser, auth } from "../Google Signin/config.tsx";
+import { useParams } from "react-router-dom";
+import { isUserLoggedIn, readUser, auth, db, readUserByUsername } from "../Google Signin/config.tsx";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
+  const { name } = useParams<{ name?: string }>();
+  const [userId, setUserId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [isMyPage, setIsMyPage] = useState(false);
   const controls = useAnimation();
+  const [userData, setUserData] = useState({
+    id: "",
+    name: "",
+    description: "",
+    from: "",
+    link: "",
+  });
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
   });
+  useEffect(() => {
+    if(auth.currentUser) {
+      auth.currentUser.uid == userData.id ? setIsMyPage(true) : setIsMyPage(false);
+      console.log(isMyPage)
+      console.log(userData.id, "USERDATA.ID")
+      console.log(auth.currentUser.uid, "AUTH.CURRENTUSER.UID")
+    }
+  }, [userData.id])
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, call readUser to fetch the user data.
+        readUserByUsername(name, setUserData);
+      } else {
+        // No user is signed in, reset the user data.
+        setUserData({
+          id: "",
+          name: "",
+          description: "",
+          from: "",
+          link: "",
+        });
+      }
+    });
+  
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   const even = {
     hidden: { x: -200, opacity: 0, scale: 1,},
@@ -45,35 +85,6 @@ function Settings() {
     visible: { opacity: 1, scale: 1 , y: 0},
     exit: { opacity: 0, scale: 0, y: 100 },
   };
-
-  const [userData, setUserData] = useState({
-    id: "",
-    name: "",
-    description: "",
-    from: "",
-    link: "",
-  });
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, call readUser to fetch the user data.
-        readUser(setUserData);
-      } else {
-        // No user is signed in, reset the user data.
-        setUserData({
-          id: "",
-          name: "",
-          description: "",
-          from: "",
-          link: "",
-        });
-      }
-    });
-  
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
-  
 
   function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
     const words = name.split(" ");
@@ -167,13 +178,15 @@ function Settings() {
               </motion.a>
             </div>
             <div className="helper-edit-wrapper">
+            {(isMyPage && 
             <motion.button
-              className="action-wrapper settings_action-wrapper"
-              onClick={() => setShowModal(!showModal)}
-              style={{ opacity: showModal ? 0 : 1}}
+            className="action-wrapper settings_action-wrapper"
+            onClick={() => setShowModal(!showModal)}
+            style={{ opacity: showModal ? 0 : 1}}
             >
               <h5 className="edit">EDIT YOUR ACCOUNT</h5>
             </motion.button>
+              )}
           </div>
           </div>
         </div>

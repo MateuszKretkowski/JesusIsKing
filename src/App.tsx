@@ -26,7 +26,7 @@ function App() {
               <Forum />
               </>
            } />
-           <Route path="/settings" element={<Settings />} />
+           <Route path="/user/:name" element={<Settings />} />
            <Route path="/adminpanel" element={<AdminPanel />} />
            <Route path="/blogs" element={<BlogSite />} />
 

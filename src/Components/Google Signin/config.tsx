@@ -9,7 +9,18 @@ import {
   updateProfile,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, onSnapshot, getFirestore, Timestamp, getDoc, collection, query, where, getDocs, orderBy, } from "firebase/firestore";
+import {
+  doc,
+  onSnapshot,
+  getFirestore,
+  Timestamp,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -51,6 +62,38 @@ export function isUserLoggedIn() {
   return isLoggedIn;
 }
 
+export async function readUserByUsername(username: string, setUserData: (userData: User) => void) {
+  // Odkoduj nazwę użytkownika z URL
+  const formattedUsername = decodeURIComponent(username).replace(/\+/g, ' ').trim();
+
+  // Stwórz zapytanie do kolekcji 'Users', gdzie pole 'name' jest równe 'formattedUsername'
+  const usersRef = collection(db, "Users");
+  const q = query(usersRef, where("name", "==", formattedUsername));
+
+  try {
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      // Zakładamy, że 'name' jest unikalne
+      const userDoc = querySnapshot.docs[0];
+      const userData: User = {
+        id: userDoc.id,
+        name: userDoc.data().name,
+        description: userDoc.data().description,
+        from: userDoc.data().from,
+        link: userDoc.data().link,
+      };
+      console.log(`user found with the name: ${formattedUsername}`);
+      setUserData(userData);
+    } else {
+      console.log(`No user found with the name: ${formattedUsername}`);
+      setUserData(null);
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    setUserData(null);
+  }
+}
+
 export async function isUserAnAdmin() {
   const q = query(collection(db, "Users"), where("admin", "==", true));
   const querySnapshot = await getDocs(q);
@@ -68,8 +111,7 @@ export function signOutUser() {
 }
 
 // CLOUD FIRESTORE
-const db = getFirestore(app);
-
+export const db = getFirestore(app);
 
 // READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER
 export function readUser(setUserData: (userData: User) => void) {
@@ -99,14 +141,14 @@ export function readUser(setUserData: (userData: User) => void) {
 
 export async function readBlogs() {
   try {
-    const blogsCollectionRef = collection(db, 'Blogs');
+    const blogsCollectionRef = collection(db, "Blogs");
     // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
-    const q = query(blogsCollectionRef, orderBy('date', 'desc'));
+    const q = query(blogsCollectionRef, orderBy("date", "desc"));
 
     const querySnapshot = await getDocs(q);
-    const blogs = querySnapshot.docs.map(doc => ({
+    const blogs = querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
     console.log("returned blogs: ", blogs);
     return blogs;
@@ -114,18 +156,18 @@ export async function readBlogs() {
     console.error("Error fetching blogs: ", error);
     return [];
   }
-};
+}
 
 export async function readPosts() {
   try {
-    const postsCollectionRef = collection(db, 'Posts');
+    const postsCollectionRef = collection(db, "Posts");
     // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
-    const q = query(postsCollectionRef, orderBy('date'));
+    const q = query(postsCollectionRef, orderBy("date"));
 
     const querySnapshot = await getDocs(q);
-    const posts = querySnapshot.docs.map(doc => ({
+    const posts = querySnapshot.docs.map((doc) => ({
       name: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
     console.log("returned posts: ", posts);
     return posts;
@@ -133,5 +175,5 @@ export async function readPosts() {
     console.error("Error fetching posts: ", error);
     return [];
   }
-};
+}
 // READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG

@@ -28,6 +28,7 @@ function Forum() {
     description: string;
     author: string;
     authorId: string;
+    date: string;
     numberOfLikes: number;
     numberOfReplies: number;
     numberOfReposts: number;
@@ -38,6 +39,7 @@ function Forum() {
     description: "",
     author: "",
     authorId: "",
+    date: "",
     numberOfLikes: 0,
     numberOfReplies: 0,
     numberOfReposts: 0,
