@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useNavigate } from 'react-router-dom';
-import { app } from '../Google Signin/config.tsx';
+import { app } from '../config/config.tsx';
 import "./Modal.css";
 
 type ModalProps = {
@@ -22,6 +22,14 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
         hidden: { y: "-200vh", opacity: 0 },
         visible: { y: "-50vh", opacity: 1 },
     };
+    const inputTitle = {
+        hidden: { opacity: 0, "letter-spacing": "0px" },
+        visible: { opacity: 1, "letter-spacing": "2px"  },
+    }
+    const inputApply = {
+        hidden: { opacity: 0, y: 100},
+        visible: { opacity: 1, y: 0},
+    }
 
     interface FormData {
         name: string;
@@ -80,7 +88,14 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                             <motion.div className='text-wrapper'>
 
                                 <motion.div className='input-wrapper'>
-                                    <motion.h2 className='input-title'>NAME</motion.h2>
+                                    <motion.h2 className='input-title'
+                                    variants={inputTitle}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="hidden"
+                                    transition={{delay: 1}}
+
+                                    >NAME</motion.h2>
                                     
                                     <motion.input 
                                     type='text'
@@ -93,7 +108,14 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                 </motion.div>
 
                                 <motion.div className='input-wrapper'>
-                                    <motion.h2 className='input-title'>DESCRIPTION</motion.h2>
+                                    <motion.h2 className='input-title'
+                                                                        variants={inputTitle}
+                                                                        initial="hidden"
+                                                                        animate="visible"
+                                                                        exit="hidden"
+                                                                    transition={{delay: 2}}
+
+                                    >DESCRIPTION</motion.h2>
                                     
                                     <motion.textarea 
                                     type='text'
@@ -106,9 +128,17 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                 </motion.div>
 
                                 <motion.div className='input-wrapper'>
-                                    <motion.h2 className='input-title'>LINK</motion.h2>
+                                    <motion.h2 className='input-title'
+                                                                        variants={inputTitle}
+                                                                        initial="hidden"
+                                                                        animate="visible"
+                                                                        exit="hidden"
+
+                                                                    transition={{delay: 3}}
+
+                                    >LINK</motion.h2>
                                     
-                                    <motion.input 
+                                    <motion.input
                                     type='text'
                                     name='link'
                                     value={formData.link}
@@ -119,7 +149,14 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                 </motion.div>
 
                                 <motion.div className='input-wrapper'>
-                                    <motion.h2 className='input-title'>LOCATION</motion.h2>
+                                    <motion.h2 className='input-title'
+                                                                        variants={inputTitle}
+                                                                        initial="hidden"
+                                                                        animate="visible"
+                                                                        exit="hidden"
+                                                                    transition={{delay: 4}}
+
+                                    >LOCATION</motion.h2>
                                     
                                     <motion.input 
                                     type='text'
@@ -133,7 +170,13 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                             </motion.div>
 
                             <motion.div className='modal_action-wrapper'>
-                                <motion.button onClick={handleSubmit} className='action-wrapper'><h2>APPLY CHANGES</h2></motion.button>
+                                <motion.button onClick={handleSubmit} className='action-wrapper'
+                                                                    variants={inputApply}
+                                                                    initial="hidden"
+                                                                    animate="visible"
+                                                                    exit="hidden"
+                                                                    transition={{delay: 5}}
+                                ><h2>APPLY CHANGES</h2></motion.button>
                             </motion.div>
                         </motion.div>
                     </motion.div>

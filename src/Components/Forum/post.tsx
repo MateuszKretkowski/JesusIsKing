@@ -87,7 +87,6 @@ const Post = ({
         </motion.div>
         <motion.div className="post_title-wrapper">
           <motion.h1
-            layout="position"
             className="post_title"
             layoutId={index === 0 ? "post_title" : ""}
             transition={{ duration: 0.7 }}
@@ -104,8 +103,7 @@ const Post = ({
           style={{ textAlign: isEven ? "end" : "start" }}
         >
           <motion.h2
-            layout="position"
-            className="post_description"
+             className="post_description"
             layoutId={index === 0 ? "post_description" : ""}
             transition={{ duration: 0.7 }}
           >

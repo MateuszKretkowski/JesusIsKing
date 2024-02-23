@@ -9,7 +9,7 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
-import { readBlogs } from "../Google Signin/config";
+import { readBlogs } from "../config/config";
 
 function BlogsWrapper() {
   interface Blog {

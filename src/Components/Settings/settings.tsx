@@ -10,7 +10,7 @@ import {
 import Modal from "./Modal.tsx";
 import handleSubmit from "./Modal.tsx";
 import { useParams } from "react-router-dom";
-import { isUserLoggedIn, readUser, auth, db, readUserByUsername } from "../Google Signin/config.tsx";
+import { isUserLoggedIn, readUser, auth, db, readUserByUsername } from "../config/config.tsx";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 const defaultAvatar = require("../../Images/avatar.webp");
@@ -137,6 +137,16 @@ function Settings() {
               className="title-settings-wrapper"
             >
               {nameMAPPED}
+            </motion.div>
+            <motion.div
+              className="settings_id"
+              variants={variantsDescription}
+              initial={controls}
+              animate={controls}
+              exit={controls}
+              transition={{type: "spring", bounce: 1, damping: 12}}
+            >
+              @{userData.id}
             </motion.div>
             <motion.h2
               className=""

@@ -111,6 +111,14 @@
     z-index: 50;
 }
 
+.settings_id {
+    font-weight: 900;
+    font-size: 12px;
+    margin: 0px 0 12px 0;
+    color: #0000009d;
+
+}
+
 
 .edit:active {
     letter-spacing: 1px;

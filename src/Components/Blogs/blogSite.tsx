@@ -11,7 +11,7 @@ import {
 } from "framer-motion";
 import BlogModal from "./BlogModal";
 import { Link, useLocation } from "react-router-dom";
-import { readBlogs } from "../Google Signin/config";
+import { readBlogs } from "../config/config";
 
 function BlogSite() {
   interface Blog {

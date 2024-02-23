@@ -1,0 +1,47 @@
+.redirect {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.redirect-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    text-align: center;
+    font-weight: 100;
+}
+
+
+.redirect-input:focus {
+    outline: none;
+}
+
+.redirect_input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    height: 100%;
+    margin-top: 40%;
+}
+
+.redirect_button {
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    text-align: center;
+    width: 100%;
+}
+
+.redirect_button-text {
+    font-weight: 100;
+    color: grey;
+    font-size: 12px;
+}

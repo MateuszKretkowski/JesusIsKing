@@ -72,7 +72,8 @@ export async function readUserByUsername(username: string, setUserData: (userDat
 
   try {
     const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty) {
+    console.log(querySnapshot)
+    if (querySnapshot.docs.length != 0) {
       // Zakładamy, że 'name' jest unikalne
       const userDoc = querySnapshot.docs[0];
       const userData: User = {
@@ -86,11 +87,19 @@ export async function readUserByUsername(username: string, setUserData: (userDat
       setUserData(userData);
     } else {
       console.log(`No user found with the name: ${formattedUsername}`);
-      setUserData(null);
+      const userData: User = {
+        id: "-1",
+        name: "-1",
+        description: "-1",
+        from: "-1",
+        link: "-1",
+      };
+      setUserData(userData);
     }
+
   } catch (error) {
     console.error("Error fetching user data:", error);
-    setUserData(null);
+
   }
 }
 
@@ -115,7 +124,7 @@ export const db = getFirestore(app);
 
 // READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER
 export function readUser(setUserData: (userData: User) => void) {
-  const userId = auth.currentUser ? auth.currentUser.uid : null;
+  const userId = auth.currentUser ? auth.currentUser.uid : "-1";
 
   const unsub = onSnapshot(
     doc(db, "Users", auth.currentUser ? auth.currentUser.uid : "none"),

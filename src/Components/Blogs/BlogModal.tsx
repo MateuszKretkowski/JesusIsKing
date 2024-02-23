@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useNavigate } from "react-router-dom";
-import { app } from "../Google Signin/config.tsx";
+import { app } from "../config/config.tsx";
 import "./blogModal.css";
 const blogImageTest = require("../../Images/blogtestimage.jpg");
 const defaultAvatar = require("../../Images/avatar.webp");

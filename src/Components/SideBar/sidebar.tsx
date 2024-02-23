@@ -5,11 +5,11 @@ import {
   signInWithGoogle,
   signOutUser,
   auth,
-} from "../Google Signin/config.tsx";
+} from "../config/config.tsx";
 import { onAuthStateChanged } from "firebase/auth";
-import { isUserLoggedIn } from "../Google Signin/config.tsx";
+import { isUserLoggedIn } from "../config/config.tsx";
 import "./sidebar.css";
-import { readUser } from "../Google Signin/config.tsx";
+import { readUser } from "../config/config.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -163,7 +163,7 @@ function SideBar() {
             null
           )}
           {isUserLoggedIn() ? (
-              <Link to="/settings">
+              <Link to={`/user`}>
                 <motion.button
                   className="login_btn link"
                   style={{opacity: isSettingsOpen ? 0 : 1}}

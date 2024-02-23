@@ -7,6 +7,7 @@ import BlogsWrapper from "./Components/Blogs/blogsWrapper.tsx";
 import AdminPanel from "./Components/AdminPanel/adminPanel.tsx";
 import BlogSite from "./Components/Blogs/blogSite.tsx";
 import Forum from "./Components/Forum/Forum.tsx";
+import Redirect from "./Components/Google Signin/redirect.tsx";
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
@@ -27,6 +28,7 @@ function App() {
               </>
            } />
            <Route path="/user/:name" element={<Settings />} />
+           <Route path="/redirect" element={<Redirect />} />
            <Route path="/adminpanel" element={<AdminPanel />} />
            <Route path="/blogs" element={<BlogSite />} />
 

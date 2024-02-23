@@ -9,7 +9,7 @@ import {
   useInView,
   useAnimate,
 } from "framer-motion";
-import { readBlogs } from "../Google Signin/config";
+import { readBlogs } from "../config/config";
 import SideBar from "../SideBar/sidebar";
 const defaultAvatar = require("../../Images/avatar.webp");
 const blogImageTest = require("../../Images/blogtestimage.jpg");

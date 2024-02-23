@@ -12,7 +12,7 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Post from "./post";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { readPosts } from "../Google Signin/config";
+import { readPosts } from "../config/config";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Forum() {

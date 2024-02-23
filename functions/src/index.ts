@@ -9,11 +9,18 @@ import * as admin from "firebase-admin";
 // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp();
-exports.createUserDocument = functions.auth.user().onCreate((user) => {
+exports.createUserDocument = functions.https.onCall((data, context) => {
   const db = admin.firestore();
+  const userId = data.userId;
+  return db.collection("Users").add(userId);
+  // chcialbym jeszcze zeby dodalo mi do plikow cookies userId, zebym mogl sobie latwo wziac userId, i zweryfikowac do kiedy, i gdzie chce
+});
 
-  return db.collection("Users").doc(user.uid).set({
-    id: user.uid,
+exports.authenticateUserDocument = functions.auth.user().onCreate((user) => {
+  const db = admin.firestore();
+  const userUidSliced = user.uid.slice(0, 15);
+  return db.collection("Users").doc(userUidSliced).set({
+    id: userUidSliced,
     email: user.email,
     name: user.displayName || "DEFAULT",
     description: "DEAFULT_DESCRIPTION",
