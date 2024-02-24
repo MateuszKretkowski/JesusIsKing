@@ -27,7 +27,6 @@ function Redirect() {
         // Wywołaj funkcję i poczekaj na zakończenie
         const result = await updateUser({ userId });
         console.log(result.data);
-        setCookie("userId", userId, 12)
         // Możesz tu przekierować użytkownika lub wykonać inną akcję po pomyślnym utworzeniu dokumentu
       } catch (error) {
         // Obsłuż błąd, jeśli funkcja Cloud zwróci błąd
