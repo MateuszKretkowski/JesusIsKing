@@ -1,24 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, query, updateDoc } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useNavigate } from "react-router-dom";
-import { app } from "../config/config.tsx";
+import { app, checkIfUserExistsById } from "../config/config.tsx";
+import { setCookie, getCookie, deleteCookie } from "../../utils/cookieUtils.ts";
 import "./redirect.css";
 
 function Redirect() {
+  const functions = getFunctions();
+  const [userId, setUserId] = useState("");
+  const [userIdExists, setUserIdExists] = useState(false);
+  useEffect(() => {
+    if (userId) {
+      checkIfUserExistsById(userId).then(exists => {
+        setUserIdExists(exists);
+      });
+    }
+  }, [userId]);
 
-    const handleSubmit = async () => {
-        try {
-            // var updateUser = httpsCallable(functions, "updateUser");
-            // const result = await updateUser(formData);
-            // console.log(result.data);
-            // setShowModal(false);
-            
-        } catch (error) {
-            console.error("Error updating User: ", error);
-        }
-    };
+  const handleSubmit = async () => {
+    if (!userIdExists && userId.length > 2) {
+      try {
+        // Utwórz funkcję aktualizującą użytkownika
+        const updateUser = httpsCallable(functions, "createUserDocument");
+        // Wywołaj funkcję i poczekaj na zakończenie
+        const result = await updateUser({ userId });
+        console.log(result.data);
+        setCookie("userId", userId, 12)
+        // Możesz tu przekierować użytkownika lub wykonać inną akcję po pomyślnym utworzeniu dokumentu
+      } catch (error) {
+        // Obsłuż błąd, jeśli funkcja Cloud zwróci błąd
+        console.error("Error creating user document:", error);
+      }
+    } else {
+      console.error('UserId does not exist or is too short');
+    }
+  };
+
+  useEffect(() => {
+    console.log(userId);
+    console.log(`userId type: ${typeof userId}`, `Value: ${userId}`);
+  }, [userId]);
+
+  const handleChange = (event: any) => {
+    const { value } = event.target;
+    setUserId(value);
+
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  };
 
   return (
     <motion.div className="redirect">
@@ -35,6 +67,8 @@ function Redirect() {
             maxlength="15"
             minlength="10"
             placeholder="WRITE YOUR @ HERE"
+            value={userId}
+            onChange={handleChange}
           />
         </motion.div>
         <motion.div className="redirect_input-wrapper">
@@ -43,7 +77,7 @@ function Redirect() {
                     animate={{opacity: 1}}
                     transition={{delay: 3, duration: 2}}
             >
-                <motion.h3 className="redirect_button-text">APPLY</motion.h3>
+                <motion.h3 className="redirect_button-text" onClick={handleSubmit}>APPLY</motion.h3>
             </motion.button>
         </motion.div>
       </motion.div>

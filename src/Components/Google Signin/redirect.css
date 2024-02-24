@@ -45,3 +45,8 @@
     color: grey;
     font-size: 12px;
 }
+
+.redirect_button-text:hover {
+    letter-spacing: 2px;
+    cursor: pointer;
+}

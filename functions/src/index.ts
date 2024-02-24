@@ -9,13 +9,6 @@ import * as admin from "firebase-admin";
 // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp();
-exports.createUserDocument = functions.https.onCall((data, context) => {
-  const db = admin.firestore();
-  const userId = data.userId;
-  return db.collection("Users").add(userId);
-  // chcialbym jeszcze zeby dodalo mi do plikow cookies userId, zebym mogl sobie latwo wziac userId, i zweryfikowac do kiedy, i gdzie chce
-});
-
 exports.authenticateUserDocument = functions.auth.user().onCreate((user) => {
   const db = admin.firestore();
   const userUidSliced = user.uid.slice(0, 15);
@@ -181,5 +174,24 @@ exports.createPost = functions.https.onCall((data, context) => {
           throw new functions.https.
             HttpsError("internal", "not create post:"+error.message);
         });
+    });
+});
+
+exports.createUserDocument = functions.https.onCall((data) => {
+  const db = admin.firestore();
+  const userId = data.userId;
+  if (!userId || typeof userId !== "string") {
+    throw new functions.https.HttpsError("invalid-argument", "ntbvu");
+  }
+  return db.collection("Users").doc(userId).create({slem: "ss"})
+    .then(() => {
+      console.log(userId, "this is a new document");
+      return {userId: userId};
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+      throw new functions
+        .https
+        .HttpsError("unknown", "Failed to create user document", error);
     });
 });

@@ -37,6 +37,7 @@ const firebaseConfig = {
   appId: "1:402878700894:web:dd7941f0b1b151a281c3cf",
   measurementId: "G-E027LNF97N",
 };
+import { setCookie, getCookie } from '../../utils/cookieUtils.tsx';
 
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig);
@@ -60,6 +61,12 @@ export function isUserLoggedIn() {
   const isLoggedIn = auth.currentUser !== null; // Jeśli currentUser istnieje, isLoggedIn = true
   console.log(isLoggedIn);
   return isLoggedIn;
+}
+
+export async function checkIfUserExistsById(userId: string): Promise<boolean> {
+  const userRef = doc(db, "Users", userId);
+  const docSnap = await getDoc(userRef);
+  return docSnap.exists(); // This will return true if the document exists, false otherwise
 }
 
 export async function readUserByUsername(username: string, setUserData: (userData: User) => void) {
