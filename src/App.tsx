@@ -11,6 +11,9 @@ import Redirect from "./Components/Google Signin/redirect.tsx";
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./Components/config/config.tsx";
+import { doc } from "firebase/firestore";
 
 function App() {
 

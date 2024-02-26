@@ -21,3 +21,11 @@ export const deleteCookie = (name: string): void => {
     // Ustaw wartość cookie na pustą i 'max-age' na 0, aby natychmiast je usunąć
     document.cookie = name + '=; max-age=0; path=/';
 };
+
+function setSessionCookie(response, token) {
+    response.cookie('sessionToken', token, {
+      httpOnly: true,
+      secure: true, // Używaj tylko w przypadku HTTPS
+      sameSite: 'strict', // Ochrona przed atakami CSRF
+    });
+  }

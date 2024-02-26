@@ -8,6 +8,7 @@ import {
   onAuthStateChanged,
   updateProfile,
   signInWithPopup,
+  getRedirectResult,
 } from "firebase/auth";
 import {
   doc,
@@ -22,6 +23,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { setCookie } from "../../utils/cookieUtils";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -37,7 +39,6 @@ const firebaseConfig = {
   appId: "1:402878700894:web:dd7941f0b1b151a281c3cf",
   measurementId: "G-E027LNF97N",
 };
-import { setCookie, getCookie } from '../../utils/cookieUtils.tsx';
 
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig);
@@ -46,7 +47,34 @@ export const app = firebase.initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 export function signInWithGoogle() {
-  return signInWithRedirect(auth, new GoogleAuthProvider());
+  const auth = getAuth();
+  signInWithRedirect(auth, new GoogleAuthProvider());
+}
+
+  // useEffect(() => {
+  //   const subscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user && user.email) {
+  //       const currentUserEmail = user.email;
+  //       const userRef = doc(db, "Users", currentUserEmail)
+            // const q = query(usersRef, where("name", "==", formattedUsername));
+  //       if (userRef) {
+  //         window.location.href = "/";
+  //       }
+  //       else {
+  //         window.location.href = "/redirect";
+  //       }
+  //       console.log("Logged user: ", user);
+        
+  //     } else {
+  //       console.log("Użytkownik jest wylogowany");
+  //     }
+  //   });
+  //   return () => subscribe();
+  // })
+
+export function saveUserTokenToFirestore(userToken: any) {
+  if (!auth.currentUser) return;
+  const userRef = doc(db, "Users", )
 }
 
 interface User {

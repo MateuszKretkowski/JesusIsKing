@@ -12,8 +12,9 @@ admin.initializeApp();
 exports.authenticateUserDocument = functions.auth.user().onCreate((user) => {
   const db = admin.firestore();
   const userUidSliced = user.uid.slice(0, 15);
-  return db.collection("Users").doc(userUidSliced).set({
-    id: userUidSliced,
+  const userEmail = user.email ? user.email : userUidSliced;
+  return db.collection("Users").doc(userEmail).set({
+    uniqueId: "DEFAULT",
     email: user.email,
     name: user.displayName || "DEFAULT",
     description: "DEAFULT_DESCRIPTION",
@@ -177,7 +178,7 @@ exports.createPost = functions.https.onCall((data, context) => {
     });
 });
 
-exports.createUserDocument = functions.https.onCall((data) => {
+exports.createUserAt = functions.https.onCall((data) => {
   const db = admin.firestore();
   const userId = data.userId;
   if (!userId || typeof userId !== "string") {
