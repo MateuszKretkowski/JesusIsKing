@@ -21,9 +21,9 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".sidebar",
-      { width: isOpen ? 300 : 50 },
+      { width: isOpen ? 320 : 50 },
       {
-        type: "linear",
+        type: "spring",
         duration: 0.2,
       }
     );
@@ -31,7 +31,7 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".sidebar_container",
-      { opacity: isOpen ? 1 : 0, width: 300 },
+      { opacity: isOpen ? 1 : 0,},
       {
         duration: 0.5,
         stagger: 2,
@@ -61,20 +61,20 @@ function SideBar() {
     description: "",
     from: "",
     link: "",
+    uniqueId: "",
   });
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, call readUser to fetch the user data.
         readUser(setUserData);
       } else {
-        // No user is signed in, reset the user data.
         setUserData({
           id: "",
           name: "",
           description: "",
           from: "",
           link: "",
+          uniqueId: "",
         });
       }
     });
@@ -96,7 +96,7 @@ function SideBar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    if (location.pathname === "/settings") {
+    if (location.pathname === `/user/${userData.uniqueId}}`) {
       setIsSettingsOpen(true);
     } else {
       setIsSettingsOpen(false);
@@ -130,6 +130,21 @@ function SideBar() {
     return () => unsubscribe();
   }, [auth, db, navigate, setCookie]);
 
+  const getUserUniqueId = async () => {
+    const user = auth.currentUser;
+    if (user && user.email) {
+      const currentUserEmail = user.email;
+      const userRef = doc(db, "Users", currentUserEmail);
+      const docSnap = await getDoc(userRef);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        console.log("Logged user:", userData.uniqueId);
+      } else {
+        console.log("No such document!");
+      }
+    }
+  };
+
   const isRedirectedCookie = getCookie("isRedirected");
   return (
     <motion.div className="sidebar"
@@ -145,6 +160,7 @@ function SideBar() {
           </div>
           <div className="desc-wrapper-account">
             <h2 className="name">{userData.name}</h2>
+            <h2 className="id">@{userData.uniqueId}</h2>
             <div className="link-wrapper">
               <h5 className="where white">{userData.link}</h5>
               <h5 className="where white">{userData.from}</h5>
@@ -186,7 +202,7 @@ function SideBar() {
             </Link>
           ) : null}
           {isUserLoggedIn() ? (
-            <Link to={`/user`}>
+            <Link to={`/user/${userData.uniqueId}`}>
               <motion.button
                 className="login_btn link"
                 style={{ opacity: isSettingsOpen ? 0 : 1 }}

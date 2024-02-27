@@ -25,22 +25,28 @@ exports.authenticateUserDocument = functions.auth.user().onCreate((user) => {
 
 exports.updateUser = functions.https.onCall((data, context) => {
   if (!context.auth) {
-    throw new functions.
-      https.
-      HttpsError("failed-precondition", "while authenticated.");
+    throw new functions
+      .https
+      .HttpsError("failed-precondition", "while authenticated.");
   }
 
+  // Pobieranie UID z kontekstu autoryzacji
   const userId = context.auth.uid;
-  const userData = data;
-  console.log(userData, userId);
-  return admin.firestore().collection("Users").doc(userId).update(userData)
-    .then(() => {
-      console.log("user updated");
-      return {result: "User updated successfully!"};
-    })
-    .catch((error) => {
-      throw new functions.https.
-        HttpsError("internal", "not update user:"+error.message);
+
+  return admin.auth().getUser(userId)
+    .then((userRecord) => {
+      const userEmail = userRecord.email;
+      const userData = data;
+      if (userEmail) {
+        return admin.firestore().collection("Users")
+          .doc(userEmail)
+          .update(userData)
+          .then(() => {
+            console.log("User updated");
+            return {result: "User updated successfully!"};
+          });
+      }
+      return null;
     });
 });
 
@@ -68,7 +74,6 @@ exports.createBlog = functions.https.onCall(async (data, context) => {
     author: user ? user.name : "UNKNOWN",
     date: formattedDate,
   };
-  console.log(blogData, userId);
   return admin.firestore().collection("Blogs").add(blogData)
     .then(() => {
       console.log("user updated");
@@ -100,7 +105,6 @@ exports.exitBlog = functions.https.onCall(async (data, context) => {
     snapshot.docs.forEach((doc) => batch.delete(doc.ref));
     await batch.commit();
 
-    console.log(`Blogs with name ${blogName} deleted`);
     return {result: "Blogs deleted successfully"};
   } catch (error) {
     if (error instanceof Error) {
@@ -117,7 +121,6 @@ exports.createPost = functions.https.onCall((data, context) => {
       https.
       HttpsError("failed-precondition", "while authenticated.");
   }
-  console.log(context.auth.uid);
   const userRef = admin.firestore().collection("Users").doc(context.auth.uid);
   const currentDate = new Date();
   const formattedDate = `${currentDate

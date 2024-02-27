@@ -43,6 +43,10 @@ function Redirect() {
           const userRef = doc(db, "Users", currentUserEmail);
           alert("Your uniqueId has been updated");
           deleteCookie("isRedirected");
+          if (auth.currentUser) {
+          const userEmail = auth.currentUser.email;
+          setCookie("email", userEmail, 1);
+        }
           navigate("/");
           return updateDoc(userRef, { uniqueId: userId });
         } else {
@@ -53,58 +57,50 @@ function Redirect() {
       }
     }
   };
-    
-    useEffect(() => {
-      console.log(userId);
-      console.log(`userId type: ${typeof userId}`, `Value: ${userId}`);
-    }, [userId]);
 
-    const handleChange = (event: any) => {
-      const { value } = event.target;
-      setUserId(value);
+  const handleChange = (event: any) => {
+    const { value } = event.target;
+    setUserId(value);
 
-      const textarea = event.target;
-      textarea.style.height = "auto";
-      textarea.style.height = textarea.scrollHeight + "px";
-    };
+    const textarea = event.target;
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  };
 
-    return (
-      <motion.div className="redirect">
-        <motion.div className="redirect_container">
-          <motion.div
-            className="redirect_input-wrapper"
+  return (
+    <motion.div className="redirect">
+      <motion.div className="redirect_container">
+        <motion.div
+          className="redirect_input-wrapper"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 2 }}
+        >
+          <motion.input
+            type="text"
+            name="id"
+            className="redirect-input"
+            maxlength="15"
+            minlength="10"
+            placeholder="WRITE YOUR @ HERE"
+            value={userId}
+            onChange={handleChange}
+          />
+        </motion.div>
+        <motion.div className="redirect_input-wrapper">
+          <motion.button
+            className="redirect_button"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 2 }}
+            transition={{ delay: 3, duration: 2 }}
           >
-            <motion.input
-              type="text"
-              name="id"
-              className="redirect-input"
-              maxlength="15"
-              minlength="10"
-              placeholder="WRITE YOUR @ HERE"
-              value={userId}
-              onChange={handleChange}
-            />
-          </motion.div>
-          <motion.div className="redirect_input-wrapper">
-            <motion.button
-              className="redirect_button"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 3, duration: 2 }}
-            >
-              <motion.h3
-                className="redirect_button-text"
-                onClick={handleSubmit}
-              >
-                APPLY
-              </motion.h3>
-            </motion.button>
-          </motion.div>
+            <motion.h3 className="redirect_button-text" onClick={handleSubmit}>
+              APPLY
+            </motion.h3>
+          </motion.button>
         </motion.div>
       </motion.div>
-    );
+    </motion.div>
+  );
 }
 export default Redirect;

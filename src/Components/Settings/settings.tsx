@@ -10,9 +10,10 @@ import {
 import Modal from "./Modal.tsx";
 import handleSubmit from "./Modal.tsx";
 import { useParams } from "react-router-dom";
-import { isUserLoggedIn, readUser, auth, db, readUserByUsername } from "../config/config.tsx";
+import { isUserLoggedIn, readUser, auth, db, readUserByUsername, app } from "../config/config.tsx";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { getCookie } from "../../utils/cookieUtils.ts";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
@@ -28,16 +29,15 @@ function Settings() {
     description: "",
     from: "",
     link: "",
+    uniqueId: "",
   });
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
   });
   useEffect(() => {
     if(auth.currentUser) {
-      auth.currentUser.uid == userData.id ? setIsMyPage(true) : setIsMyPage(false);
+      getCookie("email") == userData.id ? setIsMyPage(true) : setIsMyPage(false);
       console.log(isMyPage)
-      console.log(userData.id, "USERDATA.ID")
-      console.log(auth.currentUser.uid, "AUTH.CURRENTUSER.UID")
     }
   }, [userData.id])
 
@@ -54,6 +54,7 @@ function Settings() {
           description: "",
           from: "",
           link: "",
+          uniqueId: "",
         });
       }
     });
@@ -146,7 +147,7 @@ function Settings() {
               exit={controls}
               transition={{type: "spring", bounce: 1, damping: 12}}
             >
-              @{userData.id}
+              @{userData.uniqueId}
             </motion.div>
             <motion.h2
               className=""

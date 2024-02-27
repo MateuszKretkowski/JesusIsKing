@@ -63,6 +63,7 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
             const result = await updateUser(formData);
             console.log(result.data);
             setShowModal(false);
+            window.location.reload();
             
         } catch (error) {
             console.error("Error updating User: ", error);
@@ -123,7 +124,7 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
                                     value={formData.description}
                                     onChange={handleChange}
                                     className='settings-input settings-input-description'
-                                    maxlength="120" minlength="10"
+                                    maxlength="200" minlength="10"
                                     />
                                 </motion.div>
 

@@ -51,27 +51,6 @@ export function signInWithGoogle() {
   signInWithRedirect(auth, new GoogleAuthProvider());
 }
 
-  // useEffect(() => {
-  //   const subscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user && user.email) {
-  //       const currentUserEmail = user.email;
-  //       const userRef = doc(db, "Users", currentUserEmail)
-            // const q = query(usersRef, where("name", "==", formattedUsername));
-  //       if (userRef) {
-  //         window.location.href = "/";
-  //       }
-  //       else {
-  //         window.location.href = "/redirect";
-  //       }
-  //       console.log("Logged user: ", user);
-        
-  //     } else {
-  //       console.log("Użytkownik jest wylogowany");
-  //     }
-  //   });
-  //   return () => subscribe();
-  // })
-
 export function saveUserTokenToFirestore(userToken: any) {
   if (!auth.currentUser) return;
   const userRef = doc(db, "Users", )
@@ -83,11 +62,11 @@ interface User {
   description: string;
   link: string;
   from: string;
+  uniqueId: string;
 }
 
 export function isUserLoggedIn() {
   const isLoggedIn = auth.currentUser !== null; // Jeśli currentUser istnieje, isLoggedIn = true
-  console.log(isLoggedIn);
   return isLoggedIn;
 }
 
@@ -97,19 +76,18 @@ export async function checkIfUserExistsById(userId: string): Promise<boolean> {
   return docSnap.exists(); // This will return true if the document exists, false otherwise
 }
 
-export async function readUserByUsername(username: string, setUserData: (userData: User) => void) {
-  // Odkoduj nazwę użytkownika z URL
-  const formattedUsername = decodeURIComponent(username).replace(/\+/g, ' ').trim();
+export async function readUserByUsername(uniqueId: string, setUserData: (userData: User) => void) {
+  // Decode the uniqueId from URL
+  const formattedUniqueId = decodeURIComponent(uniqueId).replace(/\+/g, ' ').trim();
 
-  // Stwórz zapytanie do kolekcji 'Users', gdzie pole 'name' jest równe 'formattedUsername'
+  // Create a query to the 'Users' collection where the 'uniqueId' field matches 'formattedUniqueId'
   const usersRef = collection(db, "Users");
-  const q = query(usersRef, where("name", "==", formattedUsername));
+  const q = query(usersRef, where("uniqueId", "==", formattedUniqueId));
 
   try {
     const querySnapshot = await getDocs(q);
-    console.log(querySnapshot)
     if (querySnapshot.docs.length != 0) {
-      // Zakładamy, że 'name' jest unikalne
+      // We assume that 'uniqueId' is unique
       const userDoc = querySnapshot.docs[0];
       const userData: User = {
         id: userDoc.id,
@@ -117,26 +95,26 @@ export async function readUserByUsername(username: string, setUserData: (userDat
         description: userDoc.data().description,
         from: userDoc.data().from,
         link: userDoc.data().link,
+        uniqueId: userDoc.data().uniqueId, // Add this line to include the uniqueId in the user data
       };
-      console.log(`user found with the name: ${formattedUsername}`);
       setUserData(userData);
     } else {
-      console.log(`No user found with the name: ${formattedUsername}`);
       const userData: User = {
         id: "-1",
         name: "-1",
         description: "-1",
         from: "-1",
         link: "-1",
+        uniqueId: "-1", // Add this line to include the uniqueId in the user data
       };
       setUserData(userData);
     }
 
   } catch (error) {
     console.error("Error fetching user data:", error);
-
   }
 }
+
 
 export async function isUserAnAdmin() {
   const q = query(collection(db, "Users"), where("admin", "==", true));
@@ -146,11 +124,9 @@ export async function isUserAnAdmin() {
   querySnapshot.forEach((doc) => {
     adminUsers.push(doc.data().id);
   });
-  return console.log(adminUsers);
 }
 
 export function signOutUser() {
-  console.log(auth.currentUser);
   return auth.signOut();
 }
 
@@ -159,27 +135,31 @@ export const db = getFirestore(app);
 
 // READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER READ USER
 export function readUser(setUserData: (userData: User) => void) {
-  const userId = auth.currentUser ? auth.currentUser.uid : "-1";
+  const userId = auth.currentUser ? auth.currentUser.email : "-1";
+  if (auth.currentUser) {
 
-  const unsub = onSnapshot(
-    doc(db, "Users", auth.currentUser ? auth.currentUser.uid : "none"),
-    (doc) => {
-      const data = doc.data();
-      if (data) {
-        const user: User = {
-          id: userId,
-          name: data.name || "",
-          description: data.description || "",
-          from: data.from || "",
-          link: data.link || "",
+    const unsub = onSnapshot(
+      doc(db, "Users", auth.currentUser.email ? auth.currentUser.email : "none"),
+      (doc) => {
+        const data = doc.data();
+        if (data) {
+          const user: User = {
+            id: userId,
+            email: data.email || "",
+            name: data.name || "",
+            uniqueId: data.uniqueId || "",
+            description: data.description || "",
+            from: data.from || "",
+            link: data.link || "",
+          };
+          setUserData(user);
+          return user;
+        } else {
+          return console.log("User has no Values");
         };
-        setUserData(user);
-        return user;
-      } else {
-        return console.log("User has no Values");
-      };
+      }
+      );
     }
-  );
 }
 
 
@@ -194,7 +174,6 @@ export async function readBlogs() {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log("returned blogs: ", blogs);
     return blogs;
   } catch (error) {
     console.error("Error fetching blogs: ", error);
@@ -213,7 +192,6 @@ export async function readPosts() {
       name: doc.id,
       ...doc.data(),
     }));
-    console.log("returned posts: ", posts);
     return posts;
   } catch (error) {
     console.error("Error fetching posts: ", error);
