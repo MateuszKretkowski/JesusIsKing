@@ -61,7 +61,6 @@ function Forum() {
     try {
       var createPost = httpsCallable(functions, "createPost");
       const result = await createPost(postData);
-      console.log(result.data);
       await setIsApplied(true);
       await setIsAppliedAddPost(true);
 
