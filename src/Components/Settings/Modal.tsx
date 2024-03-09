@@ -4,13 +4,15 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useNavigate } from 'react-router-dom';
 import { app } from '../config/config.tsx';
+import fetchUserData from './settings.tsx';
 import "./Modal.css";
 
 type ModalProps = {
     showModal: boolean;
     setShowModal: (show: boolean) => void;
+    onUpdate: () => void;
 };
-const Modal = ({ showModal, setShowModal }: ModalProps) => {
+const Modal = ({ showModal, setShowModal, onUpdate }: ModalProps) => {
 
     const navigate = useNavigate();
 
@@ -46,10 +48,10 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
     })
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target; // Destrukturyzacja, aby uzyskać `name` i `value`
+        const { name, value } = event.target;
         setFormData(prevState => ({
-          ...prevState, // Kopiowanie istniejących wartości stanu
-          [name]: value // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
+          ...prevState,
+          [name]: value
         }));
 
         const textarea = event.target;
@@ -62,8 +64,8 @@ const Modal = ({ showModal, setShowModal }: ModalProps) => {
             var updateUser = httpsCallable(functions, "updateUser");
             const result = await updateUser(formData);
             console.log(result.data);
+            onUpdate();
             setShowModal(false);
-            window.location.reload();
             
         } catch (error) {
             console.error("Error updating User: ", error);
