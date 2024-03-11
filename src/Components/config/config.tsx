@@ -24,6 +24,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { setCookie } from "../../utils/cookieUtils";
+import { firestore } from "firebase-admin";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -198,4 +199,20 @@ export async function readPosts() {
     return [];
   }
 }
-// READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG READ BLOG
+
+export const getAuthorDataByEmail = async (email:string) => {
+  try {
+    const userRef = doc(db, 'Users', email); // Użycie funkcji doc zamiast chainowania .collection().doc()
+    const docSnap = await getDoc(userRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log('No such document!');
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting document:", error);
+    return null;
+  }
+};

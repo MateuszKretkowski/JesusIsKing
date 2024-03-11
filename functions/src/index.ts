@@ -117,69 +117,69 @@ exports.exitBlog = functions.https.onCall(async (data, context) => {
 
 exports.createPost = functions.https.onCall((data, context) => {
   if (!context.auth) {
-    throw new functions.
-      https.
-      HttpsError("failed-precondition", "while authenticated.");
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called while authenticated."
+    );
   }
-  const userRef = admin.firestore().collection("Users").doc(context.auth.uid);
+  const userEmail = context.auth.token.email || null;
+  if (!userEmail) {
+    throw new functions.https.HttpsError("not-found", "Unable.");
+  }
+  const userRef = admin.firestore()
+    .collection("Users")
+    .doc(userEmail);
   const currentDate = new Date();
-  const formattedDate = `${currentDate
-    .getUTCFullYear()}-${(currentDate.getUTCMonth() + 1)
-    .toString().padStart(2, "0")}-${currentDate.getUTCDate()
-    .toString().padStart(2, "0")} ${currentDate.getUTCHours()
-    .toString().padStart(2, "0")}:${currentDate.getUTCMinutes()
-    .toString()
-    .padStart(2, "0")}`;
+  const formattedDate = `${currentDate.getFullYear()}
+    -${(currentDate.getMonth() + 1)
+    .toString().padStart(2, "0")}-${currentDate.getDate()
+  .toString().padStart(2, "0")} ${currentDate.getHours()
+  .toString().padStart(2, "0")}:${currentDate.getMinutes()
+  .toString().padStart(2, "0")}`;
   return userRef.get()
     .then((userDoc) => {
       if (!userDoc.exists) {
-        throw new functions.
-          https.
-          HttpsError("not-found", "User data not found");
+        throw new functions.https.HttpsError(
+          "not-found",
+          "User data not found"
+        );
       }
       const userData = userDoc.data();
       if (!userData) {
-        throw new functions.
-          https.
-          HttpsError("internal", "User data is undefined");
-      }
-      if (!context.auth) {
-        throw new functions.
-          https.
-          HttpsError("failed-precondition", "while authenticated.");
+        throw new functions.https.HttpsError(
+          "internal",
+          "User data is undefined"
+        );
       }
       const postData = {
         name: data.name,
         description: data.description,
+        authorId: context.auth?.uid,
+        authorEmail: userData.email,
         author: userData.name,
-        authorDescription: userData.description,
-        authorFrom: userData.from,
-        authorLink: userData.link,
-        authorId: context.auth.uid,
         date: formattedDate,
         numberOfLikes: 0,
         numberOfReplies: 0,
         numberOfReposts: 0,
       };
-      const userRef = admin
-        .firestore()
-        .collection("Users")
-        .doc(context.auth.uid);
-      const userPostRef = userRef.collection("UserPosts").doc(postData.name);
-      const docRef = admin.firestore().collection("Posts").doc(data.name);
+      const docRef = admin.firestore().collection("Posts").doc();
       const savePostPromise = docRef.set(postData);
-      const saveUserPostPromise = userPostRef.set({id: postData.name});
+      const userPostRef = userRef.collection("UserPosts").doc(docRef.id);
+      const saveUserPostPromise = userPostRef.set({id: docRef.id});
       return Promise.all([savePostPromise, saveUserPostPromise])
         .then(() => {
-          console.log("Post Created with id: ", data.name);
-          return {result: "Post Created successfully!"};
+          console.log("Post Created with id: ", docRef.id);
+          return {result: "Post Created successfully!", id: docRef.id};
         })
         .catch((error) => {
-          throw new functions.https.
-            HttpsError("internal", "not create post:"+error.message);
+          throw new functions.https.HttpsError(
+            "internal",
+            `Could not create post: ${error.message}`
+          );
         });
     });
 });
+
 
 exports.createUserAt = functions.https.onCall((data) => {
   const db = admin.firestore();

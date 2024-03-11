@@ -141,14 +141,14 @@ function Forum() {
           <h1 className="">FORUM</h1>
         </div>
         <div className="forum_content">
-          <div className="addpost_container">
+          <motion.div className="addpost_container">
             <motion.div
               className="post_author-wrapper"
-              style={{ justifyContent: isEven ? "end" : "start" }}
+              style={{ justifyContent: isEven ? "end" : "start", height: isApplied ? "50px" : "0px"}}
             >
               <motion.div
                 className="post_author-wrapper-wrapper"
-                style={{ flexDirection: isEven ? "row-reverse" : "row" }}
+                style={{ flexDirection: isEven ? "row-reverse" : "row"}}
                 variants={addPostAuthorContainerVariants}
                 initial={controls}
                 animate={controls}
@@ -303,7 +303,7 @@ function Forum() {
                 </h3>
               </motion.button>
             </div>
-          </div>
+          </motion.div>
           <div className="posts_container">
             {posts &&
               posts.map((post, index) => (

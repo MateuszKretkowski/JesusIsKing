@@ -88,7 +88,6 @@ const Post = ({
         <motion.div className="post_title-wrapper">
           <motion.h1
             className="post_title"
-            layoutId={index === 0 ? "post_title" : ""}
             transition={{ duration: 0.7 }}
           >
             {name}
@@ -104,7 +103,6 @@ const Post = ({
         >
           <motion.h2
              className="post_description"
-            layoutId={index === 0 ? "post_description" : ""}
             transition={{ duration: 0.7 }}
           >
             {description}
