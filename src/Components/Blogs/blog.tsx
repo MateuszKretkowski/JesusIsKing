@@ -100,8 +100,8 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
   });
 
   const descriptionVariants = {
-    hidden: { opacity: 0, scale: 1, y: 0, x: 0, height: "0px", transition: { delay: 0.4 } },
-    visible: { opacity: 0, scale: 0, y: 0, x: 0, height: "0px", transition: { delay: 0.4 } },
+    hidden: { opacity: 0, scale: 1, y: 0, x: 0, height: "0px", transition: { delay: showModal ? 4 : 0, duration: 0.5 } },
+    visible: { opacity: 0, scale: 0, y: 0, x: 0, height: "100%", transition: { delay: showModal ? 4 : 2, duration: 0.5 } },
   };
     // max-width: 42vw;
   const blogVariants = {
@@ -141,8 +141,8 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
   const blogNameMAPPED = wrapBlogWordsInSpan(blogData.name);
 
   useEffect(() => {
-    console.log(blogData);
-  }, []);
+    console.log("blogModal: ", showModal);
+  }, [showModal]);
 
   return (
     <motion.div
@@ -157,16 +157,6 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
       }}
       onClick={() => {
         setShowModal(!showModal);
-      }}
-      onHoverStart={() => {
-        if (!showModal) {
-          setIsHovered(true);
-        }
-      }}
-      onHoverEnd={() => {
-        if (!showModal) {
-          setIsHovered(false);
-        }
       }}
     >
       <motion.div className="blog_container">

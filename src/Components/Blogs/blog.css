@@ -48,7 +48,7 @@
 }
 
 .description-wrapper {
-    width: 100%;
+    width: 80%;
     height: 100%;
     margin-bottom: 5%;
     display: flex;
@@ -75,8 +75,12 @@
     top: 120%;
     height: 2px;
     left: 0%;
-    background: rgb(27,27,27);
-background: radial-gradient(circle, rgba(27,27,27,1) 0%, rgba(40,40,40,0) 100%);
+    background: linear-gradient(
+        90deg,
+        rgba(40, 40, 40, 1) 40%,
+        rgba(40, 40, 40, 0) 100%
+      );
+      border-radius: 4px;
 transition: all 300ms ease;
 }
 
