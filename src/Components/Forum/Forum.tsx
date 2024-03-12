@@ -12,7 +12,8 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Post from "./post";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { readPosts } from "../config/config";
+import { auth, readPosts } from "../config/config";
+import { findUserByEmail } from "../config/config.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Forum() {
@@ -45,6 +46,13 @@ function Forum() {
     numberOfReposts: 0,
   });
 
+  const userEmail = auth.currentUser?.email || null;
+  const getUser = async () => {
+    const user = await findUserByEmail(userEmail || "");
+    setAuthor(user?.name);
+  };
+
+  const [author, setAuthor] = useState("");
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target; // Destrukturyzacja, aby uzyskać `name` i `value`
     setPostData((prevState) => ({
@@ -59,11 +67,11 @@ function Forum() {
   const functions = getFunctions();
   const handleSubmit = async () => {
     try {
+      getUser();
       var createPost = httpsCallable(functions, "createPost");
       const result = await createPost(postData);
       await setIsApplied(true);
       await setIsAppliedAddPost(true);
-
     } catch (error) {
       console.error("Error creating Post: ", error);
     }
@@ -115,11 +123,16 @@ function Forum() {
   };
   const addPostAuthorContainerVariants = {
     hidden: { opacity: "0", top: -100, height: "0%" },
-    visible: { opacity: "1", top: 0, height: "100%",  transition: { staggerChildren: 0.5 } },
+    visible: {
+      opacity: "1",
+      top: 0,
+      height: "100%",
+      transition: { staggerChildren: 0.5 },
+    },
   };
   const addPostAuthorVariants = {
-    hidden: { opacity: "0", top: -100, height: "0%", },
-    visible: { opacity: "1", top: 0, height: "100%", },
+    hidden: { opacity: "0", top: -100, height: "0%" },
+    visible: { opacity: "1", top: 0, height: "auto" },
   };
   const addPostPostVariants = {
     hidden: { opacity: "1" },
@@ -144,11 +157,14 @@ function Forum() {
           <motion.div className="addpost_container">
             <motion.div
               className="post_author-wrapper"
-              style={{ justifyContent: isEven ? "end" : "start", height: isApplied ? "50px" : "0px"}}
+              style={{
+                justifyContent: isEven ? "end" : "start",
+                height: isApplied ? "50px" : "0px",
+              }}
             >
               <motion.div
                 className="post_author-wrapper-wrapper"
-                style={{ flexDirection: isEven ? "row-reverse" : "row"}}
+                style={{ flexDirection: isEven ? "row-reverse" : "row" }}
                 variants={addPostAuthorContainerVariants}
                 initial={controls}
                 animate={controls}
@@ -166,48 +182,47 @@ function Forum() {
                   initial={controls}
                   animate={controls}
                 >
-                  {postData.author}
+                  {author}
                 </motion.h5>
               </motion.div>
               <motion.div
-                                variants={gradientVariants}
-                                initial={controls}
-                                animate={controls}
+                variants={gradientVariants}
+                initial={controls}
+                animate={controls}
                 className="post_bottom_gradient"
                 style={{ scaleX: isEven ? "-1" : "1" }}
               />
             </motion.div>
             <div className="addpost_title-wrapper">
               {!isApplied ? (
-              <motion.textarea
-              name="name"
-              value={postData.name}
-              onChange={handleChange}
-              className="forum_addpost_title"
-              variants={addPostTitleVariants}
-              initial={controls}
-              animate={controls}
-              maxLength="40"
-              minLength="1"
-              rows="1"
-              cols="50"
-              layout="position"
-              // layoutId={"post_title"}
-              transition={{ duration: 0.5 }}
-              placeholder="WHAT'S ON YOUR MIND TODAY?"
-              style={{ height: "100%" }}
-              ></motion.textarea>
+                <motion.textarea
+                  name="name"
+                  value={postData.name}
+                  onChange={handleChange}
+                  className="forum_addpost_title"
+                  variants={addPostTitleVariants}
+                  initial={controls}
+                  animate={controls}
+                  maxLength="40"
+                  minLength="1"
+                  rows="1"
+                  cols="50"
+                  layout="position"
+                  // layoutId={"post_title"}
+                  transition={{ duration: 0.5 }}
+                  placeholder="WHAT'S ON YOUR MIND TODAY?"
+                  style={{ height: "100%" }}
+                ></motion.textarea>
               ) : (
-              <motion.h1
-              className="forum_addpost_title"
-              variants={addPostTitleVariants}
-              initial={controls}
-              animate={controls}
-              >
-              {postData.name}
-              </motion.h1>
-              )
-              }
+                <motion.h1
+                  className="forum_addpost_title"
+                  variants={addPostTitleVariants}
+                  initial={controls}
+                  animate={controls}
+                >
+                  {postData.name}
+                </motion.h1>
+              )}
               <motion.div
                 className="bottom_gradient"
                 variants={gradientVariants}
@@ -217,40 +232,38 @@ function Forum() {
             </div>
             <div className="addpost_title-wrapper">
               {!isApplied ? (
-
                 <motion.textarea
-                name="description"
-                value={postData.description}
-                onChange={handleChange}
-                className="forum_addpost_title forum_addpost_description"
-                variants={addPostDescriptionVariants}
-                initial={controls}
-                animate={controls}
-                maxLength="400"
-                minLength="1"
-                rows="6"
-                cols="50"
-                layout="position"
-                // layoutId={"post_description"}
-                style={{ height: isFocused ? "200px" : "30px" }}
-                transition={{ type: "spring" }}
-                onFocus={() => {
-                  setIsFocused(true);
-                }}
-                placeholder="Could You maybe describe it?"
-                ></motion.textarea>
-                ) : (
-                  <motion.h2
+                  name="description"
+                  value={postData.description}
+                  onChange={handleChange}
                   className="forum_addpost_title forum_addpost_description"
                   variants={addPostDescriptionVariants}
                   initial={controls}
                   animate={controls}
-                  >
-                    {postData.description}
-                  </motion.h2>
-                )
-              }
-                </div>
+                  maxLength="400"
+                  minLength="1"
+                  rows="6"
+                  cols="50"
+                  layout="position"
+                  // layoutId={"post_description"}
+                  style={{ height: isFocused ? "200px" : "30px" }}
+                  transition={{ type: "spring" }}
+                  onFocus={() => {
+                    setIsFocused(true);
+                  }}
+                  placeholder="Could You maybe describe it?"
+                ></motion.textarea>
+              ) : (
+                <motion.h2
+                  className="forum_addpost_title forum_addpost_description"
+                  variants={addPostDescriptionVariants}
+                  initial={controls}
+                  animate={controls}
+                >
+                  {postData.description}
+                </motion.h2>
+              )}
+            </div>
             <div className="addpost_action">
               <motion.div
                 className="post_action_container"
@@ -288,10 +301,11 @@ function Forum() {
                   <motion.h3 className="post_action-text">REPOST (0)</motion.h3>
                 </motion.button>
               </motion.div>
-              <motion.button className="forum_addpost_button"
-                                variants={addPostPostVariants}
-                                initial={controls}
-                                animate={controls}
+              <motion.button
+                className="forum_addpost_button"
+                variants={addPostPostVariants}
+                initial={controls}
+                animate={controls}
               >
                 <h3
                   className="forum_addpost_button-text"

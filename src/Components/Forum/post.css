@@ -55,6 +55,7 @@
 .author_name {
   font-weight: 900;
   font-size: 18px;
+  height: auto;
   margin-bottom: 2%;
 }
 

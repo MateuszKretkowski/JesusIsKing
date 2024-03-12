@@ -200,19 +200,28 @@ export async function readPosts() {
   }
 }
 
-export const getAuthorDataByEmail = async (email:string) => {
+export const findUserByEmail = async (authorEmail: string) => {
   try {
-    const userRef = doc(db, 'Users', email); // Użycie funkcji doc zamiast chainowania .collection().doc()
-    const docSnap = await getDoc(userRef);
+    const docRef = doc(db, "Users", authorEmail);
+    const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return docSnap.data();
+      const userData = docSnap.data();
+      console.log("Document data:", userData);
+      return {
+        id: userData.id || "",
+        email: userData.email || "",
+        name: userData.name || "",
+        uniqueId: userData.uniqueId || "",
+        description: userData.description || "",
+        from: userData.from || "",
+        link: userData.link || "",
+      };
     } else {
-      console.log('No such document!');
+      console.log("No such document!");
       return null;
     }
   } catch (error) {
     console.error("Error getting document:", error);
-    return null;
   }
 };
