@@ -24,4 +24,18 @@ JESUSISKING is designed to cater to the diverse needs of its community, offering
 
 Under the leadership of Mateusz Kretkowski, JESUSISKING is not just a project but a testament to what's possible when passion meets innovation. Our development process is rooted in a commitment to excellence and a vision for setting new standards in digital religious engagement.
 
-Our team is dedicated to pushing the boundaries of what's possible, incorporating cutting-edge technology to enhance user experience and engagement. As we move forward, we remain focused on our mission
+Our team is dedicated to pushing the boundaries of what's possible, incorporating cutting-edge technology to enhance user experience and engagement. As we move forward, we remain focused on our mission to provide a platform that not only meets the current needs of our community but also anticipates and adapts to future trends and technologies.
+
+### Stay Connected
+
+As JESUSISKING evolves, we invite you to join us on this exciting journey. Your feedback, ideas, and participation are invaluable as we strive to create a digital sanctuary that resonates with believers worldwide.
+
+Thank you for your interest and support. Stay tuned for updates and developments as we continue to build JESUSISKING into a landmark project that redefines the intersection of faith and technology.
+
+---
+
+_Mateusz Kretkowski, Creator of JESUSISKING_
+
+_"Currently dedicated to leading the development of JESUSISKING, an ambitious project aiming to redefine its domain through innovative technology and a unique approach. This endeavor represents not just a commitment to excellence but a vision for what's possible when creativity meets technology. JESUSISKING is poised to be a landmark project, setting new standards in its field. The dedication to this project is unwavering, with a clear focus on delivering unparalleled user experiences, robust functionality, and cutting-edge features. Stay tuned for updates as we progress on this exciting journey."_
+
+Keep the faith, and may your journey with JESUSISKING be as enriching as it is inspiring.
