@@ -63,6 +63,14 @@
 .Bibleverse {
 }
 
+.verse {
+    font-weight: 900;
+    color: #000000bd;
+    font-size: 32px;
+    letter-spacing: 1px;
+    word-spacing: 1px;
+}
+
 .Bibleverse_chapter {
     position: relative;
     padding-bottom: 6px;
