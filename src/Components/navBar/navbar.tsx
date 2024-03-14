@@ -1,6 +1,6 @@
 import React from 'react'
 import "./navbar.css";
-const JIKLogoLong = require("../../Images/JIK-Logo-long 2.png");
+const JIKLogoLong = require("../../Images/JIK LOGO LONGA.png");
 
 function Navbar() {
   return (
