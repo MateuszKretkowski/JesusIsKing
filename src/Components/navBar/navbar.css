@@ -61,3 +61,60 @@ transition: all 300ms ease;
     letter-spacing: 2px;
     cursor: pointer;
 }
+
+/* Default styles for mobile */
+.navbar {
+    position: relative;
+    width: 100%;
+    height: auto; /* Adjust height for mobile */
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.navbar_container {
+    display: flex;
+    width: 100%; /* Full width on mobile */
+    justify-content: center; /* Center logo */
+    align-items: end;
+    margin: 0 auto;
+    padding: 8px; /* Adjust padding for smaller screens */
+}
+
+.logo_navbar {
+    width: 60%; /* Adjust logo size for mobile */
+}
+
+/* Hide links by default for mobile */
+.Link-wrapper {
+    display: none;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .navbar {
+        height: 12vh;
+    }
+
+    .navbar_container {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 80%;
+        padding: 10px 20px;
+    }
+
+    .Link-wrapper, .logo_navbar {
+        display: inline-flex; /* Show links for tablets and larger */
+    }
+
+    .logo_navbar {
+        width: 45%;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .navbar_container {
+        width: 50%; /* More space on larger screens */
+    }
+}

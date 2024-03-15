@@ -31,7 +31,7 @@ function Header() {
         </div>
         <div className="Bibleverse_action_container">
           <a className="action-wrapper" href="https://https://www.bible.com" target="_blank">
-            <h3>MORE BIBLE VERSES</h3>
+            <h3 className='action-text'>MORE BIBLE VERSES</h3>
           </a>
         </div>
         <button className='button' onClick={() => {handleSubmit()}}>Create New Verse</button>

@@ -97,3 +97,67 @@
     background-color: #1b1b1b;
     color: hsl(30, 45%, 91%);
 }
+
+/* Global styles can stay, just ensure they're responsive */
+
+@media only screen and (max-width: 768px) {
+    /* For tablets and below */
+    .header_container, .header_text-wrapper, .Bibleverse_action_container {
+        width: 90%; /* Increase width to use more of the screen */
+    }
+
+    .header_text-wrapper, .desc-wrapper, .Bibleverse_action_container {
+        flex-direction: column; /* Stack elements vertically */
+        gap: 4vh; /* Adjust spacing */
+    }
+
+    .title-wrapper:after, .Bibleverse_chapter:after {
+        width: 100%; /* Adjust line width */
+        left: 0%; /* Center line */
+    }
+
+    .verse {
+        font-size: 24px; /* Adjust font size for readability */
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    /* For mobile phones */
+    .header_text-wrapper, .desc-wrapper {
+        width: 95%; /* Use even more screen width */
+        gap: 2vh; /* Less space between elements */
+    }
+
+    .title-wrapper, .Bibleverse_action_container {
+        width: 100%; /* Full width */
+    }
+
+    .Bibleverse_Title {
+        font-size: 28px;
+    }
+
+    .verse, .Bibleverse_chapter {
+        font-size: 20px; /* Smaller font size for smaller screens */
+    }
+
+    .action-wrapper {
+        padding: 8px; /* Adjust padding */
+    }
+}
+
+  @media only screen and (max-width: 768px) {
+    .action-wrapper {
+      padding: 10px 20px; /* Adjust padding to better fit smaller screens */
+      font-size: 16px; /* Adjust font size for readability */
+    }
+  }
+  
+  @media only screen and (max-width: 480px) {
+    .action-wrapper {
+      width: auto; /* Full width on small devices for easier interaction */
+    }
+    .action-text {
+        font-size: 24px;
+    }
+  }
+  
