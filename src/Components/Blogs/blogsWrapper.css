@@ -1,5 +1,5 @@
 .blogs {
-    width: 120vw;
+    width: 100vw;
     height: auto;
     max-height: 60vh;
     display: flex;
@@ -46,7 +46,7 @@
     position: relative;
     display: flex;
     justify-content: start;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     height: 100%;
     width: 100%;
 }
@@ -67,3 +67,111 @@
     border: none;
 
 }
+
+.blog {
+    margin: 2% 1%; /* Smaller margins on smaller screens */
+  }
+  
+  .blog_container {
+    flex-direction: column; /* Stack elements vertically on smaller screens */
+  }
+  
+  .author-avatar {
+    width: 15%; /* Adjust avatar size */
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .blog {
+      margin: 4% 2%;
+      max-width: 100vw;
+    }
+  
+    .blog_container {
+      flex-direction: column;
+    }
+
+    .title {
+      font-size: 2.6rem; 
+    }
+
+    .blog_title-wrapper {
+      width: 100%;
+    }
+  
+    .author-avatar {
+      width: 25%; /* Larger avatar on smaller screens */
+    }
+  
+    .blog_title {
+      font-size: 28px; /* Adjust title font size for smaller screens */
+    }
+  
+    .blog_description {
+      font-size: 1.5rem; /* Adjust description font size */
+    }
+  }
+  
+  @media only screen and (max-width: 480px) {
+  
+    .blog_author-wrapper, .blog_date-wrapper {
+      justify-content: center;
+    }
+  }
+
+  .blogs-wrapper {
+    overflow-x: auto; /* Ensure horizontal scroll is available when needed */
+  }
+  
+  .blogs-wrapper-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .blogs-wrapper-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+  }
+  
+.blogs-wrapper-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+  @media only screen and (max-width: 1006px) {
+    .blogs-wrapper-wrapper {
+        flex-direction: column;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .section-title {
+      justify-content: center;
+    }
+
+    .blogs-wrapper {
+      width: 100%; /* Full width to use available space */
+    }
+
+    .blog {
+      width: 100vw;
+      max-width: 90% !important;
+    }
+  }
+
+  .blog_description, .blog_title, .date {
+    font-size: calc(1.5em); /* Example of responsive font sizing */
+  }
+  
+  .author-avatar, .blog_image {
+    max-width: 100%;
+    height: auto; /* Ensure images are responsive and maintain aspect ratio */
+  }
+  
+  
+  

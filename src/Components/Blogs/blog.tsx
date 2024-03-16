@@ -105,9 +105,9 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
   };
     // max-width: 42vw;
   const blogVariants = {
-    hidden: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "37vw" },
+    hidden: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "30%" },
     visible: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "37vw" },
-    modal: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "62vw" },
+    modal: { opacity: 1, scale: 1, y: 0, x: 0, "max-width": "52vw" },
   };
 
   const [blogData, setBlogData] = useState({

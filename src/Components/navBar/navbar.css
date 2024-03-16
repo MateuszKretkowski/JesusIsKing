@@ -117,4 +117,12 @@ transition: all 300ms ease;
     .navbar_container {
         width: 50%; /* More space on larger screens */
     }
+    .navbar {
+        min-height: 10vh;
+        height: auto;
+    }
+
+    .logo_navbar {
+        width: 50%;
+    }
 }
