@@ -1,1 +1,51 @@
 /* Every property is in adminModal.css */
+
+h1 {
+    font-size: 3em !important;
+}
+
+/* Adapt the main settings container for smaller screens */
+@media only screen and (max-width: 768px) {
+    .settings_container {
+      padding: 5% 1%; /* Reduce padding on smaller screens */
+    }
+    .account-wrapper-settings, .desc-wrapper-account-settings {
+      width: 90%; /* Increase width to use available space */
+    }
+    .avatar-settings {
+      width: 50%; /* Adjust avatar size */
+    }
+
+    .settings {
+        display: flex;
+        justify-content: center;
+        align-items: end;
+    }
+
+    h2 {
+        font-size: 1.4rem !important;
+    }
+
+    .settings_container {
+        height: 100%;
+    }
+
+    .account-wrapper-settings {
+
+    }
+
+    h1 {
+        font-size: 2.2em !important;
+      }
+  }
+  
+  /* Further adjustments for very small screens */
+  @media only screen and (max-width: 480px) {
+    .avatar-settings {
+      width: 60%; /* Further adjust avatar size */
+    }
+    .title-settings, .edit, .where {
+      font-size: smaller; /* Reduce font size */
+    }
+  }
+  

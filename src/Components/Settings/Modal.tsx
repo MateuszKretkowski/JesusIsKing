@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { doc, getDoc, updateDoc } from "firebase/firestore"; 
 import { getFunctions, httpsCallable } from "firebase/functions";
@@ -16,13 +16,37 @@ const Modal = ({ showModal, setShowModal, onUpdate }: ModalProps) => {
 
     const navigate = useNavigate();
 
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        // Update the state based on window width to approximate device type
+        const handleResize = () => {
+            if (window.innerWidth <= 768) {
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        };
+
+        // Call the function to set the initial state
+        handleResize();
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Clean up the event listener on component unmount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const backdrop = {
         visible: { opacity: 1 },
         hidden: { opacity: 0 },
     };
     const modal = {
         hidden: { y: "-200vh", opacity: 0 },
-        visible: { y: "-50vh", opacity: 1 },
+                visible: {
+            y: isMobile ? "0" : "-50vh",
+            opacity: 1
+        }
     };
     const inputTitle = {
         hidden: { opacity: 0, "letter-spacing": "0px" },

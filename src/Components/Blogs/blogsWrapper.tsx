@@ -45,7 +45,7 @@ function BlogsWrapper() {
     >
       <div className="blogs_container">
         <div className="section-title">
-            <motion.h1 className="title"
+            <motion.h1
             style={{opacity: isInView ? 1 : 0}}
             >NEWEST BLOGS</motion.h1>
         </div>

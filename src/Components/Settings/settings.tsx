@@ -45,6 +45,7 @@ function Settings() {
     link: "",
     uniqueId: "",
   });
+  
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
   });
@@ -168,6 +169,7 @@ function Settings() {
 
   const nameMAPPED = wrapWordsAndLettersInSpan(userData.name);
 
+  
   return (
     <div className="settings">
       <div className="settings_container">

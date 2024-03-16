@@ -16,7 +16,7 @@
     justify-content: end;
     align-items: end;
     flex-direction: column;
-    padding: 0% 1.2%;
+    padding: 0% 0.6%;
     z-index: 1000;
 }
 
@@ -94,4 +94,32 @@
 
 .motto {
     margin-top: 1%;
+}
+
+/* RESPONSIVENESS */
+
+.footer_text {
+    font-size: 1rem !important; /* Adjust base font size */
+}
+
+/* Adjustments for smaller screens */
+@media only screen and (max-width: 768px) {
+    .Footer {
+        height: auto; /* Allow the footer to grow as needed */
+    }
+
+    .footer_text {
+        font-size: 1rem; /* Smaller font size */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* Further adjustments for very small screens */
+@media only screen and (max-width: 480px) {
+
+    .motto {
+        font-size: 1.1rem; /* Adjust motto text size for emphasis */
+    }
 }
