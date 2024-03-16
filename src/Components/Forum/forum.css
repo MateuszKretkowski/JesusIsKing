@@ -157,3 +157,73 @@ background: radial-gradient(circle, rgba(40,40,40,1) 16%, rgba(40,40,40,0) 100%)
   background-color: #e9ecef; /* Zmienia tło dla zablokowanego inputa */
   color: #ced4da; /* Zmienia kolor czcionki dla zablokowanego inputa */
 }
+
+@media only screen and (max-width: 768px) {
+  .addpost_container {
+    width: 90vw; /* Adjust width for smaller devices */
+    margin: 6% 5% 5% 5%; /* Adjust margins */
+  }
+
+  .forum_addpost_title, .forum_addpost_description {
+    font-size: 1.5rem; /* Adjust font size for smaller screens */
+  }
+
+  .forum_addpost_button {
+    width: 40%; /* Adjust button width */
+  }
+
+  .post_action-text {
+    font-size: 16px; /* Adjust font size within buttons */
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .addpost_container {
+    width: 95vw; /* Further adjust width for very small devices */
+  }
+
+  .forum_addpost_button {
+    width: 60%; /* Adjust button width for smaller devices */
+  }
+
+  .post {
+    margin-left: 10px; /* Adjust margin for the posts */
+    margin-right: 10px;
+    width: calc(100vw - 20px); /* Ensure posts do not overflow screen width */
+  }
+
+  .post_author-wrapper, .post_action_container, .post_date_container {
+    justify-content: center; /* Center content for smaller screens */
+  }
+}
+
+/* POST.css RESPONSIVENESS */
+
+@media only screen and (max-width: 768px) {
+  .post {
+    width: 80vw; /* Adjust post width for tablet devices */
+  }
+
+  .author_img {
+    width: 36px; /* Adjust avatar size */
+  }
+
+  .author_name, .post_title, .post_description {
+    font-size: 1.45rem; /* Adjust font size for readability */
+  }
+
+  .post_title {
+    font-size: 1.6rem !important; /* Adjust action text font size */
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .post {
+    width: 90vw !important;
+    margin: 20% 0 20% 0 !important;
+  }
+
+  .post_author-wrapper-wrapper, .post_title-wrapper, .post_description-wrapper {
+    text-align: center; /* Ensure text is centered */
+  }
+}
