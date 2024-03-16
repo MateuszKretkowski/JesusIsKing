@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DailyVerse from "./dailyverse.tsx";
 import "./header.css";
 import { getFunctions, httpsCallable, Functions } from 'firebase/functions';
+import { setCookie } from '../../utils/cookieUtils.ts';
 const Cross = require("../../Images/Cross 2.png");
 const JIKLogoLong = require("../../Images/JIK-Logo-long 2.png");
 

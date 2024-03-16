@@ -15,8 +15,29 @@ import './App.css';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./Components/config/config.tsx";
 import { doc } from "firebase/firestore";
+import { setCookie } from "./utils/cookieUtils.ts";
 
 function App() {
+
+  useEffect(() => {
+    // Update the state based on window width to approximate device type
+    const handleResize = () => {
+        if (window.innerWidth <= 768) {
+            setCookie("isMobile", true, 1);
+        } else {
+            setCookie("isMobile", false, 1);
+        }
+    };
+
+    // Call the function to set the initial state
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => window.removeEventListener('resize', handleResize);
+});
 
   return (
       <BrowserRouter>

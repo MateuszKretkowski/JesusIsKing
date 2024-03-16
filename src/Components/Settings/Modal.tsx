@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { app } from '../config/config.tsx';
 import fetchUserData from './settings.tsx';
 import "./Modal.css";
+import { getCookie, setCookie } from '../../utils/cookieUtils.ts';
 
 type ModalProps = {
     showModal: boolean;
@@ -18,24 +19,14 @@ const Modal = ({ showModal, setShowModal, onUpdate }: ModalProps) => {
 
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
-        // Update the state based on window width to approximate device type
-        const handleResize = () => {
-            if (window.innerWidth <= 768) {
+            if (getCookie("isMobile") == "true") {
                 setIsMobile(true);
+                console.log("Mobile");
             } else {
                 setIsMobile(false);
+                console.log("Desktop");
             }
-        };
-
-        // Call the function to set the initial state
-        handleResize();
-
-        // Add event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Clean up the event listener on component unmount
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    });
 
     const backdrop = {
         visible: { opacity: 1 },
