@@ -15,8 +15,8 @@ const defaultAvatar = require("../../Images/avatar.webp");
 function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
-    animate(".arrow", { rotate: isOpen ? 45 : -45 }, { duration: 0.2 });
-    animate(".arrow2", { rotate: isOpen ? -45 : 45 }, { duration: 0.2 });
+    animate(".arrow", { rotate: isOpen ? -45 : isMobile ? 0 : 45, top: isMobile ? "2%" : "50%", left: "90%", margin: isOpen ? "0px 0px" : "0px 16px" }, { duration: 0.2 });
+    animate(".arrow2", { rotate: isOpen ? 45 : isMobile ? 0 : -45, top: isMobile ? isOpen ? "2%" : "3%" : "51.6%", width: isMobile ? isOpen ? "24px" : "16px" : "24px", left: "90%", margin: isOpen ? "0px 0px" : "0px 16px" }, { duration: 0.2 });
   });
 
   // useEffect(() => {
@@ -27,10 +27,12 @@ function SideBar() {
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    if (getCookie("isMobile") == true) {
+    if (getCookie("isMobile") == "true") {
       setIsMobile(true);
+      console.log("isMobile: ", isMobile);
     } else {
       setIsMobile(false);
+      console.log("isMobile: ", isMobile);
     }
   });
   useEffect(() => {
@@ -168,18 +170,10 @@ function SideBar() {
       {isMobile ? (
         null
         ): <motion.div className="stripe" />}
-        {isMobile ? (
-          <motion.div onClick={() => setIsOpen(!isOpen)}>
-          <motion.div className="mobileArrow"/>
-          <motion.div className="mobileArrow mobileArrow2"/>
-          <motion.div className="mobileArrow mobileArrow3"/>
-          </motion.div>
-          ) :
             <div>
           <motion.div className="arrow" onClick={() => setIsOpen(!isOpen)} />
           <motion.div className="arrow arrow2" onClick={() => setIsOpen(!isOpen)} />
           </div>
-          }
       <motion.div className="sidebar_container">
         <div className="account-wrapper">
           <div className="avatar-wrapper">

@@ -1,4 +1,4 @@
-export const setCookie = (name: string, value: boolean, daysToLive?: number): void => {
+export const setCookie = (name: string, value: string, daysToLive?: number): void => {
     const cookieValue = encodeURIComponent(value);
     let cookieText = `${name}=${cookieValue}`;
     if (typeof daysToLive === "number") {

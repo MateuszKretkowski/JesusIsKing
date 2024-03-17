@@ -23,9 +23,9 @@ function App() {
     // Update the state based on window width to approximate device type
     const handleResize = () => {
         if (window.innerWidth <= 768) {
-            setCookie("isMobile", true, 1);
+            setCookie("isMobile", "true", 1);
         } else {
-            setCookie("isMobile", false, 1);
+            setCookie("isMobile", "false", 1);
         }
     };
 
