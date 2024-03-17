@@ -11,6 +11,8 @@ import {
 } from "framer-motion";
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../config/config";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
@@ -29,10 +31,14 @@ interface Post {
   firstPostTitle: string;
   firstPostDescription: string;
 }
+
+interface AuthorData {
+  author: string;
+  authorId: string;
+}
 const Post = ({
   index,
   authorId,
-  author,
   date,
   description,
   name,
@@ -48,6 +54,34 @@ const Post = ({
   const [isEven, setIsEven] = useState(false);
   useEffect(() => {
     index % 2 === 0 ? setIsEven(true) : setIsEven(false);
+  }, []);
+
+  useEffect(() => {
+    console.log(authorId);
+  })  
+
+  const [authorData, setAuthorData] = useState<AuthorData>({
+    author: "",
+    authorId: "",
+  });
+
+
+  
+  useEffect(() => {
+    const readPostAuthor = async () => {
+      const userRef = doc(db, "Users", authorId);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        console.log(userData);
+        setAuthorData({
+          author: userData?.name || "",
+          authorId: userData?.id || "",
+        });
+      }
+    };
+
+    readPostAuthor();
   }, []);
 
   return (
@@ -75,7 +109,7 @@ const Post = ({
             style={{ flexDirection: isEven ? "row-reverse" : "row" }}
           >
             <motion.img src={defaultAvatar} className="author_img" />
-            <motion.h5 className="author_name">{author}</motion.h5>
+            <motion.h5 className="author_name">{authorData.author}</motion.h5>
           </motion.div>
           <motion.div className="author_description">
 

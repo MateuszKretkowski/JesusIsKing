@@ -45,7 +45,7 @@ function Redirect() {
           deleteCookie("isRedirected");
           if (auth.currentUser) {
           const userEmail = auth.currentUser.email;
-          setCookie("email", userEmail, 1);
+          setCookie("email", userEmail, 100000000000000000000000000);
         }
           navigate("/");
           return updateDoc(userRef, { uniqueId: userId });

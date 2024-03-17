@@ -154,7 +154,7 @@ exports.createPost = functions.https.onCall((data, context) => {
       const postData = {
         name: data.name,
         description: data.description,
-        authorId: context.auth?.uid,
+        authorId: userEmail,
         authorEmail: userData.email,
         author: userData.name,
         date: formattedDate,
