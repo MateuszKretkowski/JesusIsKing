@@ -8,7 +8,7 @@
     width: 24vw;
     height: 100vh;
     background-color: #f1f0ea2a;
-    z-index: 1;
+    z-index: 10000;
 }
 
 .sidebar_container {
@@ -130,7 +130,7 @@
 
 .id {
     font-size: 12px;
-    color: #f1f0ea7c;
+    color: #b9b9b9;
     font-weight: 800;
     margin: 0% 0 4% 0;
 }
