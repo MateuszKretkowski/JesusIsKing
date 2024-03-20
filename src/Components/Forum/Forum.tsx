@@ -95,13 +95,17 @@ function Forum() {
     const fetchPosts = async () => {
       try {
         const postsData = await readPosts();
-        setPosts(postsData);
+        const formattedPosts = postsData.map(post => ({
+          ...post,
+          id: post.id,
+        }));
+        setPosts(formattedPosts);
       } catch (error) {
         console.error("Error fetching Blogs: ", error);
         setPosts([]);
       }
     };
-
+  
     fetchPosts();
   }, []);
 
@@ -322,6 +326,8 @@ function Forum() {
             {posts &&
               posts.map((post, index) => (
                 <Post
+                  key={post.id}
+                  id={post.id}
                   index={index}
                   authorId={post.authorId}
                   author={post.author}

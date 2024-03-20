@@ -21,6 +21,11 @@ import {
   where,
   getDocs,
   orderBy,
+  setDoc,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  deleteField,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { setCookie } from "../../utils/cookieUtils";
@@ -190,13 +195,68 @@ export async function readPosts() {
 
     const querySnapshot = await getDocs(q);
     const posts = querySnapshot.docs.map((doc) => ({
-      name: doc.id,
+      id: doc.id,
       ...doc.data(),
     }));
     return posts;
   } catch (error) {
     console.error("Error fetching posts: ", error);
     return [];
+  }
+}
+
+export async function likeAPost(postId: string) {
+  const postRef = doc(db, "Posts", postId);
+  const postDoc = await getDoc(postRef);
+  const userEmail = auth.currentUser?.email || "none";
+  const userRef = doc(db, "Users", userEmail);
+  
+  if (postDoc.exists()) {
+    const postData = postDoc.data();
+    const authorRef = doc(db, "Users", postData.authorEmail || "none");
+    const authorDoc = await getDoc(authorRef);
+    const authorData = authorDoc.data();
+    
+    // Sprawdź, czy użytkownik już polubił post
+    if (authorData?.notifications?.likes?.[userEmail]) {
+      // Użytkownik już polubił ten post, nie rób nic
+      return;
+    }
+
+    // Użytkownik nie polubił tego posta, zwiększ liczbę polubień i zaktualizuj powiadomienia
+    const likes = postData?.numberOfLikes || 0;
+    await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
+    const notificationsUpdate = {
+      [`notifications.likes.${userEmail}`]: postId
+    };
+    if (authorData?.notifications?.likes) {
+    await updateDoc(authorRef, notificationsUpdate);
+    } else {
+      await setDoc(authorRef, { notifications: { likes: { [userEmail]: postId } } }, { merge: true });
+    }
+  }
+}
+
+export async function unlikeAPost(postId: string) {
+  const postRef = doc(db, "Posts", postId);
+  const postDoc = await getDoc(postRef);
+  const userEmail = auth.currentUser?.email || "none";
+  const userRef = doc(db, "Users", userEmail);
+
+  if (postDoc.exists()) {
+    const postData = postDoc.data();
+    const authorRef = doc(db, "Users", postData.authorEmail || "none");
+    const authorDoc = await getDoc(authorRef);
+    const authorData = authorDoc.data();
+    // Sprawdź, czy użytkownik faktycznie polubił post
+      console.log("User has liked this post", postId, authorData?.notifications?.likes?.[userEmail])
+      // Użytkownik polubił ten post, zmniejsz liczbę polubień i usuń z powiadomień
+      const likes = postData?.numberOfLikes || 0;
+      await setDoc(postRef, { numberOfLikes: likes - 1 }, { merge: true });
+      await updateDoc(authorRef, {
+        [`notifications.likes.${userEmail}`]: deleteField()
+      });
+    // W przeciwnym razie, jeśli użytkownik nie polubił posta, nie rób nic
   }
 }
 

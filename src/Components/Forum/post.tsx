@@ -12,10 +12,11 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../config/config";
+import { db, likeAPost, unlikeAPost } from "../config/config";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
+  id: string;
   index: number;
   authorId: string;
   author: string;
@@ -37,6 +38,7 @@ interface AuthorData {
   authorId: string;
 }
 const Post = ({
+  id,
   index,
   authorId,
   date,
@@ -83,6 +85,51 @@ const Post = ({
 
     readPostAuthor();
   }, []);
+
+  const addPostTitleVariants = {
+    hidden: { color: "#333333" },
+    visible: { color: "#000000" },
+  };
+  const addPostDescriptionVariants = {
+    hidden: { color: "#333333" },
+    visible: { color: "#000000" },
+  };
+  const addPostActionContainerVariants = {
+    hidden: { opacity: "0", top: 100 },
+    visible: { opacity: "1", top: 0, transition: { staggerChildren: 0.5 } },
+  };
+  const addPostActionVariants = {
+    hidden: { opacity: "0", top: 100 },
+    visible: { opacity: "1", top: 0 },
+  };
+  const addPostAuthorContainerVariants = {
+    hidden: { opacity: "0", top: -100, height: "0%" },
+    visible: {
+      opacity: "1",
+      top: 0,
+      height: "100%",
+      transition: { staggerChildren: 0.5 },
+    },
+  };
+  const addPostAuthorVariants = {
+    hidden: { opacity: "0", top: -100, height: "0%" },
+    visible: { opacity: "1", top: 0, height: "auto" },
+  };
+  const addPostPostVariants = {
+    hidden: { opacity: "1" },
+    visible: { opacity: "0" },
+  };
+  const gradientVariants = {
+    hidden: { width: "0%" },
+    visible: { width: "100%" },
+  };
+
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    console.log(isLiked);
+  
+  }, [isLiked])
 
   return (
     <motion.div
@@ -154,8 +201,8 @@ const Post = ({
               REPLIES: {noReplies}
             </motion.h3>
           </motion.button>
-          <motion.button className="post_action action_line">
-            <motion.h3 className="post_action-text">LIKE: {noLikes}</motion.h3>
+          <motion.button className="post_action action_line" onClick={() => {isLiked ? likeAPost(id) : unlikeAPost(id); setIsLiked(!isLiked)}}>
+            <motion.h3 className="post_action-text">{isLiked ? `LIKE: ${noLikes+=1}` : `LIKE: ${noLikes}`}</motion.h3>
           </motion.button>
           <motion.button className="post_action action_line">
             <motion.h3 className="post_action-text">
@@ -168,6 +215,18 @@ const Post = ({
           style={{ justifyContent: isEven ? "end" : "start" }}
         >
           <motion.h5 className="post_date-text">{date}</motion.h5>
+        </motion.div>
+      </motion.div>
+
+      {/* REPLIES */}
+
+      <motion.div
+        className="replies_container"
+        style={{ justifyContent: isEven ? "end" : "start" }}
+      >
+        <motion.div className="reply_addPost"
+        style={{ justifyContent: isEven ? "end" : "start" }}
+        >
         </motion.div>
       </motion.div>
     </motion.div>
