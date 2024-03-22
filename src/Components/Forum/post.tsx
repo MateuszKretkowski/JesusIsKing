@@ -11,8 +11,8 @@ import {
 } from "framer-motion";
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
-import { doc, getDoc } from "firebase/firestore";
-import { db, likeAPost, unlikeAPost } from "../config/config";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { auth, db, likeAPost, unlikeAPost } from "../config/config";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
@@ -127,9 +127,33 @@ const Post = ({
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    console.log(isLiked);
+    const checkLiked = async () => {
+      // Assuming you have access to the current user's email
+      const currentUserEmail = auth.currentUser?.email || "";
+      const postRef = doc(db, "Posts", id);
+      const postDoc = await getDoc(postRef);
+      if (postDoc.exists()) {
+        const postData = postDoc.data();
+        console.log(postData?.likes || []);
+        const likedBy = postData?.likes || [];
+        setIsLiked(likedBy.includes(currentUserEmail));
+      }
+    };
+
+    const unsubscribe = onSnapshot(doc(db, "Posts", id), (doc) => {
+      const postData = doc.data();
+      const likedBy = postData?.likes || [];
+      setIsLiked(likedBy.includes(auth.currentUser?.email || ""));
+    });
+
+    return () => unsubscribe();
+  }, []);
   
+  useEffect(() => {
+    console.log(isLiked);
   }, [isLiked])
+
+  
 
   return (
     <motion.div
@@ -201,8 +225,8 @@ const Post = ({
               REPLIES: {noReplies}
             </motion.h3>
           </motion.button>
-          <motion.button className="post_action action_line" onClick={() => {isLiked ? likeAPost(id) : unlikeAPost(id); setIsLiked(!isLiked)}}>
-            <motion.h3 className="post_action-text">{isLiked ? `LIKE: ${noLikes+=1}` : `LIKE: ${noLikes}`}</motion.h3>
+          <motion.button className="post_action action_line" onClick={() => {isLiked ? unlikeAPost(id) : likeAPost(id);}}>
+            <motion.h3 className="post_action-text">LIKES: {isLiked ? noLikes+=1 : noLikes}</motion.h3>
           </motion.button>
           <motion.button className="post_action action_line">
             <motion.h3 className="post_action-text">
@@ -220,15 +244,30 @@ const Post = ({
 
       {/* REPLIES */}
 
-      <motion.div
+      {/* <motion.div
         className="replies_container"
         style={{ justifyContent: isEven ? "end" : "start" }}
       >
+      <motion.div className="replies_title-wrapper">
+        <motion.h1 className="replies-title">REPLIES</motion.h1>
+      </motion.div>
         <motion.div className="reply_addPost"
         style={{ justifyContent: isEven ? "end" : "start" }}
         >
-        </motion.div>
-      </motion.div>
+          <motion.div className="reply_addPost_title-wrapper">
+            <motion.h3 className="reply_addPost-title">POST</motion.h3>
+          </motion.div>
+
+          <motion.div className="reply_addPost_input-wrapper">
+            <motion.input
+              type="text"
+              className="reply_addPost_input"
+              placeholder="WRITE YOUR REPLY"
+              maxLength={100}
+            />
+          </motion.div>
+        </motion.div> */}
+      {/* </motion.div> */}
     </motion.div>
   );
 };

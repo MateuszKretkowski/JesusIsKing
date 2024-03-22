@@ -217,22 +217,23 @@ export async function likeAPost(postId: string) {
     const authorDoc = await getDoc(authorRef);
     const authorData = authorDoc.data();
     
-    // Sprawdź, czy użytkownik już polubił post
-    if (authorData?.notifications?.likes?.[userEmail]) {
-      // Użytkownik już polubił ten post, nie rób nic
-      return;
-    }
-
     // Użytkownik nie polubił tego posta, zwiększ liczbę polubień i zaktualizuj powiadomienia
     const likes = postData?.numberOfLikes || 0;
     await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
     const notificationsUpdate = {
       [`notifications.likes.${userEmail}`]: postId
     };
-    if (authorData?.notifications?.likes) {
+    await setDoc(authorRef, { notifications: { likes: { [userEmail]: postId } } }, { merge: true });
     await updateDoc(authorRef, notificationsUpdate);
-    } else {
-      await setDoc(authorRef, { notifications: { likes: { [userEmail]: postId } } }, { merge: true });
+    const userLikesRef = doc(db, "Posts", postId);
+    const userLikesDoc = await getDoc(userLikesRef);
+    
+    if (userLikesDoc.exists()) {
+      const userLikesData = userLikesDoc.data();
+      const likesArray = userLikesData.likes || [];
+      console.log("User likes doc", likesArray)
+      likesArray.push(auth.currentUser?.email);
+      await updateDoc(userLikesRef, { likes: likesArray });
     }
   }
 }
@@ -256,6 +257,16 @@ export async function unlikeAPost(postId: string) {
       await updateDoc(authorRef, {
         [`notifications.likes.${userEmail}`]: deleteField()
       });
+      const userLikesRef = doc(db, "Posts", postId);
+      const userLikesDoc = await getDoc(userLikesRef);
+
+      if (userLikesDoc.exists()) {
+        const userLikesData = userLikesDoc.data();
+        const likesArray = userLikesData.likes || [];
+        const updatedLikesArray = likesArray.filter((email: string) => email !== auth.currentUser?.email);
+        await updateDoc(userLikesRef, { likes: updatedLikesArray });
+      }
+
     // W przeciwnym razie, jeśli użytkownik nie polubił posta, nie rób nic
   }
 }

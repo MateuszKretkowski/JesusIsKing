@@ -180,7 +180,6 @@ exports.createPost = functions.https.onCall((data, context) => {
     });
 });
 
-
 exports.createUserAt = functions.https.onCall((data) => {
   const db = admin.firestore();
   const userId = data.userId;
