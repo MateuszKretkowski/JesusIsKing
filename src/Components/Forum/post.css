@@ -189,11 +189,17 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   background-color: transparent;
   border: none;
   font-weight: 900;
+  height: 24px;
   resize: none;
 }
 
 .reply_addP:focus {
   cursor: pointer;
   outline: none;
+}
+
+.reply_addP::placeholder {
+  color: grey;
+  font-weight: 800;
 }
 
