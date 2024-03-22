@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./post.css";
+import "./forum.css"
 import {
   motion,
   AnimatePresence,
@@ -13,6 +14,7 @@ import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db, likeAPost, unlikeAPost } from "../config/config";
+import { getFunctions, httpsCallable } from "firebase/functions";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
@@ -153,8 +155,34 @@ const Post = ({
     console.log(isLiked);
   }, [isLiked])
 
-  
+  // REPLIES
 
+  const [postData, setPostData] = useState({
+    name: "",
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = event.target; // Destrukturyzacja, aby uzyskać `name` i `value`
+    setPostData((prevState) => ({
+      ...prevState, // Kopiowanie istniejących wartości stanu
+      [name]: value, // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
+    }));
+
+    const textarea = event.target;
+    textarea.style.height = "auto"; // Reset wysokości
+    textarea.style.height = textarea.scrollHeight + "px";
+  };
+  const functions = getFunctions();
+  const handleSubmit = async () => {
+    try {
+      var createPost = httpsCallable(functions, "createPost");
+      const result = await createPost(postData);
+    } catch (error) {
+      console.error("Error creating Post: ", error);
+    }
+  };
+
+  const [isFocused, setisFocused] = useState(false);
   return (
     <motion.div
       className="post"
@@ -244,30 +272,37 @@ const Post = ({
 
       {/* REPLIES */}
 
-      {/* <motion.div
+      <motion.div
         className="replies_container"
-        style={{ justifyContent: isEven ? "end" : "start" }}
+        style={{ alignItems: isEven ? "end" : "start" }}
       >
       <motion.div className="replies_title-wrapper">
-        <motion.h1 className="replies-title">REPLIES</motion.h1>
+        <motion.h2 className="replies-title">REPLIES</motion.h2>
       </motion.div>
         <motion.div className="reply_addPost"
-        style={{ justifyContent: isEven ? "end" : "start" }}
+        style={{ justifyContent: isEven ? "end" : "start", flexDirection: isEven ? "row" : "row-reverse"}}
         >
-          <motion.div className="reply_addPost_title-wrapper">
+          <motion.div className="reply_addPost_title-wrapper" onClick={() => {handleSubmit()}}>
             <motion.h3 className="reply_addPost-title">POST</motion.h3>
           </motion.div>
 
-          <motion.div className="reply_addPost_input-wrapper">
-            <motion.input
+          <motion.div className="reply_addPost_input-wrapper"
+              onFocus={() => {setisFocused(true)}}           
+          >
+            <motion.textarea
               type="text"
-              className="reply_addPost_input"
+              name="name"
+              className="reply_addP"
               placeholder="WRITE YOUR REPLY"
+              value={postData.name}
+              onChange={handleChange}
+              style={{ textAlign: isEven ? "end" : "start"}}   
               maxLength={100}
             />
+            <motion.div className="post_bottom_gradient" style={{ scaleX: isEven ? -1 : 1, width: "50%", left: isEven ?" 49%" : 0 }} />
           </motion.div>
-        </motion.div> */}
-      {/* </motion.div> */}
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };
