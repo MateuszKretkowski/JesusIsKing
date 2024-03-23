@@ -13,8 +13,9 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { auth, db, likeAPost, unlikeAPost } from "../config/config";
+import { auth, db, likeAPost, readReplies, unlikeAPost } from "../config/config";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import Reply from "./Reply";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
@@ -182,6 +183,33 @@ const Post = ({
     }
   };
 
+  interface Reply {
+    id: string;
+    name: string;
+    author: string;
+    authorId: string;
+    date: string;
+    numberOfLikes: number;
+  }
+  const [replies, setReplies] = useState<Reply[]>([]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const repliesData = await readReplies();
+        const formattedReplies = repliesData.map(reply => ({
+          ...reply,
+          id: reply.id,
+        }));
+        setReplies(formattedReplies);
+      } catch (error) {
+        console.error("Error fetching Blogs: ", error);
+        setReplies([]);
+      }
+    };
+  
+    fetchPosts();
+  }, []);
+
   const [isFocused, setisFocused] = useState(false);
   return (
     <motion.div
@@ -302,6 +330,15 @@ const Post = ({
             <motion.div className="post_bottom_gradient" style={{ scaleX: isEven ? -1 : 1, width: "50%", left: isEven ?" 49%" : 0 }} />
           </motion.div>
         </motion.div>
+        {/* REPLIES */}
+
+        <motion.div className="reply_container">
+        {replies &&
+              replies.map((reply, index) => (
+          <Reply id={reply.id} name={reply.name} author={reply.author} authorId={reply.authorId} date={reply.date} noLikes={reply.numberOfLikes} />
+              ))}
+        </motion.div>
+
       </motion.div>
     </motion.div>
   );
