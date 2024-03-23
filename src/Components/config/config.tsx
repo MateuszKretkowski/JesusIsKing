@@ -205,6 +205,24 @@ export async function readPosts() {
   }
 }
 
+export async function readReplies() {
+  try {
+    const postsCollectionRef = collection(db, "Replies");
+    // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
+    const q = query(postsCollectionRef, orderBy("date"));
+
+    const querySnapshot = await getDocs(q);
+    const replies = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return replies;
+  } catch (error) {
+    console.error("Error fetching replies: ", error);
+    return [];
+  }
+}
+
 export async function likeAPost(postId: string) {
   const postRef = doc(db, "Posts", postId);
   const postDoc = await getDoc(postRef);
