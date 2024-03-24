@@ -126,3 +126,4 @@ Dev App Server is now running.
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[debug] [2024-03-24T01:21:58.598Z] Received signal SIGHUP 1

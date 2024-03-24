@@ -101,7 +101,7 @@ export async function readUserByUsername(uniqueId: string, setUserData: (userDat
         description: userDoc.data().description,
         from: userDoc.data().from,
         link: userDoc.data().link,
-        uniqueId: userDoc.data().uniqueId, // Add this line to include the uniqueId in the user data
+        uniqueId: userDoc.data().uniqueId,
       };
       setUserData(userData);
     } else {
@@ -111,7 +111,7 @@ export async function readUserByUsername(uniqueId: string, setUserData: (userDat
         description: "-1",
         from: "-1",
         link: "-1",
-        uniqueId: "-1", // Add this line to include the uniqueId in the user data
+        uniqueId: "-1",
       };
       setUserData(userData);
     }
@@ -172,7 +172,6 @@ export function readUser(setUserData: (userData: User) => void) {
 export async function readBlogs() {
   try {
     const blogsCollectionRef = collection(db, "Blogs");
-    // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
     const q = query(blogsCollectionRef, orderBy("date", "desc"));
 
     const querySnapshot = await getDocs(q);
@@ -190,7 +189,6 @@ export async function readBlogs() {
 export async function readPosts() {
   try {
     const postsCollectionRef = collection(db, "Posts");
-    // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
     const q = query(postsCollectionRef, orderBy("date"));
 
     const querySnapshot = await getDocs(q);
@@ -208,7 +206,6 @@ export async function readPosts() {
 export async function readReplies() {
   try {
     const postsCollectionRef = collection(db, "Replies");
-    // Utwórz zapytanie z sortowaniem po polu 'date' w porządku malejącym
     const q = query(postsCollectionRef, orderBy("date"));
 
     const querySnapshot = await getDocs(q);
@@ -235,7 +232,6 @@ export async function likeAPost(postId: string) {
     const authorDoc = await getDoc(authorRef);
     const authorData = authorDoc.data();
     
-    // Użytkownik nie polubił tego posta, zwiększ liczbę polubień i zaktualizuj powiadomienia
     const likes = postData?.numberOfLikes || 0;
     await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
     const notificationsUpdate = {
@@ -267,9 +263,7 @@ export async function unlikeAPost(postId: string) {
     const authorRef = doc(db, "Users", postData.authorEmail || "none");
     const authorDoc = await getDoc(authorRef);
     const authorData = authorDoc.data();
-    // Sprawdź, czy użytkownik faktycznie polubił post
       console.log("User has liked this post", postId, authorData?.notifications?.likes?.[userEmail])
-      // Użytkownik polubił ten post, zmniejsz liczbę polubień i usuń z powiadomień
       const likes = postData?.numberOfLikes || 0;
       await setDoc(postRef, { numberOfLikes: likes - 1 }, { merge: true });
       await updateDoc(authorRef, {
@@ -284,8 +278,6 @@ export async function unlikeAPost(postId: string) {
         const updatedLikesArray = likesArray.filter((email: string) => email !== auth.currentUser?.email);
         await updateDoc(userLikesRef, { likes: updatedLikesArray });
       }
-
-    // W przeciwnym razie, jeśli użytkownik nie polubił posta, nie rób nic
   }
 }
 
