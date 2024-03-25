@@ -220,10 +220,14 @@ exports.createReply = functions.https.onCall(async (data, context) => {
     if (!userDoc.exists) {
       throw new functions.https.HttpsError("not-found", "un found");
     }
-    const notificationsUpdate = {
-      [`notifications.replies.${currentUserEmail}`]: replyRef.id,
+    const userUpdate = {
+      notifications: {
+        replies: {
+          [currentUserEmail]: replyRef.id,
+        },
+      },
     };
-    await userRef.set(notificationsUpdate, {merge: true});
+    await userRef.set(userUpdate, {merge: true});
 
     console.log("Reply created and user notified");
     return {result: "Reply created and user notified", id: "replyRef.id"};
