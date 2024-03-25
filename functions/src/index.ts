@@ -215,6 +215,17 @@ exports.createReply = functions.https.onCall(async (data, context) => {
     };
     await postRef.set(postUpdate, {merge: true});
 
+    const currentUserRef = admin.firestore()
+      .collection("Users").doc(currentUserEmail);
+    const currentUserDoc = await currentUserRef.get();
+    if (!currentUserDoc.exists) {
+      throw new functions.https.HttpsError("not-found", "un found");
+    }
+    const userRepliesRef = admin.firestore()
+      .collection("User")
+      .doc(currentUserEmail).collection("UserReplies");
+    await userRepliesRef.doc(replyRef.id);
+
     const userRef = admin.firestore().collection("Users").doc(data.authorEmail);
     const userDoc = await userRef.get();
     if (!userDoc.exists) {
