@@ -180,72 +180,60 @@ exports.createPost = functions.https.onCall((data, context) => {
     });
 });
 
-exports.createReply = functions.https.onCall((data, context) => {
+exports.createReply = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       "failed-precondition",
       "The function must be called while authenticated."
     );
   }
-  const currentUserEmail = context.auth.token.email || null;
+  const currentUserEmail = context.auth?.token.email || null;
   if (!currentUserEmail) {
     throw new functions.https.HttpsError("not-found", "Unable.");
   }
-  const postRef = admin.firestore().collection("Posts").doc(data.postId);
-  const currentDate = new Date();
-  const formattedDate = `${currentDate.getFullYear()}-${(currentDate
-    .getMonth() + 1)
-    .toString().padStart(2, "0")}-${currentDate
-    .getDate()
-    .toString()
-    .padStart(2, "0")} ${currentDate.getHours()
-    .toString()
-    .padStart(2, "0")}:${currentDate
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}`;
-  const batch = admin.firestore().batch();
-  const replyData = {
-    description: data.description,
-    authorEmail: currentUserEmail,
-    date: formattedDate,
-  };
-  const replyRef = postRef.collection("Replies").doc();
-  batch.set(replyRef, replyData);
-  const postUpdate = {
-    [`replies.${currentUserEmail}`]: replyRef.id,
-  };
-  batch.update(postRef, postUpdate);
-  const userRef = admin.firestore().collection("Users").doc(data.authorEmail);
-  return batch.commit()
-    .then(() => {
-      return userRef.get();
-    })
-    .then((userDoc) => {
-      if (!userDoc.exists) {
-        throw new functions.https.HttpsError(
-          "not-found",
-          "User data not found"
-        );
-      }
-      const notificationsUpdate = {
-        [`notifications.replies.${currentUserEmail}`]: replyRef.id,
-      };
-      return userRef.update(notificationsUpdate);
-    })
-    .then(() => {
-      console.log("Reply created and user notified");
-      return {result: "Reply created and user notified", id: replyRef.id};
-    })
-    .catch((error) => {
-      console.error("Error creating reply: ", error);
-      throw new functions.https.HttpsError(
-        "internal",
-        `Could not create reply: ${error.message}`
-      );
-    });
-});
 
+  try {
+    const postRef = admin.firestore().collection("Posts").doc(data.postId);
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${(currentDate
+      .getMonth() + 1)
+      .toString().padStart(2, "0")}-${currentDate.getDate()
+      .toString().padStart(2, "0")} ${currentDate.getHours()
+      .toString().padStart(2, "0")}:${currentDate.getMinutes()
+      .toString().padStart(2, "0")}`;
+
+    const replyData = {
+      name: data.name,
+      authorEmail: currentUserEmail,
+      date: formattedDate,
+    };
+    const replyRef = await admin.firestore()
+      .collection("Replies").add(replyData);
+
+    const postUpdate = {
+      [`replies.${currentUserEmail}`]: replyRef.id,
+    };
+    await postRef.set(postUpdate, {merge: true});
+
+    const userRef = admin.firestore().collection("Users").doc(data.authorEmail);
+    const userDoc = await userRef.get();
+    if (!userDoc.exists) {
+      throw new functions.https.HttpsError("not-found", "un found");
+    }
+    const notificationsUpdate = {
+      [`notifications.replies.${currentUserEmail}`]: replyRef.id,
+    };
+    await userRef.set(notificationsUpdate, {merge: true});
+
+    console.log("Reply created and user notified");
+    return {result: "Reply created and user notified", id: "replyRef.id"};
+  } catch (error: any) {
+    console.error("Error creating reply: ", error);
+    throw new functions
+      .https
+      .HttpsError("internal", `Could not create reply: ${error.message}`);
+  }
+});
 
 exports.createUserAt = functions.https.onCall((data) => {
   const db = admin.firestore();

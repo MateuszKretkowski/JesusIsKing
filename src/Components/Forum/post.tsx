@@ -160,6 +160,8 @@ const Post = ({
 
   const [postData, setPostData] = useState({
     name: "",
+    postId: id,
+    authorEmail: authorId, 
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -176,10 +178,10 @@ const Post = ({
   const functions = getFunctions();
   const handleSubmit = async () => {
     try {
-      var createPost = httpsCallable(functions, "createPost");
-      const result = await createPost(postData);
+      var createReply = httpsCallable(functions, "createReply");
+      const result = await createReply(postData);
     } catch (error) {
-      console.error("Error creating Post: ", error);
+      console.error("Error creating Reply: ", error);
     }
   };
 
@@ -310,9 +312,8 @@ const Post = ({
         <motion.div className="reply_addPost"
         style={{ justifyContent: isEven ? "end" : "start", flexDirection: isEven ? "row" : "row-reverse"}}
         >
-          <motion.div className="reply_addPost_title-wrapper" onClick={() => {handleSubmit()}}>
-            <motion.h3 className="reply_addPost-title">POST</motion.h3>
-          </motion.div>
+          <motion.button className="reply_addPost_title-wrapper" onClick={() => {handleSubmit()}}>
+          </motion.button>
 
           <motion.div className="reply_addPost_input-wrapper"
               onFocus={() => {setisFocused(true)}}           

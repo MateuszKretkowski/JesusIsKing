@@ -74,6 +74,9 @@ input {
 button {
   background-color: transparent;
   background-color: transparent;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
 }
 
 span {
