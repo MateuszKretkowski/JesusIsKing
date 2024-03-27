@@ -204,14 +204,14 @@ exports.createReply = functions.https.onCall(async (data, context) => {
 
     const replyData = {
       name: data.name,
-      authorEmail: currentUserEmail,
+      authorEmail: data.authorEmail,
       date: formattedDate,
     };
     const replyRef = await admin.firestore()
       .collection("Replies").add(replyData);
 
     const postUpdate = {
-      [`replies.${currentUserEmail}`]: replyRef.id,
+      Replies: [replyRef.id],
     };
     await postRef.set(postUpdate, {merge: true});
 
@@ -222,7 +222,7 @@ exports.createReply = functions.https.onCall(async (data, context) => {
       throw new functions.https.HttpsError("not-found", "un found");
     }
     const userRepliesRef = admin.firestore()
-      .collection("User")
+      .collection("Users")
       .doc(currentUserEmail).collection("UserReplies");
     await userRepliesRef.doc(replyRef.id);
 
@@ -238,7 +238,7 @@ exports.createReply = functions.https.onCall(async (data, context) => {
         },
       },
     };
-    await userRef.set(userUpdate, {merge: true});
+    await userRef.update(userUpdate);
 
     console.log("Reply created and user notified");
     return {result: "Reply created and user notified", id: "replyRef.id"};

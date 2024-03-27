@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion';
-import { likeAPost, unlikeAPost } from '../config/config';
+import { db, likeAPost, unlikeAPost } from '../config/config';
+import { collection, getDoc } from 'firebase/firestore';
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Reply {
     id: string;
     name: string;
     author: string;
-    authorId: string;
+    authorEmail: string;
     date: string;
     noLikes: number;
 }
-function Reply({ id, name, author, authorId, date, noLikes }: Reply) {
+function Reply({ id, name, author, authorEmail, date, noLikes }: Reply) {
+
   return (
     <div className='Reply'>
         <div className='reply_container'>

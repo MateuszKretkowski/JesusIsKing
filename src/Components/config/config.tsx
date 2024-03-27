@@ -202,19 +202,40 @@ export async function readPosts() {
   }
 }
 
-export async function readReplies() {
+export async function readReplies(postId: string) {
   try {
-    const postsCollectionRef = collection(db, "Replies");
-    const q = query(postsCollectionRef, orderBy("date"));
+    const postRef = doc(db, 'Posts', postId);
+    console.log(`Fetching post document to read replies for post: ${postId}`);
 
-    const querySnapshot = await getDocs(q);
-    const replies = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
+    const docSnapshot = await getDoc(postRef);
+
+    if (!docSnapshot.exists()) {
+      console.log('No post found.');
+      return [];
+    }
+
+    const postData = docSnapshot.data();
+
+    const replies = await Promise.all(postData.Replies.map(async (replyId: string) => {
+      const replyRef = doc(db, "Replies", replyId);
+      const replyDoc = await getDoc(replyRef);
+      if (replyDoc.exists()) {
+        const replyData = replyDoc.data();
+        return {
+          id: replyDoc.id,
+          ...replyData
+        };
+      } else {
+        return null;
+      }
     }));
-    return replies;
+
+    const filteredReplies = replies.filter((reply: any) => reply !== null);
+
+    console.log('Replies:', filteredReplies);
+    return filteredReplies;
   } catch (error) {
-    console.error("Error fetching replies: ", error);
+    console.error('Error fetching replies:', error);
     return [];
   }
 }

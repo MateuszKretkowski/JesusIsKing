@@ -161,7 +161,7 @@ const Post = ({
   const [postData, setPostData] = useState({
     name: "",
     postId: id,
-    authorEmail: authorId, 
+    authorEmail: auth.currentUser?.email || "", 
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -189,7 +189,7 @@ const Post = ({
     id: string;
     name: string;
     author: string;
-    authorId: string;
+    authorEmail: string;
     date: string;
     numberOfLikes: number;
   }
@@ -197,18 +197,28 @@ const Post = ({
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const repliesData = await readReplies();
-        const formattedReplies = repliesData.map(reply => ({
-          ...reply,
-          id: reply.id,
-        }));
+        const repliesData = await readReplies(id);
+        const formattedReplies = [];
+        for (const reply of repliesData) {
+          const userRef = doc(db, "Users", reply.authorEmail);
+          const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const formattedReply = {
+              ...reply,
+              id: reply.id,
+              author: userData?.name || "",
+            };
+            formattedReplies.push(formattedReply);
+          }
+        }
         setReplies(formattedReplies);
       } catch (error) {
         console.error("Error fetching Blogs: ", error);
         setReplies([]);
       }
     };
-  
+
     fetchPosts();
   }, []);
 
@@ -336,7 +346,7 @@ const Post = ({
         <motion.div className="reply_container">
         {replies &&
               replies.map((reply, index) => (
-          <Reply id={reply.id} name={reply.name} author={reply.author} authorId={reply.authorId} date={reply.date} noLikes={reply.numberOfLikes} />
+          <Reply id={reply.id} name={reply.name} author={reply.author} authorEmail={reply.authorEmail} date={reply.date} noLikes={reply.numberOfLikes} />
               ))}
         </motion.div>
 
