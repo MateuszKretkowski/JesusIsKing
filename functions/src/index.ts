@@ -210,10 +210,13 @@ exports.createReply = functions.https.onCall(async (data, context) => {
     const replyRef = await admin.firestore()
       .collection("Replies").add(replyData);
 
+    const postSnapshot = await postRef.get();
+    const currentReplies = postSnapshot.data()?.Replies || [];
+    const updatedReplies = [...currentReplies, replyRef.id];
     const postUpdate = {
-      Replies: [replyRef.id],
+      Replies: updatedReplies,
     };
-    await postRef.set(postUpdate, {merge: true});
+    await postRef.update(postUpdate);
 
     const currentUserRef = admin.firestore()
       .collection("Users").doc(currentUserEmail);
