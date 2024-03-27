@@ -223,6 +223,7 @@ const Post = ({
   }, []);
 
   const [isFocused, setisFocused] = useState(false);
+  const [isRepliesOpen, setIsRepliesOpen] = useState(false);
   return (
     <motion.div
       className="post"
@@ -289,7 +290,7 @@ const Post = ({
             className="post_action action_line"
             style={{ marginRight: "6%" }}
           >
-            <motion.h3 className="post_action-text">
+            <motion.h3 className="post_action-text" onClick={() => {setIsRepliesOpen(!isRepliesOpen)}}>
               REPLIES: {noReplies}
             </motion.h3>
           </motion.button>
@@ -311,11 +312,12 @@ const Post = ({
       </motion.div>
 
       {/* REPLIES */}
-
+      
+      {(isRepliesOpen) && (
       <motion.div
         className="replies_container"
         style={{ alignItems: isEven ? "end" : "start" }}
-      >
+        >
       <motion.div className="replies_title-wrapper">
         <motion.h2 className="replies-title">REPLIES</motion.h2>
       </motion.div>
@@ -343,14 +345,16 @@ const Post = ({
         </motion.div>
         {/* REPLIES */}
 
-        <motion.div className="reply_container">
+
+          <motion.div className="reply_container">
         {replies &&
               replies.map((reply, index) => (
-          <Reply id={reply.id} name={reply.name} author={reply.author} authorEmail={reply.authorEmail} date={reply.date} noLikes={reply.numberOfLikes} />
-              ))}
+                <Reply id={reply.id} name={reply.name} author={reply.author} authorEmail={reply.authorEmail} date={reply.date} noLikes={reply.numberOfLikes} />
+                ))}
         </motion.div>
 
       </motion.div>
+                )}
     </motion.div>
   );
 };
