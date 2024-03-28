@@ -151,7 +151,7 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin: 2% 1% 2% 0;
+  margin: 2% 1% 2% 1%;
 }
 
 .replies_title-wrapper {
@@ -167,8 +167,8 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   display: flex;
   justify-content: end;
   align-items: end;
-  gap: 5%;
   padding-bottom: 1%;
+  overflow-y: hidden;
 }
 
 .reply_addPost-title {
@@ -203,3 +203,6 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   font-weight: 800;
 }
 
+.replies_container {
+  overflow: hidden;
+}

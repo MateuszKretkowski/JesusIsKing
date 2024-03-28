@@ -9,6 +9,7 @@ import {
   useAnimation,
   useInView,
   useAnimate,
+  delay,
 } from "framer-motion";
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
@@ -222,8 +223,19 @@ const Post = ({
     fetchPosts();
   }, []);
 
-  const [isFocused, setisFocused] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
+  const controls = useAnimation();
+  useEffect(() => {
+    isRepliesOpen ? controls.start("visible") : controls.start("hidden");
+    console.log(index)
+  }, [isRepliesOpen])
+  const addReplyVariants = {
+    hidden: { opacity: 0, height: "0px", transition: { duration: 0.2 } },
+    visible: { opacity: 1, height: "40px", transition: { duration: 0.4 } },
+  }
+
+
+  const [isFocused, setisFocused] = useState(false);
   return (
     <motion.div
       className="post"
@@ -313,18 +325,25 @@ const Post = ({
 
       {/* REPLIES */}
       
-      {(isRepliesOpen) && (
       <motion.div
         className="replies_container"
-        style={{ alignItems: isEven ? "end" : "start" }}
+        style={{ alignItems: isEven ? "end" : "start"}}
         >
+                  <motion.div
+          className="post_line"
+          style={{ left: isEven ? "100%" : "0%"}}
+        />
       <motion.div className="replies_title-wrapper">
         <motion.h2 className="replies-title">REPLIES</motion.h2>
       </motion.div>
         <motion.div className="reply_addPost"
         style={{ justifyContent: isEven ? "end" : "start", flexDirection: isEven ? "row" : "row-reverse"}}
+        variants={addReplyVariants}
+        initial={controls}
+        animate={controls}
         >
           <motion.button className="reply_addPost_title-wrapper" onClick={() => {handleSubmit()}}>
+            <motion.h5>POST</motion.h5>
           </motion.button>
 
           <motion.div className="reply_addPost_input-wrapper"
@@ -349,12 +368,14 @@ const Post = ({
           <motion.div className="reply_container">
         {replies &&
               replies.map((reply, index) => (
+                <motion.div
+                >
                 <Reply id={reply.id} name={reply.name} author={reply.author} authorEmail={reply.authorEmail} date={reply.date} noLikes={reply.numberOfLikes} />
+                </motion.div>
                 ))}
         </motion.div>
 
       </motion.div>
-                )}
     </motion.div>
   );
 };
