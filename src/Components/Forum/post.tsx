@@ -233,7 +233,20 @@ const Post = ({
     hidden: { opacity: 0, height: "0px", transition: { duration: 0.2 } },
     visible: { opacity: 1, height: "40px", transition: { duration: 0.4 } },
   }
+  const replyVariants = {
+    hidden: { opacity: 0},
+    visible: { opacity: 1},
+  }
 
+  const [expandedReply, setExpandedReply] = useState("");
+
+  const handleReplyClick = (replyId: string) => {
+    if (expandedReply === replyId) {
+      setExpandedReply("");
+    } else {
+      setExpandedReply(replyId);
+    }
+  };
 
   const [isFocused, setisFocused] = useState(false);
   return (
@@ -362,17 +375,30 @@ const Post = ({
             <motion.div className="post_bottom_gradient" style={{ scaleX: isEven ? -1 : 1, width: "50%", left: isEven ?" 49%" : 0 }} />
           </motion.div>
         </motion.div>
-        {/* REPLIES */}
+        <motion.div className="reply_container"></motion.div>
 
 
           <motion.div className="reply_container">
-        {replies &&
-              replies.map((reply, index) => (
-                <motion.div
-                >
-                <Reply id={reply.id} name={reply.name} author={reply.author} authorEmail={reply.authorEmail} date={reply.date} noLikes={reply.numberOfLikes} />
-                </motion.div>
-                ))}
+          {replies &&
+            replies.map((reply, index) => (
+              <motion.div
+                variants={replyVariants}
+                initial={controls}
+                animate={controls}
+                transition={{ duration: 0.3, delay: 0.1 * index }}
+              >
+                <Reply
+                  id={reply.id}
+                  name={reply.name}
+                  author={reply.author}
+                  authorEmail={reply.authorEmail}
+                  date={reply.date}
+                  noLikes={reply.numberOfLikes}
+                  isRepliesOpen={isRepliesOpen}
+                  i={index}
+                />
+              </motion.div>
+            ))}
         </motion.div>
 
       </motion.div>

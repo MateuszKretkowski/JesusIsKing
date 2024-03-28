@@ -1,0 +1,7 @@
+.reply_name-wrapper {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 70%;
+    flex-wrap: wrap;
+}
