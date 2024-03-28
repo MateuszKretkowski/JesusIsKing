@@ -167,7 +167,7 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   display: flex;
   justify-content: end;
   align-items: end;
-  padding-bottom: 1%;
+  height: auto;
   overflow-y: hidden;
 }
 

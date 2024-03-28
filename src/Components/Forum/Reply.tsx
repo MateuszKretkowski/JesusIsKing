@@ -50,14 +50,16 @@ function Reply({
 
   useEffect(() => {
     expanded ? controls.start("visible") : controls.start("hidden");
-  }, [expanded]);
+    console.log("isRepliesOpen: ", isRepliesOpen)
+    console.log("expanded: ", expanded)
+  }, [expanded, isRepliesOpen]);
 
   const truncatedName = name.split("").map((letter, index) => (
     <motion.h2
       variants={letterVariants}
       initial={controls}
       animate={controls}
-      transition={{ duration: 0.01, delay: 0.01 * index }}
+      transition={{ duration: 0.01, delay: 0.004 * index }}
       key={index}
       className="letters"
     >
@@ -65,14 +67,23 @@ function Reply({
     </motion.h2>
   ));
 
+  const controlsForReply = useAnimation();
+  useEffect(() => {
+    isRepliesOpen ? controlsForReply.start("visible") : controlsForReply.start("hidden")
+  }, [isRepliesOpen, expanded])
+  const replyVariants = {
+    hidden: { height: "0px" },
+    visible: { height: expanded ? "240px" : "150px" }
+  }
+
   return (
     <AnimatePresence>
       <motion.div
         className="Reply"
-        style={{
-          height: isRepliesOpen ? (expanded ? "240px" : "150px") : "0px",
-        }}
-        transition={{ duration: 0.5, delay: 1 * i }}
+        variants={replyVariants}
+        initial={controlsForReply}
+        animate={controlsForReply}
+        transition={{ duration: 0.2, delay: 0.1 * i }}
         onClick={handleClick}
       >
         <motion.div className="reply_container">

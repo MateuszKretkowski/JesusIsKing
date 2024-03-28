@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./post.css";
-import "./forum.css"
+import "./forum.css";
 import {
   motion,
   AnimatePresence,
@@ -14,7 +14,13 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { auth, db, likeAPost, readReplies, unlikeAPost } from "../config/config";
+import {
+  auth,
+  db,
+  likeAPost,
+  readReplies,
+  unlikeAPost,
+} from "../config/config";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import Reply from "./Reply";
 const defaultAvatar = require("../../Images/avatar.webp");
@@ -64,15 +70,13 @@ const Post = ({
 
   useEffect(() => {
     console.log(authorId);
-  })  
+  });
 
   const [authorData, setAuthorData] = useState<AuthorData>({
     author: "",
     authorId: "",
   });
 
-
-  
   useEffect(() => {
     const readPostAuthor = async () => {
       const userRef = doc(db, "Users", authorId);
@@ -152,17 +156,17 @@ const Post = ({
 
     return () => unsubscribe();
   }, []);
-  
+
   useEffect(() => {
     console.log(isLiked);
-  }, [isLiked])
+  }, [isLiked]);
 
   // REPLIES
 
   const [postData, setPostData] = useState({
     name: "",
     postId: id,
-    authorEmail: auth.currentUser?.email || "", 
+    authorEmail: auth.currentUser?.email || "",
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -227,16 +231,16 @@ const Post = ({
   const controls = useAnimation();
   useEffect(() => {
     isRepliesOpen ? controls.start("visible") : controls.start("hidden");
-    console.log(index)
-  }, [isRepliesOpen])
+    console.log(index);
+  }, [isRepliesOpen]);
   const addReplyVariants = {
     hidden: { opacity: 0, height: "0px", transition: { duration: 0.2 } },
     visible: { opacity: 1, height: "40px", transition: { duration: 0.4 } },
-  }
+  };
   const replyVariants = {
-    hidden: { opacity: 0},
-    visible: { opacity: 1},
-  }
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
 
   const [expandedReply, setExpandedReply] = useState("");
 
@@ -276,19 +280,14 @@ const Post = ({
             <motion.img src={defaultAvatar} className="author_img" />
             <motion.h5 className="author_name">{authorData.author}</motion.h5>
           </motion.div>
-          <motion.div className="author_description">
-
-          </motion.div>
+          <motion.div className="author_description"></motion.div>
           <motion.div
             className="post_bottom_gradient"
             style={{ scaleX: isEven ? "-1" : "1" }}
           />
         </motion.div>
         <motion.div className="post_title-wrapper">
-          <motion.h1
-            className="post_title"
-            transition={{ duration: 0.7 }}
-          >
+          <motion.h1 className="post_title" transition={{ duration: 0.7 }}>
             {name}
           </motion.h1>
           <motion.div
@@ -301,7 +300,7 @@ const Post = ({
           style={{ textAlign: isEven ? "end" : "start" }}
         >
           <motion.h2
-             className="post_description"
+            className="post_description"
             transition={{ duration: 0.7 }}
           >
             {description}
@@ -315,12 +314,24 @@ const Post = ({
             className="post_action action_line"
             style={{ marginRight: "6%" }}
           >
-            <motion.h3 className="post_action-text" onClick={() => {setIsRepliesOpen(!isRepliesOpen)}}>
+            <motion.h3
+              className="post_action-text"
+              onClick={() => {
+                setIsRepliesOpen(!isRepliesOpen);
+              }}
+            >
               REPLIES: {noReplies}
             </motion.h3>
           </motion.button>
-          <motion.button className="post_action action_line" onClick={() => {isLiked ? unlikeAPost(id) : likeAPost(id);}}>
-            <motion.h3 className="post_action-text">LIKES: {isLiked ? noLikes+=1 : noLikes}</motion.h3>
+          <motion.button
+            className="post_action action_line"
+            onClick={() => {
+              isLiked ? unlikeAPost(id) : likeAPost(id);
+            }}
+          >
+            <motion.h3 className="post_action-text">
+              LIKES: {isLiked ? (noLikes += 1) : noLikes}
+            </motion.h3>
           </motion.button>
           <motion.button className="post_action action_line">
             <motion.h3 className="post_action-text">
@@ -337,30 +348,42 @@ const Post = ({
       </motion.div>
 
       {/* REPLIES */}
-      
+
       <motion.div
         className="replies_container"
-        style={{ alignItems: isEven ? "end" : "start"}}
-        >
-                  <motion.div
+        style={{ alignItems: isEven ? "end" : "start" }}
+      >
+        <motion.div
           className="post_line"
-          style={{ left: isEven ? "100%" : "0%"}}
+          style={{ left: isEven ? "100%" : "0%" }}
         />
-      <motion.div className="replies_title-wrapper">
-        <motion.h2 className="replies-title">REPLIES</motion.h2>
-      </motion.div>
-        <motion.div className="reply_addPost"
-        style={{ justifyContent: isEven ? "end" : "start", flexDirection: isEven ? "row" : "row-reverse"}}
-        variants={addReplyVariants}
-        initial={controls}
-        animate={controls}
+        <motion.div className="replies_title-wrapper">
+          <motion.h2 className="replies-title">REPLIES</motion.h2>
+        </motion.div>
+        <motion.div
+          className="reply_addPost"
+          style={{
+            justifyContent: isEven ? "end" : "start",
+            flexDirection: isEven ? "row" : "row-reverse",
+          }}
+          variants={addReplyVariants}
+          initial={controls}
+          animate={controls}
         >
-          <motion.button className="reply_addPost_title-wrapper" onClick={() => {handleSubmit()}}>
+          <motion.button
+            className="reply_addPost_title-wrapper"
+            onClick={() => {
+              handleSubmit();
+            }}
+          >
             <motion.h5>POST</motion.h5>
           </motion.button>
 
-          <motion.div className="reply_addPost_input-wrapper"
-              onFocus={() => {setisFocused(true)}}           
+          <motion.div
+            className="reply_addPost_input-wrapper"
+            onFocus={() => {
+              setisFocused(true);
+            }}
           >
             <motion.textarea
               type="text"
@@ -369,16 +392,23 @@ const Post = ({
               placeholder="WRITE YOUR REPLY"
               value={postData.name}
               onChange={handleChange}
-              style={{ textAlign: isEven ? "end" : "start"}}   
+              style={{ textAlign: isEven ? "end" : "start" }}
               maxLength={100}
             />
-            <motion.div className="post_bottom_gradient" style={{ scaleX: isEven ? -1 : 1, width: "50%", left: isEven ?" 49%" : 0 }} />
           </motion.div>
+          <motion.div
+              className="post_bottom_gradient"
+              style={{
+                scaleX: isEven ? -1 : 1,
+                width: "50%",
+                left: isEven ? " 49%" : 0,
+                top: "22%"
+              }}
+            />
         </motion.div>
         <motion.div className="reply_container"></motion.div>
 
-
-          <motion.div className="reply_container">
+        <motion.div className="reply_container">
           {replies &&
             replies.map((reply, index) => (
               <motion.div
@@ -400,7 +430,6 @@ const Post = ({
               </motion.div>
             ))}
         </motion.div>
-
       </motion.div>
     </motion.div>
   );
