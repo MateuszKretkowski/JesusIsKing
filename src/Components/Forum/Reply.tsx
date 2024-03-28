@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import "./Reply.css";
-import { AnimatePresence, motion } from 'framer-motion';
-import { db, likeAPost, unlikeAPost } from '../config/config';
-import { collection, getDoc } from 'firebase/firestore';
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import { db, likeAPost, unlikeAPost } from "../config/config";
+import { collection, getDoc } from "firebase/firestore";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Reply {
@@ -16,60 +16,96 @@ interface Reply {
   i: number;
 }
 
-function Reply({ id, name, author, authorEmail, date, noLikes, isRepliesOpen, i }: Reply) {
+function Reply({
+  id,
+  name,
+  author,
+  authorEmail,
+  date,
+  noLikes,
+  isRepliesOpen,
+  i,
+}: Reply) {
   const [expanded, setExpanded] = useState(false);
+  const controls = useAnimation();
 
   const handleClick = () => {
-    setExpanded(!expanded);
+    if (name.length >= 50) {
+      setExpanded(!expanded);
+    }
   };
 
-  const truncatedName = expanded ? name.split('').map((letter, index) => (
-    <AnimatePresence key={index}>
-      <motion.h2
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 20, opacity: 0 }}
-        transition={{ duration: 0.5, delay: 0.01 * index }}
-        key={index}
-      >
-        {letter}
-      </motion.h2>
-    </AnimatePresence>
-  )) : (
-    <AnimatePresence mode='wait'>
-      <motion.h2
-        initial={{ y: 0, opacity: 1 }}
-        exit={{ y: -20, opacity: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {name.slice(0, 50) + (name.length > 50 ? "..." : "")}
-      </motion.h2>
-    </AnimatePresence>
-  );
+  const letterVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0,
+      x: -20,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      x: 0,
+    },
+  };
+
+  useEffect(() => {
+    expanded ? controls.start("visible") : controls.start("hidden");
+  }, [expanded]);
+
+  const truncatedName = name.split("").map((letter, index) => (
+    <motion.h2
+      variants={letterVariants}
+      initial={controls}
+      animate={controls}
+      transition={{ duration: 0.01, delay: 0.01 * index }}
+      key={index}
+      className="letters"
+    >
+      {index >= 50 ? letter : ""}
+    </motion.h2>
+  ));
 
   return (
-    <motion.div
-      className='Reply'
-      style={{ height: isRepliesOpen ? expanded ? "240px" : "120px" : "0px" }}
-      transition={{ duration: 0.5, delay: 1 * i }}
-      onClick={handleClick}
-    >
-      <motion.div className='reply_container'>
-        <div className='reply_author-wrapper'>
-          <img src={defaultAvatar} className='author_img' />
-          <motion.h5 className="author_name">{author}</motion.h5>
-        </div>
-        <motion.div className='reply_name-wrapper'>
-          {truncatedName}
-        </motion.div>
-        <motion.div className="post_action_container">
-          <motion.button className="post_action action_line">
-            <motion.h3 className="post_action-text">{noLikes}</motion.h3>
-          </motion.button>
+    <AnimatePresence>
+      <motion.div
+        className="Reply"
+        style={{
+          height: isRepliesOpen ? (expanded ? "240px" : "150px") : "0px",
+        }}
+        transition={{ duration: 0.5, delay: 1 * i }}
+        onClick={handleClick}
+      >
+        <motion.div className="reply_container">
+          <div className="reply_author-wrapper">
+            <img src={defaultAvatar} className="author_img" />
+            <motion.h5 className="author_name">{author}</motion.h5>
+          </div>
+          <motion.h2 className="reply_name-wrapper">
+            {name.slice(0, 50)}
+            {name.length > 50 ? <motion.h2
+              style={{
+                display: "inline-block",
+                width: "0px",
+                color: expanded ? "transparent" : "black",
+              }}
+            >
+              ...
+            </motion.h2> : ""}
+            {" "}
+            {truncatedName}
+          </motion.h2>
+          <motion.div
+            className="post_action_container"
+            //   style={{ justifyContent: isEven ? "end" : "start" }}
+          >
+            <motion.button className="post_action action_line">
+              <motion.h3 className="post_action-text">{noLikes}</motion.h3>
+            </motion.button>
+          </motion.div>
         </motion.div>
       </motion.div>
-    </motion.div>
-  )
+    </AnimatePresence>
+  );
 }
 
-export default Reply
+export default Reply;
