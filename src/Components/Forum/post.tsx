@@ -68,9 +68,6 @@ const Post = ({
     index % 2 === 0 ? setIsEven(true) : setIsEven(false);
   }, []);
 
-  useEffect(() => {
-    console.log(authorId);
-  });
 
   const [authorData, setAuthorData] = useState<AuthorData>({
     author: "",
@@ -83,7 +80,6 @@ const Post = ({
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log(userData);
         setAuthorData({
           author: userData?.name || "",
           authorId: userData?.id || "",
@@ -142,7 +138,6 @@ const Post = ({
       const postDoc = await getDoc(postRef);
       if (postDoc.exists()) {
         const postData = postDoc.data();
-        console.log(postData?.likes || []);
         const likedBy = postData?.likes || [];
         setIsLiked(likedBy.includes(currentUserEmail));
       }
@@ -156,12 +151,6 @@ const Post = ({
 
     return () => unsubscribe();
   }, []);
-
-  useEffect(() => {
-    console.log(isLiked);
-  }, [isLiked]);
-
-  // REPLIES
 
   const [postData, setPostData] = useState({
     name: "",
@@ -231,7 +220,6 @@ const Post = ({
   const controls = useAnimation();
   useEffect(() => {
     isRepliesOpen ? controls.start("visible") : controls.start("hidden");
-    console.log(index);
   }, [isRepliesOpen]);
   const addReplyVariants = {
     hidden: { opacity: 0, height: "0px", transition: { duration: 0.2 } },

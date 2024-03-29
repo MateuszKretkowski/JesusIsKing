@@ -232,7 +232,6 @@ export async function readReplies(postId: string) {
 
     const filteredReplies = replies.filter((reply: any) => reply !== null);
 
-    console.log('Replies:', filteredReplies);
     return filteredReplies;
   } catch (error) {
     console.error('Error fetching replies:', error);

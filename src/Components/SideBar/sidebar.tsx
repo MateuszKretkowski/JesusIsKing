@@ -29,10 +29,8 @@ function SideBar() {
   useEffect(() => {
     if (getCookie("isMobile") == "true") {
       setIsMobile(true);
-      console.log("isMobile: ", isMobile);
     } else {
       setIsMobile(false);
-      console.log("isMobile: ", isMobile);
     }
   });
   useEffect(() => {
@@ -131,12 +129,10 @@ function SideBar() {
           if (userData.uniqueId !== "DEFAULT" || getCookie("isRedirected") === "true"){
             console.log("Logged user:", userData.uniqueId);
           } else {
-            console.log("Redirecting to /redirect");
             navigate("/redirect");
             setCookie("isRedirected", "true", 1);
           }
         } else {
-          console.log("No such document!");
         }
       } else {
         console.log("Użytkownik jest wylogowany");
@@ -155,9 +151,7 @@ function SideBar() {
       const docSnap = await getDoc(userRef);
       if (docSnap.exists()) {
         const userData = docSnap.data();
-        console.log("Logged user:", userData.uniqueId);
       } else {
-        console.log("No such document!");
       }
     }
   };

@@ -50,8 +50,6 @@ function Reply({
 
   useEffect(() => {
     expanded ? controls.start("visible") : controls.start("hidden");
-    console.log("isRepliesOpen: ", isRepliesOpen)
-    console.log("expanded: ", expanded)
   }, [expanded, isRepliesOpen]);
 
   const truncatedName = name.split("").map((letter, index) => (
