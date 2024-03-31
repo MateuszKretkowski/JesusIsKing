@@ -67,8 +67,9 @@ const Post = ({
   useEffect(() => {
     index % 2 === 0 ? setIsEven(true) : setIsEven(false);
   }, []);
-
-
+  
+  
+  const [isRepliesOpen, setIsRepliesOpen] = useState(false);
   const [authorData, setAuthorData] = useState<AuthorData>({
     author: "",
     authorId: "",
@@ -129,6 +130,7 @@ const Post = ({
   };
 
   const [isLiked, setIsLiked] = useState(false);
+  const [checkLikedCounter, setCheckLikedCounter] = useState(0);
 
   useEffect(() => {
     const checkLiked = async () => {
@@ -139,7 +141,6 @@ const Post = ({
       if (postDoc.exists()) {
         const postData = postDoc.data();
         const likedBy = postData?.likes || [];
-        setIsLiked(likedBy.includes(currentUserEmail));
       }
     };
 
@@ -150,7 +151,7 @@ const Post = ({
     });
 
     return () => unsubscribe();
-  }, []);
+  });
 
   const [postData, setPostData] = useState({
     name: "",
@@ -188,64 +189,47 @@ const Post = ({
     numberOfLikes: number;
   }
   const [replies, setReplies] = useState<Reply[]>([]);
-  const [visibleReplies, setVisibleReplies] = useState<Reply[]>([]); // New state to manage visible replies
-  const [lastVisible, setLastVisible] = useState(null); // State to keep track of the last visible document for pagination
+  const [loading, setLoading] = useState(false);
+  const [lastVisible, setLastVisible] = useState(null); // State to keep track of the last loaded reply
 
-  // Adjusted useEffect for initial fetch
-  useEffect(() => {
-    const fetchReplies = async () => {
-      const repliesQuery = query(
-        collection(db, "Replies"), 
-        where("postId", "==", id),
-        orderBy("date", "desc"), 
-        limit(10)
-      );
-
-      const querySnapshot = await getDocs(repliesQuery);
-      const repliesData = [];
-      querySnapshot.forEach((doc) => {
-        repliesData.push({ id: doc.id, ...doc.data() });
-      });
-      
-      if (!querySnapshot.empty) {
-        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-      }
-
-      setReplies(repliesData);
-      setVisibleReplies(repliesData);
-    };
-
-    fetchReplies();
-  }, []);
-
-  const loadMoreReplies = async () => {
-    if (!lastVisible) return;
-
-    const nextQuery = query(
-      collection(db, "Replies"), 
-      where("postId", "==", id),
-      orderBy("date", "desc"),
-      startAfter(lastVisible),
-      limit(10)
-    );
-
-    const querySnapshot = await getDocs(nextQuery);
-    const nextReplies = [];
+  // Function to fetch initial replies or the first page
+  const fetchReplies = async () => {
+    setLoading(true);
+    const querySnapshot = await getDocs(query(collection(db, "Replies"), where("postId", "==", id), orderBy("date", "desc"), limit(10)));
+    const newReplies = [];
     querySnapshot.forEach((doc) => {
-      nextReplies.push({ id: doc.id, ...doc.data() });
+      newReplies.push({ id: doc.id, ...doc.data() });
     });
-
-    if (!querySnapshot.empty) {
-      setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-    }
-
-    setReplies([...replies, ...nextReplies]);
-    setVisibleReplies([...visibleReplies, ...nextReplies]);
+    setReplies(newReplies);
+    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+    setLoading(false);
   };
 
+  // Call fetchReplies when the component mounts
+  useEffect(() => {
+    fetchReplies();
+  }, [isRepliesOpen]);
   
+  useEffect(() => {
+    if (isRepliesOpen === false) {
+      setReplies([])
+    }
+  }, [isRepliesOpen])
 
-  const [isRepliesOpen, setIsRepliesOpen] = useState(false);
+  const loadMoreReplies = async () => {
+    if (loading || !lastVisible) return; // Do nothing if we are already loading or there's nothing more to load
+
+    setLoading(true);
+    const querySnapshot = await getDocs(query(collection(db, "Replies"), orderBy("date", "desc"), startAfter(lastVisible), limit(10)));
+    const newReplies = [];
+    querySnapshot.forEach((doc) => {
+      newReplies.push({ id: doc.id, ...doc.data() });
+    });
+    setReplies([...replies, ...newReplies]);
+    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+    setLoading(false);
+  };
+
   const controls = useAnimation();
   useEffect(() => {
     isRepliesOpen ? controls.start("visible") : controls.start("hidden");
@@ -353,10 +337,11 @@ const Post = ({
             className="post_action action_line"
             onClick={() => {
               isLiked ? unlikeAPost(id) : likeAPost(id);
+              setCheckLikedCounter(5)
             }}
           >
             <motion.h3 className="post_action-text">
-              LIKES: {isLiked ? (noLikes += 1) : noLikes}
+              LIKES: {isLiked ? noLikes : noLikes}
             </motion.h3>
           </motion.button>
           <motion.button className="post_action action_line">
@@ -440,7 +425,7 @@ const Post = ({
 
         <motion.div className="reply_container">
           {replies &&
-            visibleReplies.map((reply, index) => (
+            replies.map((reply, index) => (
               <motion.div
                 variants={replyVariants}
                 initial={controls}

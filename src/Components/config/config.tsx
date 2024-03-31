@@ -252,21 +252,24 @@ export async function likeAPost(postId: string) {
     const authorData = authorDoc.data();
     
     const likes = postData?.numberOfLikes || 0;
-    await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
-    const notificationsUpdate = {
-      [`notifications.likes.${userEmail}`]: postId
-    };
-    await setDoc(authorRef, { notifications: { likes: { [userEmail]: postId } } }, { merge: true });
-    await updateDoc(authorRef, notificationsUpdate);
-    const userLikesRef = doc(db, "Posts", postId);
-    const userLikesDoc = await getDoc(userLikesRef);
-    
-    if (userLikesDoc.exists()) {
-      const userLikesData = userLikesDoc.data();
-      const likesArray = userLikesData.likes || [];
-      console.log("User likes doc", likesArray)
-      likesArray.push(auth.currentUser?.email);
-      await updateDoc(userLikesRef, { likes: likesArray });
+    if (!postData.likes.includes(auth.currentUser?.email || "")) {
+
+      await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
+      const notificationsUpdate = {
+        [`notifications.likes.${userEmail}`]: postId
+      };
+      await setDoc(authorRef, { notifications: { likes: { [userEmail]: postId } } }, { merge: true });
+      await updateDoc(authorRef, notificationsUpdate);
+      const userLikesRef = doc(db, "Posts", postId);
+      const userLikesDoc = await getDoc(userLikesRef);
+      
+      if (userLikesDoc.exists()) {
+        const userLikesData = userLikesDoc.data();
+        const likesArray = userLikesData.likes || [];
+        console.log("User likes doc", likesArray)
+        likesArray.push(auth.currentUser?.email);
+        await updateDoc(userLikesRef, { likes: likesArray });
+      }
     }
   }
 }
