@@ -206,6 +206,7 @@ exports.createReply = functions.https.onCall(async (data, context) => {
       name: data.name,
       authorEmail: data.authorEmail,
       date: formattedDate,
+      postId: data.postId,
     };
     const replyRef = await admin.firestore()
       .collection("Replies").add(replyData);

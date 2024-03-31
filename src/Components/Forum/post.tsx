@@ -13,7 +13,7 @@ import {
 } from "framer-motion";
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from "firebase/firestore";
 import {
   auth,
   db,
@@ -188,33 +188,62 @@ const Post = ({
     numberOfLikes: number;
   }
   const [replies, setReplies] = useState<Reply[]>([]);
+  const [visibleReplies, setVisibleReplies] = useState<Reply[]>([]); // New state to manage visible replies
+  const [lastVisible, setLastVisible] = useState(null); // State to keep track of the last visible document for pagination
+
+  // Adjusted useEffect for initial fetch
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const repliesData = await readReplies(id);
-        const formattedReplies = [];
-        for (const reply of repliesData) {
-          const userRef = doc(db, "Users", reply.authorEmail);
-          const userDoc = await getDoc(userRef);
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const formattedReply = {
-              ...reply,
-              id: reply.id,
-              author: userData?.name || "",
-            };
-            formattedReplies.push(formattedReply);
-          }
-        }
-        setReplies(formattedReplies);
-      } catch (error) {
-        console.error("Error fetching Blogs: ", error);
-        setReplies([]);
+    const fetchReplies = async () => {
+      const repliesQuery = query(
+        collection(db, "Replies"), 
+        where("postId", "==", id),
+        orderBy("date", "desc"), 
+        limit(10)
+      );
+
+      const querySnapshot = await getDocs(repliesQuery);
+      const repliesData = [];
+      querySnapshot.forEach((doc) => {
+        repliesData.push({ id: doc.id, ...doc.data() });
+      });
+      
+      if (!querySnapshot.empty) {
+        setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
       }
+
+      setReplies(repliesData);
+      setVisibleReplies(repliesData);
     };
 
-    fetchPosts();
+    fetchReplies();
   }, []);
+
+  const loadMoreReplies = async () => {
+    if (!lastVisible) return;
+
+    const nextQuery = query(
+      collection(db, "Replies"), 
+      where("postId", "==", id),
+      orderBy("date", "desc"),
+      startAfter(lastVisible),
+      limit(10)
+    );
+
+    const querySnapshot = await getDocs(nextQuery);
+    const nextReplies = [];
+    querySnapshot.forEach((doc) => {
+      nextReplies.push({ id: doc.id, ...doc.data() });
+    });
+
+    if (!querySnapshot.empty) {
+      setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+    }
+
+    setReplies([...replies, ...nextReplies]);
+    setVisibleReplies([...visibleReplies, ...nextReplies]);
+  };
+
+  
 
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
   const controls = useAnimation();
@@ -411,7 +440,7 @@ const Post = ({
 
         <motion.div className="reply_container">
           {replies &&
-            replies.map((reply, index) => (
+            visibleReplies.map((reply, index) => (
               <motion.div
                 variants={replyVariants}
                 initial={controls}
@@ -432,6 +461,11 @@ const Post = ({
             ))}
         </motion.div>
       </motion.div>
+      {replies.length !== 0 && (
+          <motion.button onClick={loadMoreReplies}>
+            Load More
+          </motion.button>
+        )}
     </motion.div>
   );
 };
