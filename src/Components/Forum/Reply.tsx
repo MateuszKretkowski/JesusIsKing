@@ -70,8 +70,8 @@ function Reply({
     isRepliesOpen ? controlsForReply.start("visible") : controlsForReply.start("hidden")
   }, [isRepliesOpen, expanded])
   const replyVariants = {
-    hidden: { height: "0px" },
-    visible: { height: expanded ? "240px" : "150px" }
+    hidden: { height: "0px", opacity: 0 },
+    visible: { height: expanded ? "240px" : "150px", opacity: 1 }
   }
 
   return (

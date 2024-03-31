@@ -1,5 +1,6 @@
 .Reply {
     margin: 2% 0 2% 0%;
+    opacity: 0;
 }
 
 .reply_name-wrapper {
