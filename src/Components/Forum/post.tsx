@@ -335,13 +335,22 @@ const Post = ({
           </motion.button>
           <motion.button
             className="post_action action_line"
-            onClick={() => {
-              isLiked ? unlikeAPost(id) : likeAPost(id);
-              setCheckLikedCounter(5)
+            onClick={async () => {
+              const newIsLiked = !isLiked; // Toggle the isLiked state
+              setIsLiked(newIsLiked); // Update the state immediately for responsive UI
+          
+              // Perform the action based on the new state
+              if (newIsLiked) {
+                await likeAPost(id);
+                // Optionally, perform additional checks here or update UI
+              } else {
+                await unlikeAPost(id);
+                // Optionally, perform additional checks here or update UI
+              }
             }}
           >
             <motion.h3 className="post_action-text">
-              LIKES: {isLiked ? noLikes : noLikes}
+            LIKES: {isLiked ? noLikes + 1 : noLikes}
             </motion.h3>
           </motion.button>
           <motion.button className="post_action action_line">
