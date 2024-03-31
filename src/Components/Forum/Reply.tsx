@@ -67,11 +67,16 @@ function Reply({
 
   const controlsForReply = useAnimation();
   useEffect(() => {
-    isRepliesOpen ? controlsForReply.start("visible") : controlsForReply.start("hidden")
-  }, [isRepliesOpen, expanded])
+    if (isRepliesOpen) {
+      controlsForReply.start("visible");
+    } else {
+      controlsForReply.start("hidden");
+    }
+  }, [isRepliesOpen, expanded]);
   const replyVariants = {
-    hidden: { height: "0px", opacity: 0 },
-    visible: { height: expanded ? "240px" : "150px", opacity: 1 }
+    hidden: { height: "0px", opacity: 0, transition: { duration: 0.5 } },
+    visible: { height: expanded ? "240px" : "150px", opacity: 1, transition: { duration: 0.5 } },
+    exit: { height: "0px", opacity: 0, transition: { duration: 0.5 } },
   }
 
   return (
@@ -81,6 +86,7 @@ function Reply({
         variants={replyVariants}
         initial={controlsForReply}
         animate={controlsForReply}
+        exit={controlsForReply}
         transition={{ duration: 0.2, delay: 0.1 * i }}
         onClick={handleClick}
       >

@@ -196,7 +196,7 @@ const Post = ({
   const fetchReplies = async () => {
     setLoading(true);
     const querySnapshot = await getDocs(query(collection(db, "Replies"), where("postId", "==", id), orderBy("date", "desc"), limit(10)));
-    const newReplies = [];
+    const newReplies: any = [];
     querySnapshot.forEach((doc) => {
       newReplies.push({ id: doc.id, ...doc.data() });
     });
@@ -211,17 +211,21 @@ const Post = ({
   }, [isRepliesOpen]);
   
   useEffect(() => {
-    if (isRepliesOpen === false) {
-      setReplies([])
+    if (!isRepliesOpen) {
+      const timer = setTimeout(() => {
+        setReplies([]);
+      }, 6000);
+  
+      return () => clearTimeout(timer);
     }
-  }, [isRepliesOpen])
+  }, [isRepliesOpen]);
 
   const loadMoreReplies = async () => {
     if (loading || !lastVisible) return; // Do nothing if we are already loading or there's nothing more to load
 
     setLoading(true);
     const querySnapshot = await getDocs(query(collection(db, "Replies"), orderBy("date", "desc"), startAfter(lastVisible), limit(10)));
-    const newReplies = [];
+    const newReplies: any = [];
     querySnapshot.forEach((doc) => {
       newReplies.push({ id: doc.id, ...doc.data() });
     });
@@ -259,6 +263,15 @@ const Post = ({
     },
     visible: {
       opacity: 1
+    }
+  }
+
+  const repliesContainerVariants = {
+    hidden: {
+      height: "0px"
+    },
+    visible: {
+      height: "auto"
     }
   }
 
@@ -341,10 +354,10 @@ const Post = ({
           
               // Perform the action based on the new state
               if (newIsLiked) {
-                await likeAPost(id);
+                likeAPost(id);
                 // Optionally, perform additional checks here or update UI
               } else {
-                await unlikeAPost(id);
+                unlikeAPost(id);
                 // Optionally, perform additional checks here or update UI
               }
             }}
@@ -430,9 +443,15 @@ const Post = ({
               }}
             />
         </motion.div>
-        <motion.div className="reply_container"></motion.div>
 
-        <motion.div className="reply_container">
+        <motion.div className="reply_container"
+        onClick={() => {setIsRepliesOpen(!isRepliesOpen)}}
+        // variants={repliesContainerVariants}
+        // initial={controls}
+        // animate={controls}
+        // transition={{ duration: 5 }}
+        // this freaking piece of dirt is so annoying, WHEN I CLOSE THE REPLIES, THERE IS ALL OF A SUDDEN BOOM. I DONT UNDERSTAND IT.
+        >
           {replies &&
             replies.map((reply, index) => (
               <motion.div
@@ -454,12 +473,14 @@ const Post = ({
               </motion.div>
             ))}
         </motion.div>
-      </motion.div>
-      {replies.length !== 0 && (
-          <motion.button onClick={loadMoreReplies}>
-            Load More
+        {replies.length !== 0 && (
+          <motion.button onClick={loadMoreReplies} className="small_button">
+            <motion.h5 className="small_text">
+              LOAD MORE
+            </motion.h5>
           </motion.button>
         )}
+      </motion.div>
     </motion.div>
   );
 };

@@ -205,4 +205,27 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
 
 .replies_container {
   overflow: hidden;
+  border-radius: 12px;
+}
+
+.small_button {
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.small_button:hover {
+
+}
+
+.small_text {
+  color: #5a5a58;
+  letter-spacing: 2px;
+  width: 100%;
+}
+
+.small_text:hover {
+  letter-spacing: 4px;
 }
