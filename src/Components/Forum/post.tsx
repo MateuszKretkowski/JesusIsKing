@@ -240,6 +240,15 @@ const Post = ({
     }
   };
 
+  const repliesVariants = {
+    hidden: {
+      opacity: 0
+    },
+    visible: {
+      opacity: 1
+    }
+  }
+
   const [isFocused, setisFocused] = useState(false);
   return (
     <motion.div
@@ -339,7 +348,11 @@ const Post = ({
 
       <motion.div
         className="replies_container"
-        style={{ alignItems: isEven ? "end" : "start" }}
+        style={{ alignItems: isEven ? "end" : "start"}}
+        variants={repliesVariants}
+        initial={controls}
+        animate={controls}
+        transition={{ duration: 1 }}
       >
         <motion.div
           className="post_line"
