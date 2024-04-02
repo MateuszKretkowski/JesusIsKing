@@ -132,27 +132,6 @@ const Post = ({
   const [isLiked, setIsLiked] = useState(false);
   const [checkLikedCounter, setCheckLikedCounter] = useState(0);
 
-  useEffect(() => {
-    const checkLiked = async () => {
-      // Assuming you have access to the current user's email
-      const currentUserEmail = auth.currentUser?.email || "";
-      const postRef = doc(db, "Posts", id);
-      const postDoc = await getDoc(postRef);
-      if (postDoc.exists()) {
-        const postData = postDoc.data();
-        const likedBy = postData?.likes || [];
-      }
-    };
-
-    const unsubscribe = onSnapshot(doc(db, "Posts", id), (doc) => {
-      const postData = doc.data();
-      const likedBy = postData?.likes || [];
-      setIsLiked(likedBy.includes(auth.currentUser?.email || ""));
-    });
-
-    return () => unsubscribe();
-  });
-
   const [postData, setPostData] = useState({
     name: "",
     postId: id,
@@ -275,6 +254,48 @@ const Post = ({
     }
   }
 
+  const [isCurrentlyLiked, setIsCurrentlyLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  useEffect(() => {
+    // Subskrypcja na zmiany w dokumencie posta
+    const unsubscribe = onSnapshot(doc(db, "Posts", id), async (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        const likes = data.likes || [];
+        const likeCount = likes.length;
+        const hasLiked = await data.likes.includes(auth.currentUser?.email);
+        console.log(isCurrentlyLiked, "isCurrentlyLiked");
+  
+        // Aktualizuj stan na podstawie danych z dokumentu
+        await setIsCurrentlyLiked(hasLiked);
+        noLikes = 1;
+      }
+    });
+  
+    // Wyczyść subskrypcję, gdy komponent zostanie odmontowany
+    return () => unsubscribe();
+  }, [id]);
+
+  useEffect(() => {
+    if (isCurrentlyLiked) {
+      setIsLiked(false);
+    };
+    console.log(isLiked, "isLiked");
+  }, [])
+
+  useEffect(() => {
+    console.log(isCurrentlyLiked)
+  }, [isCurrentlyLiked])
+
+  // LIKE SWITCHING ANIMATION
+  const [isOn, setIsOn] = useState(false);
+  const toggleSwitch = () => setIsOn(!isOn);
+  const spring = {
+    type: "spring",
+    stiffness: 700,
+    damping: 30
+  };
+
   const [isFocused, setisFocused] = useState(false);
   return (
     <motion.div
@@ -349,27 +370,46 @@ const Post = ({
           <motion.button
             className="post_action action_line"
             onClick={async () => {
-              const newIsLiked = !isLiked; // Toggle the isLiked state
+              const newIsLiked = !isCurrentlyLiked; // Toggle the isLiked state
               setIsLiked(newIsLiked); // Update the state immediately for responsive UI
-          
-              // Perform the action based on the new state
+            if (!isCurrentlyLiked) {
               if (newIsLiked) {
                 likeAPost(id);
-                // Optionally, perform additional checks here or update UI
-              } else {
+              } 
+            }
+            if (isCurrentlyLiked) {
+              if (!newIsLiked) {
                 unlikeAPost(id);
-                // Optionally, perform additional checks here or update UI
               }
+            }
             }}
           >
             <motion.h3 className="post_action-text">
-            LIKES: {isLiked ? noLikes + 1 : noLikes}
-            </motion.h3>
-          </motion.button>
-          <motion.button className="post_action action_line">
-            <motion.h3 className="post_action-text">
-              REPOST: {noReposts}
-            </motion.h3>
+    LIKES:
+    <motion.div className="post_like_num-wrapper">
+        <motion.h3 className="post_action-text switch"
+                    transition={spring}
+                    style={{ 
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        transform: isLiked ? 'translateY(-100%)' : 'translateY(0%)', 
+                        opacity: isLiked ? 0 : 1 
+                    }}
+        >{noLikes}</motion.h3>
+        <motion.h3 className="post_action-text switch2"
+                    transition={spring}
+                    style={{ 
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        transform: isLiked ? 'translateY(0%)' : 'translateY(100%)', 
+                        opacity: isLiked ? 1 : 0 
+                    }}
+        >{noLikes + 1}</motion.h3>
+    </motion.div>
+</motion.h3>
+
           </motion.button>
         </motion.div>
         <motion.div

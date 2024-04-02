@@ -104,12 +104,26 @@
 }
 
 .post_action-text {
+  position: relative;
+  overflow: hidden;
   font-size: 20px;
   font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: start;
 }
 
-.post_action:hover .post_action-text {
-  letter-spacing: 4px;
+.post_like_num-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  position: 'relative';
+  height: 24px;
+  width: 28px;
+}
+
+.switch, .switch2 {
 }
 
 .post_bottom_gradient {
