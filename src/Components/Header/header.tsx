@@ -22,21 +22,7 @@ function Header() {
 
   return (
     <div className="header">
-      <div className="header_container">
-        <div className="header_text-wrapper">
-          <div className="title-wrapper">
-            <h1 className="Bibleverse_Title">BIBLE VERSE OF THE DAY</h1>
-          </div>
-          <DailyVerse />
-
-        </div>
-        <div className="Bibleverse_action_container">
-          <a className="action-wrapper" href="https://https://www.bible.com" target="_blank">
-            <h3 className='action-text'>MORE BIBLE VERSES</h3>
-          </a>
-        </div>
-        <button className='button' onClick={() => {handleSubmit()}}>Create New Verse</button>
-      </div>
+      <DailyVerse />
     </div>
   );
 }
