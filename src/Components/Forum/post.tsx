@@ -264,7 +264,6 @@ const Post = ({
         const likes = data.likes || [];
         const likeCount = likes.length;
         const hasLiked = await data.likes.includes(auth.currentUser?.email);
-        console.log(isCurrentlyLiked, "isCurrentlyLiked");
   
         // Aktualizuj stan na podstawie danych z dokumentu
         await setIsCurrentlyLiked(hasLiked);
@@ -280,11 +279,9 @@ const Post = ({
     if (isCurrentlyLiked) {
       setIsLiked(false);
     };
-    console.log(isLiked, "isLiked");
   }, [])
 
   useEffect(() => {
-    console.log(isCurrentlyLiked)
   }, [isCurrentlyLiked])
 
   // LIKE SWITCHING ANIMATION
@@ -370,18 +367,15 @@ const Post = ({
           <motion.button
             className="post_action action_line"
             onClick={async () => {
-              const newIsLiked = !isCurrentlyLiked; // Toggle the isLiked state
-              setIsLiked(newIsLiked); // Update the state immediately for responsive UI
-            if (!isCurrentlyLiked) {
-              if (newIsLiked) {
-                likeAPost(id);
-              } 
-            }
-            if (isCurrentlyLiked) {
-              if (!newIsLiked) {
-                unlikeAPost(id);
+              if (isLiked === false) {
+                const newIsLiked = !isCurrentlyLiked; // Toggle the isLiked state
+                setIsLiked(newIsLiked); // Update the state immediately for responsive UI
+                if (!isCurrentlyLiked) {
+                  if (newIsLiked) {
+                    likeAPost(id);
+                  } 
+                }
               }
-            }
             }}
           >
             <motion.h3 className="post_action-text">
