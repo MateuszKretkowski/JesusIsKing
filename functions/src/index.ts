@@ -158,6 +158,7 @@ exports.createPost = functions.https.onCall((data, context) => {
         authorEmail: userData.email,
         author: userData.name,
         date: formattedDate,
+        likes: [],
         numberOfLikes: 0,
         numberOfReplies: 0,
         numberOfReposts: 0,
