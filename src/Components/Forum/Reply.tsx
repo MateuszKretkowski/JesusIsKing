@@ -57,7 +57,7 @@ function Reply({
       variants={letterVariants}
       initial={controls}
       animate={controls}
-      transition={{ duration: 0.01, delay: 0.004 * index }}
+      transition={{ duration: 0.01, delay: 0.01 * index }}
       key={index}
       className="letters"
     >
@@ -75,7 +75,7 @@ function Reply({
   }, [isRepliesOpen, expanded]);
   const replyVariants = {
     hidden: { height: "0px", opacity: 0, transition: { duration: 0.5 } },
-    visible: { height: expanded ? "240px" : "150px", opacity: 1, transition: { duration: 0.5 } },
+    visible: { height: expanded ? "240px" : "150px", opacity: 1, transition: { duration: 0.5, delay: 0.6 } },
     exit: { height: "0px", opacity: 0, transition: { duration: 0.5 } },
   }
 
