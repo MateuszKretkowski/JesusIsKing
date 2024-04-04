@@ -188,6 +188,19 @@ const Post = ({
   useEffect(() => {
     fetchReplies();
   }, [isRepliesOpen]);
+
+  const [repliesLength, setRepliesLength] = useState(0);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, "Posts", id), (doc) => {
+      const postData = doc.data();
+      if (postData) {
+        const Replies = postData.Replies || [];
+        setRepliesLength(Replies.length);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [id]);
   
   useEffect(() => {
     if (!isRepliesOpen) {
@@ -361,7 +374,7 @@ const Post = ({
                 setIsRepliesOpen(!isRepliesOpen);
               }}
             >
-              REPLIES: {noReplies}
+              REPLIES: {repliesLength}
             </motion.h3>
           </motion.button>
           <motion.button
