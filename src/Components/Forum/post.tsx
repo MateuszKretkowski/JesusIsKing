@@ -460,7 +460,8 @@ const Post = ({
               handleSubmit();
             }}
           >
-            <motion.h5>POST</motion.h5>
+            <motion.h5 className="reply_addPost_title-wrapper-text">POST</motion.h5>
+            
           </motion.button>
 
           <motion.div
@@ -469,6 +470,7 @@ const Post = ({
               setisFocused(true);
             }}
           >
+            
             <motion.textarea
               type="text"
               name="name"
@@ -479,16 +481,9 @@ const Post = ({
               style={{ textAlign: isEven ? "end" : "start" }}
               maxLength={100}
             />
+
           </motion.div>
-          <motion.div
-              className="post_bottom_gradient"
-              style={{
-                scaleX: isEven ? -1 : 1,
-                width: "50%",
-                left: isEven ? " 49%" : 0,
-                top: "22%"
-              }}
-            />
+          
         </motion.div>
 
         <motion.div className="reply_container"

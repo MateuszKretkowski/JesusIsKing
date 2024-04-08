@@ -113,6 +113,18 @@
   align-items: start;
 }
 
+.reply_addPost_title-wrapper:hover .reply_addPost_title-wrapper-text {
+  letter-spacing: 2px;
+}
+
+.reply_addPost_title-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: 100%;
+}
+
 .post_action-text:hover {
   letter-spacing: 2px;
 }
@@ -187,6 +199,7 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   align-items: end;
   height: auto;
   overflow-y: hidden;
+  margin-bottom: 6%;
 }
 
 .reply_addPost-title {
