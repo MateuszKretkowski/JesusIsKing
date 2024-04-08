@@ -12,8 +12,16 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Post from "./post";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { auth, readPosts } from "../config/config";
+import { auth, db, readPosts } from "../config/config";
 import { findUserByEmail } from "../config/config.tsx";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+} from "firebase/firestore";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Forum() {
@@ -54,10 +62,10 @@ function Forum() {
 
   const [author, setAuthor] = useState("");
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = event.target; // Destrukturyzacja, aby uzyskać `name` i `value`
+    const { name, value } = event.target;
     setPostData((prevState) => ({
-      ...prevState, // Kopiowanie istniejących wartości stanu
-      [name]: value, // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
+      ...prevState,
+      [name]: value,
     }));
 
     const textarea = event.target;
@@ -89,25 +97,49 @@ function Forum() {
   }
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false });
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState([]);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const postsData = await readPosts();
-        const formattedPosts = postsData.map(post => ({
-          ...post,
-          id: post.id,
-        }));
-        setPosts(formattedPosts);
-      } catch (error) {
-        console.error("Error fetching Blogs: ", error);
-        setPosts([]);
-      }
+    const fetchInitialPosts = async () => {
+      setLoading(true);
+      const q = query(
+        collection(db, "Posts"),
+        orderBy("date", "desc"),
+        limit(2)
+      );
+      const querySnapshot = await getDocs(q);
+      const postsArray = [];
+      querySnapshot.forEach((doc) => {
+        postsArray.push({ id: doc.id, ...doc.data() });
+      });
+      setPosts(postsArray);
+      setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      setLoading(false);
     };
-  
-    fetchPosts();
+
+    fetchInitialPosts();
   }, []);
+
+  const loadMorePosts = async () => {
+    if (loading || !lastVisible) return;
+    setLoading(true);
+    const next = query(
+      collection(db, "Posts"),
+      orderBy("date", "desc"),
+      startAfter(lastVisible),
+      limit(1)
+    );
+    const newDocs = await getDocs(next);
+    const newPosts = [];
+    newDocs.forEach((doc) => {
+      newPosts.push({ id: doc.id, ...doc.data() });
+    });
+    setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+    setLastVisible(newDocs.docs[newDocs.docs.length - 1]);
+    setLoading(false);
+  };
 
   const addPostTitleVariants = {
     hidden: { color: "#333333" },
@@ -345,6 +377,11 @@ function Forum() {
                 />
               ))}
           </div>
+          <button onClick={loadMorePosts} disabled={loading} className="small_button">
+            <motion.h5 className="small_text">
+              {loading ? "LOADING..." : "LOAD MORE"}
+            </motion.h5>
+          </button>
         </div>
       </div>
     </div>

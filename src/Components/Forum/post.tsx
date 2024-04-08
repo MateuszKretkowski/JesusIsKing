@@ -174,7 +174,7 @@ const Post = ({
   // Function to fetch initial replies or the first page
   const fetchReplies = async () => {
     setLoading(true);
-    const querySnapshot = await getDocs(query(collection(db, "Replies"), where("postId", "==", id), orderBy("date", "desc"), limit(10)));
+    const querySnapshot = await getDocs(query(collection(db, "Replies"), where("postId", "==", id), orderBy("date", "desc"), limit(3)));
     const newReplies: any = [];
     querySnapshot.forEach((doc) => {
       newReplies.push({ id: doc.id, ...doc.data() });
@@ -206,7 +206,7 @@ const Post = ({
     if (!isRepliesOpen) {
       const timer = setTimeout(() => {
         setReplies([]);
-      }, 6000);
+      }, 1000);
   
       return () => clearTimeout(timer);
     }
@@ -270,7 +270,6 @@ const Post = ({
   const [isCurrentlyLiked, setIsCurrentlyLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   useEffect(() => {
-    // Subskrypcja na zmiany w dokumencie posta
     const unsubscribe = onSnapshot(doc(db, "Posts", id), async (doc) => {
       if (doc.exists()) {
         const data = doc.data();
@@ -278,13 +277,11 @@ const Post = ({
         const likeCount = likes.length;
         const hasLiked = await data.likes.includes(auth.currentUser?.email);
   
-        // Aktualizuj stan na podstawie danych z dokumentu
         await setIsCurrentlyLiked(hasLiked);
         noLikes = 1;
       }
     });
   
-    // Wyczyść subskrypcję, gdy komponent zostanie odmontowany
     return () => unsubscribe();
   }, [id]);
 
@@ -314,6 +311,9 @@ const Post = ({
         marginLeft: isEven ? "250px" : "0",
         marginRight: isEven ? "0" : "250px",
       }}
+      initial={{ opacity: 0, height: "0px" }}
+      animate={{ opacity: 1, height: "100%"}}
+      transition={{ duration: 2, delay: 0.1 * index }}
     >
       <motion.div
         className="post_container"
@@ -487,7 +487,6 @@ const Post = ({
         </motion.div>
 
         <motion.div className="reply_container"
-        onClick={() => {setIsRepliesOpen(!isRepliesOpen)}}
         // variants={repliesContainerVariants}
         // initial={controls}
         // animate={controls}
