@@ -28,6 +28,7 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { getCookie } from "../../utils/cookieUtils.ts";
+import LoadingScreen from "../Loading Screen/LoadingScreen.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
@@ -45,7 +46,7 @@ function Settings() {
     link: "",
     uniqueId: "",
   });
-  
+
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
   });
@@ -59,35 +60,41 @@ function Settings() {
   }, [userData.id]);
 
   const fetchUserData = async () => {
+    setIsLoading(true); // Indicate loading
     const userRef = collection(db, "Users");
     try {
-    if (userData.id) {
-      console.log(userData.id)
-      const docRef = doc(userRef, userData.id);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUserData({
-          id: docSnap.data().id,
-          name: docSnap.data().name,
-          description: docSnap.data().description,
-          from: docSnap.data().from,
-          link: docSnap.data().link,
-          uniqueId: docSnap.data().uniqueId,
-        });
-        console.log(userData);
-      } else {
-        console.log("No such document!");
+      if (userData.id) {
+        console.log(userData.id);
+        const docRef = doc(userRef, userData.id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserData({
+            id: docSnap.data().id,
+            name: docSnap.data().name,
+            description: docSnap.data().description,
+            from: docSnap.data().from,
+            link: docSnap.data().link,
+            uniqueId: docSnap.data().uniqueId,
+          });
+          console.log(userData);
+        } else {
+          console.log("No such document!");
+        }
       }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false); // Data fetched or error occurred, stop indicating loading
     }
-  } catch (e) {
-  console.log(e)
-  }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        readUserByUsername(name, setUserData);
+        readUserByUsername(name, (userData) => {
+          setUserData(userData);
+          setIsLoading(false); // Ensure loading is stopped after user data is set
+        });
       } else {
         setUserData({
           id: "",
@@ -97,11 +104,14 @@ function Settings() {
           link: "",
           uniqueId: "",
         });
+        setIsLoading(false); // Ensure loading is stopped if no user
       }
     });
 
+    // This will call fetchUserData if needed or any other logic to ensure data is loaded
+
     return () => unsubscribe();
-  }, []);
+  }, [name]);
 
   const even = {
     hidden: { x: -200, opacity: 0, scale: 1 },
@@ -169,7 +179,10 @@ function Settings() {
 
   const nameMAPPED = wrapWordsAndLettersInSpan(userData.name);
 
-  
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="settings">
       <div className="settings_container">
@@ -180,22 +193,45 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <img className="avatar-settings" src={defaultAvatar} />
+            <motion.img
+              className="avatar-settings"
+              src={defaultAvatar}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            />
           </motion.div>
-          <div className="desc-wrapper-account-settings">
-            <motion.div className="title-settings-wrapper">
+          <motion.div className="desc-wrapper-account-settings">
+            <motion.div
+              className="title-settings-wrapper"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
               {nameMAPPED}
             </motion.div>
             <motion.div
-              className="settings_id"
-              variants={variantsDescription}
-              initial={controls}
-              animate={controls}
-              exit={controls}
-              transition={{ type: "spring", bounce: 1, damping: 12 }}
+                className="link-settings-wrapper"
+                initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
             >
-              @{userData.uniqueId}
+              <motion.div
+                className="settings_id"
+                variants={variantsDescription}
+                initial={controls}
+                animate={controls}
+                exit={controls}
+              >
+                @{userData.uniqueId}
+              </motion.div>
             </motion.div>
+            <motion.div
+                className="link-settings-wrapper"
+                initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 1 }}
+            >
             <motion.h2
               className=""
               variants={variantsDescription}
@@ -203,52 +239,92 @@ function Settings() {
               animate={controls}
               exit={controls}
               transition={{ type: "spring", bounce: 1, damping: 12 }}
-            >
+              >
               {userData.description}
             </motion.h2>
+              </motion.div>
             <div className="links-wrapper">
+              <motion.div
+                className="link-settings-wrapper"
+                initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 1.2 }}
+              >
               <motion.a
                 className="desc link-settings"
                 variants={variantsAction}
                 initial={controls}
                 animate={controls}
                 exit={controls}
-              >
+                >
                 <h5 className="where">{userData.link}</h5>
               </motion.a>
+                </motion.div>
+                <motion.div
+                className="link-settings-wrapper"
+
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ delay: 1.3 }}
+                >
+                  
               <motion.a
                 className="desc link-settings"
                 variants={variantsAction}
                 initial={controls}
                 animate={controls}
                 exit={controls}
-              >
+                >
                 <h5 className="where">MESSAGE</h5>
               </motion.a>
+                </motion.div>
+                <motion.div
+                className="link-settings-wrapper"
+                                          initial={{ opacity: 0 }}
+                                          animate={{ opacity: 1 }}
+                                          transition={{ delay: 1.4 }}
+                >
+
               <motion.a
                 className="desc link-settings"
                 variants={variantsAction}
                 initial={controls}
                 animate={controls}
                 exit={controls}
-              >
+                >
                 <motion.h5 className="where">{userData.from}</motion.h5>
               </motion.a>
+                </motion.div>
             </div>
-            <div className="helper-edit-wrapper">
+            <div className="helper-edit-wrapper"
+                  style={{ opacity: showModal ? 0 : 1 }}
+            >
               {isMyPage && (
                 <motion.button
                   className="action-wrapper settings_action-wrapper"
                   onClick={() => setShowModal(!showModal)}
-                  style={{ opacity: showModal ? 0 : 1 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.45 }}
                 >
                   <h5 className="edit">EDIT YOUR ACCOUNT</h5>
                 </motion.button>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
-        <Modal showModal={showModal} setShowModal={setShowModal} onUpdate={() => {fetchUserData()}} />
+        <Modal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          onUpdate={() => {
+            fetchUserData();
+          }}
+        />
+        <motion.div
+                                                  initial={{ opacity: 0 }}
+                                                  animate={{ opacity: 1 }}
+                                                  transition={{ delay: 1.5 }}
+        >
         <motion.button
           className="action-wrapper settings_action-wrapper"
           variants={variantsDescription}
@@ -256,9 +332,10 @@ function Settings() {
           animate={controls}
           exit={controls}
           transition={{ delay: 1 }}
-        >
+          >
           <h5 className="edit">OPEN POSTS</h5>
         </motion.button>
+          </motion.div>
       </div>
     </div>
   );
