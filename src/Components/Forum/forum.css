@@ -95,9 +95,10 @@
   border: none;
   margin: 1% 1%;
   width: 20%;
+  position: relative;
 }
 
-.forum_addpost_button-text:after {
+.forum_addpost_button_gradient {
   content: "";
   position: absolute;
   top: 100%;

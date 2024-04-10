@@ -31,6 +31,7 @@ function Forum() {
   const [isAppliedAddPost, setIsAppliedAddPost] = useState(false);
   const [firstPostTitle, setFirstPostTitle] = useState("");
   const [firstPostDescription, setFirstPostDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   interface PostData {
     name: string;
@@ -80,6 +81,7 @@ function Forum() {
       const result = await createPost(postData);
       await setIsApplied(true);
       await setIsAppliedAddPost(true);
+      setIsLoading(true);
     } catch (error) {
       console.error("Error creating Post: ", error);
     }
@@ -182,6 +184,16 @@ function Forum() {
   useEffect(() => {
     isApplied ? controls.start("visible") : controls.start("hidden");
   }, [isApplied]);
+
+  const controlsGradients = useAnimation();
+
+  const startAnimation = async () => {
+    await controlsGradients.start({ width: "70%", x: "50%", transition: { duration: 0.4, type: "linear", at: ">"} });
+    while (isLoading) {
+      await controlsGradients.start({ x: "-80%", transition: { duration: 0.5, type: "linear", bounce: 0.5,} });
+      await controlsGradients.start({ x: "200%", transition: { duration: 0.5, type: "linear", bounce: 0.5,} });
+    }    
+  };
 
   return (
     <div className="forum">
@@ -347,10 +359,12 @@ function Forum() {
                   className="forum_addpost_button-text"
                   onClick={() => {
                     handleSubmit();
+                    startAnimation();
                   }}
                 >
                   POST IT
                 </h3>
+                <motion.div animate={controlsGradients} className="forum_addpost_button_gradient" />
               </motion.button>
             </div>
           </motion.div>
