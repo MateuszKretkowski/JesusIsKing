@@ -32,6 +32,7 @@ function Forum() {
   const [firstPostTitle, setFirstPostTitle] = useState("");
   const [firstPostDescription, setFirstPostDescription] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   interface PostData {
     name: string;
@@ -78,10 +79,15 @@ function Forum() {
     try {
       getUser();
       var createPost = httpsCallable(functions, "createPost");
-      const result = await createPost(postData);
-      await setIsApplied(true);
-      await setIsAppliedAddPost(true);
-      setIsLoading(true);
+      if (postData.name !== "") {
+        const result = await createPost(postData);
+        await setIsApplied(true);
+        await setIsAppliedAddPost(true);
+        setIsLoading(true);
+      }
+      else {
+        setError(true);
+      }
     } catch (error) {
       console.error("Error creating Post: ", error);
     }

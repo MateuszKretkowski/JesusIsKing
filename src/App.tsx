@@ -9,6 +9,7 @@ import BlogSite from "./Components/Blogs/blogSite.tsx";
 import Forum from "./Components/Forum/Forum.tsx";
 import Redirect from "./Components/Google Signin/redirect.tsx";
 import Footer from "./Components/Footer/Footer.tsx";
+import ErrorPanel from "./Components/ERROR PANEL/ErrorPanel.tsx";
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
@@ -20,7 +21,6 @@ import { setCookie } from "./utils/cookieUtils.ts";
 function App() {
 
   useEffect(() => {
-    // Update the state based on window width to approximate device type
     const handleResize = () => {
         if (window.innerWidth <= 768) {
             setCookie("isMobile", "true", 1);
@@ -28,14 +28,8 @@ function App() {
             setCookie("isMobile", "false", 1);
         }
     };
-
-    // Call the function to set the initial state
     handleResize();
-
-    // Add event listener for window resize
     window.addEventListener('resize', handleResize);
-
-    // Clean up the event listener on component unmount
     return () => window.removeEventListener('resize', handleResize);
 });
 
@@ -57,7 +51,7 @@ function App() {
            <Route path="/redirect" element={<Redirect />} />
            <Route path="/adminpanel" element={<AdminPanel />} />
            <Route path="/blogs" element={<BlogSite />} />
-
+           <Route path="/error" element={<ErrorPanel />} />
           </Routes>
         </div>
       </BrowserRouter>
