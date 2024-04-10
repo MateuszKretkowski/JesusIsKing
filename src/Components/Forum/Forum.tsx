@@ -80,6 +80,7 @@ function Forum() {
       getUser();
       var createPost = httpsCallable(functions, "createPost");
       if (postData.name !== "") {
+        startAnimation();
         const result = await createPost(postData);
         await setIsApplied(true);
         await setIsAppliedAddPost(true);
@@ -365,7 +366,6 @@ function Forum() {
                   className="forum_addpost_button-text"
                   onClick={() => {
                     handleSubmit();
-                    startAnimation();
                   }}
                 >
                   POST IT

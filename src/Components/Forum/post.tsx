@@ -344,25 +344,30 @@ const Post = ({
           <motion.h1 className="post_title" transition={{ duration: 0.7 }}>
             {name}
           </motion.h1>
+        {description !== "" && (
           <motion.div
-            className="post_bottom_gradient"
-            style={{ scaleX: isEven ? "-1" : "1" }}
+          className="post_bottom_gradient"
+          style={{ scaleX: isEven ? "-1" : "1" }}
           />
+        )}
         </motion.div>
-        <motion.div
+        {description !== "" && (
+
+          <motion.div
           className="post_description-wrapper"
           style={{ textAlign: isEven ? "end" : "start" }}
-        >
+          >
           <motion.h2
             className="post_description"
             transition={{ duration: 0.7 }}
-          >
+            >
             {description}
           </motion.h2>
         </motion.div>
+      )}
         <motion.div
-          className="post_action_container"
-          style={{ justifyContent: isEven ? "end" : "start" }}
+        className="post_action_container"
+        style={{ justifyContent: isEven ? "end" : "start" }}
         >
           <motion.button
             className="post_action action_line"
