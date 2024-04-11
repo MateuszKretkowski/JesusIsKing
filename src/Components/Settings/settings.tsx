@@ -29,6 +29,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { getCookie } from "../../utils/cookieUtils.ts";
 import LoadingScreen from "../Loading Screen/LoadingScreen.tsx";
+import ProfilePicture from "../Forum/ProfilePicture.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
@@ -193,13 +194,7 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <motion.img
-              className="avatar-settings"
-              src={defaultAvatar}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            />
+            <ProfilePicture />
           </motion.div>
           <motion.div className="desc-wrapper-account-settings">
             <motion.div

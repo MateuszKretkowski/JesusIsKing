@@ -30,6 +30,7 @@ import {
 import { useEffect, useState } from "react";
 import { setCookie } from "../../utils/cookieUtils";
 import { firestore } from "firebase-admin";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -47,6 +48,22 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig);
+
+// STORAGE
+
+// Get a reference to the storage service, which is used to create references in your storage bucket
+const storage = getStorage();
+
+// Create a storage reference from our storage service
+const storageRef = ref(storage);
+
+export async function upload(file) {
+  const fileRef = ref(storage, auth.currentUser?.email + '.png');
+
+  const snapshot = await uploadBytes(fileRef, file);
+  const photoURL = await getDownloadURL(fileRef);
+  alert("Uploaded file!");
+}
 
 // AUTHENTICATION
 export const auth = getAuth(app);

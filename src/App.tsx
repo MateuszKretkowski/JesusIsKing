@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Navbar from './Components/navBar/navbar.tsx';
 import Header from './Components/Header/header.tsx';
 import SideBar from "./Components/SideBar/sidebar.tsx";
@@ -10,6 +10,7 @@ import Forum from "./Components/Forum/Forum.tsx";
 import Redirect from "./Components/Google Signin/redirect.tsx";
 import Footer from "./Components/Footer/Footer.tsx";
 import ErrorPanel from "./Components/ERROR PANEL/ErrorPanel.tsx";
+import IsLoadingContext from "./Components/Contexts/isLoadingContext.tsx";
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
@@ -17,6 +18,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./Components/config/config.tsx";
 import { doc } from "firebase/firestore";
 import { setCookie } from "./utils/cookieUtils.ts";
+import LoadingScreen from "./Components/Loading Screen/LoadingScreen.tsx";
 
 function App() {
 
@@ -33,11 +35,18 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
 });
 
+  const [isLoading, setIsLoading]: any = useState(false);
+
   return (
       <BrowserRouter>
+      <IsLoadingContext.Provider value={{ isLoading, setIsLoading }}>
+
        <div className="App">
          <SideBar />
-         <Routes>
+         {isLoading && <LoadingScreen />}
+         {!isLoading && (
+
+           <Routes>
            <Route path="/" element={
              <>
               <Navbar />
@@ -53,7 +62,9 @@ function App() {
            <Route path="/blogs" element={<BlogSite />} />
            <Route path="/error" element={<ErrorPanel />} />
           </Routes>
+      )}
         </div>
+           </IsLoadingContext.Provider>
       </BrowserRouter>
   );
 }
