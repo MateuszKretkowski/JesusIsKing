@@ -194,7 +194,7 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <ProfilePicture />
+            <ProfilePicture email={userData.id} />
           </motion.div>
           <motion.div className="desc-wrapper-account-settings">
             <motion.div

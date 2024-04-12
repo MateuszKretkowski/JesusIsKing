@@ -51,18 +51,35 @@ export const app = firebase.initializeApp(firebaseConfig);
 
 // STORAGE
 
+function encodeEmail(email: string): string {
+  return email.replace(/\./g, '_dot_').replace(/@/g, '_at_');
+}
+
 // Get a reference to the storage service, which is used to create references in your storage bucket
 const storage = getStorage();
 
 // Create a storage reference from our storage service
 const storageRef = ref(storage);
 
-export async function upload(file) {
-  const fileRef = ref(storage, auth.currentUser?.email + '.png');
+export async function upload(file: File) {
+  if (!auth.currentUser || !auth.currentUser.email) {
+    console.error("No authenticated user with an email address.");
+    return;
+  }
 
-  const snapshot = await uploadBytes(fileRef, file);
-  const photoURL = await getDownloadURL(fileRef);
-  alert("Uploaded file!");
+  // Use the encoded email as the file name
+  const encodedEmail = encodeEmail(auth.currentUser.email);
+  const fileRef = ref(storage, `Avatars/${encodedEmail}.png`);
+
+  try {
+    const snapshot = await uploadBytes(fileRef, file);
+    const photoURL = await getDownloadURL(snapshot.ref);
+    alert("Uploaded file!");
+    // Here you can also update the user's photoURL in the auth profile or in your users database
+    // if you store the users information there.
+  } catch (error) {
+    console.error("Upload failed:", error);
+  }
 }
 
 // AUTHENTICATION
