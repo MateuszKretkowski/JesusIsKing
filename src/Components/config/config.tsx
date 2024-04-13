@@ -61,22 +61,24 @@ const storage = getStorage();
 // Create a storage reference from our storage service
 const storageRef = ref(storage);
 
-export async function upload(file: File) {
+export async function upload(file: File, email: string) {
   if (!auth.currentUser || !auth.currentUser.email) {
     console.error("No authenticated user with an email address.");
     return;
   }
 
-  // Use the encoded email as the file name
   const encodedEmail = encodeEmail(auth.currentUser.email);
   const fileRef = ref(storage, `Avatars/${encodedEmail}.png`);
-
   try {
     const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(snapshot.ref);
     alert("Uploaded file!");
-    // Here you can also update the user's photoURL in the auth profile or in your users database
-    // if you store the users information there.
+
+    console.log(email, photoURL)
+    const userRef = doc(db, 'Users', email);
+    await setDoc(userRef, { avatar: photoURL }, { merge: true });
+    console.log("User avatar URL has been updated in Firestore.");
+
   } catch (error) {
     console.error("Upload failed:", error);
   }
