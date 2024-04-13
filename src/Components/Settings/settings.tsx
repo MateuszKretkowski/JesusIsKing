@@ -38,6 +38,7 @@ function Settings() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isMyPage, setIsMyPage] = useState(false);
+  const [canEditPFP, setCanEditPFP] = useState(false);
   const controls = useAnimation();
   const [userData, setUserData] = useState({
     id: "",
@@ -59,6 +60,9 @@ function Settings() {
       console.log(isMyPage);
     }
   }, [userData.id]);
+  useEffect(() => {
+    isMyPage ? setCanEditPFP(true) : setCanEditPFP(false);
+  }, [isMyPage])
 
   const fetchUserData = async () => {
     setIsLoading(true); // Indicate loading
@@ -194,7 +198,7 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <ProfilePicture email={userData.id} isAbleToChange={true} />
+            <ProfilePicture email={userData.id} isAbleToChange={canEditPFP} />
           </motion.div>
           <motion.div className="desc-wrapper-account-settings">
             <motion.div
