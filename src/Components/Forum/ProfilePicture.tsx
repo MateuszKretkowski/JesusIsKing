@@ -105,7 +105,7 @@ function ProfilePicture({
   }
   useEffect(() => {
     isUploadVisible ? controls.start("visible") : controls.start("hidden");
-  }, [isUploadVisible])
+  })
 
   return (
     <motion.div className="ProfilePicture-wrapper">
