@@ -67,18 +67,15 @@ export async function upload(file: File, email: string) {
     return;
   }
 
-  const encodedEmail = encodeEmail(auth.currentUser.email);
+  const encodedEmail = encodeEmail(email);
   const fileRef = ref(storage, `Avatars/${encodedEmail}.png`);
   try {
     const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(snapshot.ref);
-    alert("Uploaded file!");
-
-    console.log(email, photoURL)
+    
     const userRef = doc(db, 'Users', email);
     await setDoc(userRef, { avatar: photoURL }, { merge: true });
-    console.log("User avatar URL has been updated in Firestore.");
-
+    alert("Avatar Changed");
   } catch (error) {
     console.error("Upload failed:", error);
   }

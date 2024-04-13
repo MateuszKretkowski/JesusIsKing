@@ -1,6 +1,39 @@
-.avatar {
-    width: 240px;
-    height: 240px;
+.ProfilePicture-wrapper {
+    position: relative;
+    width: 320px;
+    height: 320px;
     border-radius: 12px;
+}
 
+.avatar {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar_upload {
+    border: none;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.avatar_upload:hover {
+    letter-spacing: 4px;
+}
+
+.avatar_input {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 1;
+    opacity: 0;
+}
+
+.avatar_input:hover {
+    cursor: pointer;
 }
