@@ -218,7 +218,7 @@ function SideBar() {
             <h2 className="id">@{userData.uniqueId}</h2>
             <div className="link-wrapper">
               <h5 className="where white" style={{ opacity: isNotificationsOpen ? "0" : "1", height: isNotificationsOpen ? "0px" : "12px" }}>{userData.link}</h5>
-              <h5 className="where white" style={{ opacity: isNotificationsOpen ? "0" : "1", height: isNotificationsOpen ? "0px" : "12px" }}>{userData.from}</h5>
+              <h5 className="where white" style={{ opacity: isNotificationsOpen ? "0" : "1", height: isNotificationsOpen ? "0px" : "12px  " }}>{userData.from}</h5>
             </div>
             <div className="notifications_trigger">
                            <motion.button

@@ -202,6 +202,7 @@ function Forum() {
     }    
   };
 
+  const [liked, setLiked] = useState(false);
   return (
     <div className="forum">
       <div className="forum_container">
@@ -335,7 +336,7 @@ function Forum() {
                   animate={controls}
                   transition={{ delay: 1 }}
                 >
-                  <motion.h3 className="post_action-text">REPLY (0)</motion.h3>
+                  <motion.h3 className="post_action-text">REPLY: 0</motion.h3>
                 </motion.button>
                 <motion.button
                   className="post_action action_line"
@@ -344,7 +345,7 @@ function Forum() {
                   animate={controls}
                   transition={{ delay: 2 }}
                 >
-                  <motion.h3 className="post_action-text">LIKE (0)</motion.h3>
+                  <motion.h3 className="post_action-text" onClick={() => {setLiked(!liked)}}>LIKE: {liked ? 1 : 0}</motion.h3>
                 </motion.button>
                 <motion.button
                   className="post_action action_line"
@@ -353,7 +354,7 @@ function Forum() {
                   animate={controls}
                   transition={{ delay: 3 }}
                 >
-                  <motion.h3 className="post_action-text">REPOST (0)</motion.h3>
+                  <motion.h3 className="post_action-text">REPOST: 0</motion.h3>
                 </motion.button>
               </motion.div>
               <motion.button
