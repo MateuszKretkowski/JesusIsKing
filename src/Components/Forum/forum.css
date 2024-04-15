@@ -228,3 +228,44 @@ background: radial-gradient(circle, rgba(40,40,40,1) 16%, rgba(40,40,40,0) 100%)
     text-align: center; /* Ensure text is centered */
   }
 }
+
+.image {
+  position: relative;
+  max-width: 320px;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0px 0px 6px 6px  rgba(0, 0, 0, 0.1);
+}
+
+.image:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transition: rotate(45deg);
+  width: 100px;
+  height: 100px;
+  background: rgba(0, 0, 0, 1);
+  border-radius: 12px;
+  transition: all 300ms ease;
+  z-index: 100000;
+}
+
+.image:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: rotate(-45deg);
+  width: 8px;
+  height: 2px;
+  background: rgba(0, 0, 0, 1);
+  border-radius: 12px;
+  transition: all 300ms ease;
+  z-index: 100000;
+}
+
+.image:hover {
+
+}

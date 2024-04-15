@@ -33,6 +33,7 @@ function Forum() {
   const [firstPostDescription, setFirstPostDescription] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   interface PostData {
     name: string;
@@ -85,8 +86,7 @@ function Forum() {
         await setIsApplied(true);
         await setIsAppliedAddPost(true);
         setIsLoading(true);
-      }
-      else {
+      } else {
         setError(true);
       }
     } catch (error) {
@@ -195,14 +195,38 @@ function Forum() {
   const controlsGradients = useAnimation();
 
   const startAnimation = async () => {
-    await controlsGradients.start({ width: "70%", x: "50%", transition: { duration: 0.4, type: "linear", at: ">"} });
+    await controlsGradients.start({
+      width: "70%",
+      x: "50%",
+      transition: { duration: 0.4, type: "linear", at: ">" },
+    });
     while (isLoading) {
-      await controlsGradients.start({ x: "-80%", transition: { duration: 0.5, type: "linear", bounce: 0.5,} });
-      await controlsGradients.start({ x: "200%", transition: { duration: 0.5, type: "linear", bounce: 0.5,} });
-    }    
+      await controlsGradients.start({
+        x: "-80%",
+        transition: { duration: 0.5, type: "linear", bounce: 0.5 },
+      });
+      await controlsGradients.start({
+        x: "200%",
+        transition: { duration: 0.5, type: "linear", bounce: 0.5 },
+      });
+    }
   };
 
-  const [liked, setLiked] = useState(false);
+  // IMAGE
+
+  const [image, setImage] = useState("");
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result.toString());
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="forum">
       <div className="forum_container">
@@ -286,8 +310,8 @@ function Forum() {
                 animate={"visible"}
               />
             </div>
-            <div className="addpost_title-wrapper">
               {!isApplied ? (
+            <div className="addpost_title-wrapper">
                 <motion.textarea
                   name="description"
                   value={postData.description}
@@ -306,46 +330,74 @@ function Forum() {
                   transition={{ type: "spring" }}
                   onFocus={() => {
                     setIsFocused(true);
-                  }}
-                  placeholder="Could You maybe describe it?"
-                ></motion.textarea>
-              ) : (
-                <motion.h2
-                  className="forum_addpost_title forum_addpost_description"
-                  variants={addPostDescriptionVariants}
+                    }}
+                    placeholder="Could You maybe describe it?"
+                  ></motion.textarea>
+                  {image && (
+                    <motion.img
+                    className="forum_addpost_description image"
+                    src={image}
+                    alt="Selected"
+                    style={{ marginLeft: "8px" }}
+                    whileHover={{ filter: "brightness(0.5)", transition: { duration: 0.3 } }}
+                    onClick={() => {
+                      setImage("");
+                    }}
+                    />
+                  )}
+                  </div>
+                ) : (
+                  <div className="addpost_title-wrapper">
+                  <motion.h2
+                    className="forum_addpost_title forum_addpost_description"
+                    variants={addPostDescriptionVariants}
+                    initial={controls}
+                    animate={controls}
+                  >
+                    {postData.description}
+                  </motion.h2>
+                  {image && (
+                    <motion.img
+                    src={image}
+                    alt="Selected"
+                    style={{ width: "100px", height: "100px" }}
+                    />
+                  )}
+                  </div>
+                )}
+                <div className="addpost_action">
+                  <motion.div
+                  className="post_action_container"
+                  variants={addPostActionContainerVariants}
                   initial={controls}
                   animate={controls}
-                >
-                  {postData.description}
-                </motion.h2>
-              )}
-            </div>
-            <div className="addpost_action">
-              <motion.div
-                className="post_action_container"
-                variants={addPostActionContainerVariants}
-                initial={controls}
-                animate={controls}
-                style={{ justifyContent: isEven ? "end" : "start" }}
-              >
-                <motion.button
-                  className="post_action action_line"
-                  style={{ marginRight: "6%" }}
-                  variants={addPostActionVariants}
-                  initial={controls}
-                  animate={controls}
-                  transition={{ delay: 1 }}
-                >
-                  <motion.h3 className="post_action-text">REPLY: 0</motion.h3>
-                </motion.button>
-                <motion.button
-                  className="post_action action_line"
-                  variants={addPostActionVariants}
-                  initial={controls}
-                  animate={controls}
-                  transition={{ delay: 2 }}
-                >
-                  <motion.h3 className="post_action-text" onClick={() => {setLiked(!liked)}}>LIKE: {liked ? 1 : 0}</motion.h3>
+                  style={{ justifyContent: isEven ? "end" : "start" }}
+                  >
+                  <motion.button
+                    className="post_action action_line"
+                    style={{ marginRight: "6%" }}
+                    variants={addPostActionVariants}
+                    initial={controls}
+                    animate={controls}
+                    transition={{ delay: 1 }}
+                  >
+                    <motion.h3 className="post_action-text">REPLY: 0</motion.h3>
+                  </motion.button>
+                  <motion.button
+                    className="post_action action_line"
+                    variants={addPostActionVariants}
+                    initial={controls}
+                    animate={controls}
+                    transition={{ delay: 2 }}
+                  >
+                    <motion.h3
+                    className="post_action-text"
+                    onClick={() => {
+                      setLiked(!liked);
+                    }}
+                  >
+                    LIKE: {liked ? 1 : 0}
+                  </motion.h3>
                 </motion.button>
                 <motion.button
                   className="post_action action_line"
@@ -356,6 +408,15 @@ function Forum() {
                 >
                   <motion.h3 className="post_action-text">REPOST: 0</motion.h3>
                 </motion.button>
+              </motion.div>
+              <motion.div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ margin: "20px 0" }}
+                />
+            
               </motion.div>
               <motion.button
                 className="forum_addpost_button"
@@ -371,7 +432,10 @@ function Forum() {
                 >
                   POST IT
                 </h3>
-                <motion.div animate={controlsGradients} className="forum_addpost_button_gradient" />
+                <motion.div
+                  animate={controlsGradients}
+                  className="forum_addpost_button_gradient"
+                />
               </motion.button>
             </div>
           </motion.div>
@@ -398,7 +462,11 @@ function Forum() {
                 />
               ))}
           </div>
-          <button onClick={loadMorePosts} disabled={loading} className="small_button">
+          <button
+            onClick={loadMorePosts}
+            disabled={loading}
+            className="small_button"
+          >
             <motion.h5 className="small_text">
               {loading ? "LOADING..." : "LOAD MORE"}
             </motion.h5>
