@@ -35,6 +35,19 @@ function Forum() {
   const [error, setError] = useState(false);
   const [liked, setLiked] = useState(false);
 
+  const [image, setImage] = useState("");
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result.toString());
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   interface PostData {
     name: string;
     description: string;
@@ -52,6 +65,7 @@ function Forum() {
     author: "",
     authorId: "",
     date: "",
+    image: image,
     numberOfLikes: 0,
     numberOfReplies: 0,
     numberOfReposts: 0,
@@ -213,19 +227,6 @@ function Forum() {
   };
 
   // IMAGE
-
-  const [image, setImage] = useState("");
-
-  const handleImageChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result.toString());
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   return (
     <div className="forum">
