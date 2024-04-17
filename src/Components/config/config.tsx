@@ -75,7 +75,7 @@ export async function upload(file: File, email: string) {
     
     const userRef = doc(db, 'Users', email);
     await setDoc(userRef, { avatar: photoURL }, { merge: true });
-    alert("Avatar Changed");
+    alert("Photo uploaded successfully!");
   } catch (error) {
     console.error("Upload failed:", error);
   }

@@ -57,6 +57,7 @@ function Forum() {
     numberOfLikes: number;
     numberOfReplies: number;
     numberOfReposts: number;
+    image: string;
   }
 
   const [postData, setPostData] = useState<PostData>({
