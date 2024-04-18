@@ -158,7 +158,7 @@ exports.createPost = functions.https.onCall(async (data, context) => {
           const file = bucket.file(`Posts/${data.image}`);
           await file.save(data.image, {
             metadata: {
-              contentType: "image/png",
+              contentType: "image/jpg",
             },
           });
           console.log("Uploaded a blob or file!");

@@ -42,9 +42,8 @@ function Forum() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(event.target.files[0].name);
+        setImage(reader.result);
         setPostData((prevState) => ({ ...prevState, image: image }));
-        console.log("Photo selected.", image);
       };
       reader.readAsDataURL(file);
     }
@@ -96,7 +95,6 @@ function Forum() {
   const handleSubmit = async () => {
     try {
       getUser();
-      console.log(postData.image, "image");
       var createPost = httpsCallable(functions, "createPost");
       if (postData.name !== "") {
         startAnimation();
@@ -148,10 +146,6 @@ function Forum() {
 
     fetchInitialPosts();
   }, []);
-
-  useEffect(() => {
-    console.log(postData.image, "imag!!!!!!!!!!!!!!!!!!!!!!!!");
-  }, [postData.image])
 
   const loadMorePosts = async () => {
     if (loading || !lastVisible) return;
@@ -457,6 +451,7 @@ function Forum() {
                   date={post.date}
                   description={post.description}
                   name={post.name}
+                  image={post.image}
                   noReposts={post.numberOfLikes}
                   noLikes={post.numberOfLikes}
                   noReplies={post.numberOfLikes}

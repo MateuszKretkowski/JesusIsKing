@@ -13,7 +13,18 @@ import {
 } from "framer-motion";
 import SideBar from "../SideBar/sidebar";
 import Forum from "./Forum";
-import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  startAfter,
+  where,
+} from "firebase/firestore";
 import {
   auth,
   db,
@@ -35,6 +46,7 @@ interface Post {
   name: string;
   noReposts: number;
   noLikes: number;
+  image: string;
   noReplies: number;
   isApplied: boolean;
   localName: string;
@@ -54,6 +66,7 @@ const Post = ({
   date,
   description,
   name,
+  image,
   noReposts,
   noLikes,
   noReplies,
@@ -67,8 +80,7 @@ const Post = ({
   useEffect(() => {
     index % 2 === 0 ? setIsEven(true) : setIsEven(false);
   }, []);
-  
-  
+
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
   const [authorData, setAuthorData] = useState<AuthorData>({
     author: "",
@@ -174,7 +186,14 @@ const Post = ({
   // Function to fetch initial replies or the first page
   const fetchReplies = async () => {
     setLoading(true);
-    const querySnapshot = await getDocs(query(collection(db, "Replies"), where("postId", "==", id), orderBy("date", "desc"), limit(3)));
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, "Replies"),
+        where("postId", "==", id),
+        orderBy("date", "desc"),
+        limit(3)
+      )
+    );
     const newReplies: any = [];
     querySnapshot.forEach((doc) => {
       newReplies.push({ id: doc.id, ...doc.data() });
@@ -201,13 +220,13 @@ const Post = ({
 
     return () => unsubscribe();
   }, [id]);
-  
+
   useEffect(() => {
     if (!isRepliesOpen) {
       const timer = setTimeout(() => {
         setReplies([]);
       }, 1000);
-  
+
       return () => clearTimeout(timer);
     }
   }, [isRepliesOpen]);
@@ -216,7 +235,14 @@ const Post = ({
     if (loading || !lastVisible) return; // Do nothing if we are already loading or there's nothing more to load
 
     setLoading(true);
-    const querySnapshot = await getDocs(query(collection(db, "Replies"), orderBy("date", "desc"), startAfter(lastVisible), limit(10)));
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, "Replies"),
+        orderBy("date", "desc"),
+        startAfter(lastVisible),
+        limit(10)
+      )
+    );
     const newReplies: any = [];
     querySnapshot.forEach((doc) => {
       newReplies.push({ id: doc.id, ...doc.data() });
@@ -251,21 +277,21 @@ const Post = ({
 
   const repliesVariants = {
     hidden: {
-      opacity: 0
+      opacity: 0,
     },
     visible: {
-      opacity: 1
-    }
-  }
+      opacity: 1,
+    },
+  };
 
   const repliesContainerVariants = {
     hidden: {
-      height: "0px"
+      height: "0px",
     },
     visible: {
-      height: "auto"
-    }
-  }
+      height: "auto",
+    },
+  };
 
   const [isCurrentlyLiked, setIsCurrentlyLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -276,23 +302,22 @@ const Post = ({
         const likes = data.likes || [];
         const likeCount = likes.length;
         const hasLiked = await data.likes.includes(auth.currentUser?.email);
-  
+
         await setIsCurrentlyLiked(hasLiked);
         noLikes = 1;
       }
     });
-  
+
     return () => unsubscribe();
   }, [id]);
 
   useEffect(() => {
     if (isCurrentlyLiked) {
       setIsLiked(false);
-    };
-  }, [])
+    }
+  }, []);
 
-  useEffect(() => {
-  }, [isCurrentlyLiked])
+  useEffect(() => {}, [isCurrentlyLiked]);
 
   // LIKE SWITCHING ANIMATION
   const [isOn, setIsOn] = useState(false);
@@ -300,7 +325,7 @@ const Post = ({
   const spring = {
     type: "spring",
     stiffness: 700,
-    damping: 30
+    damping: 30,
   };
 
   const [isFocused, setisFocused] = useState(false);
@@ -312,7 +337,7 @@ const Post = ({
         marginRight: isEven ? "0" : "250px",
       }}
       initial={{ opacity: 0, height: "0px" }}
-      animate={{ opacity: 1, height: "100%"}}
+      animate={{ opacity: 1, height: "100%" }}
       transition={{ duration: 2, delay: 0.1 * index }}
     >
       <motion.div
@@ -344,30 +369,42 @@ const Post = ({
           <motion.h1 className="post_title" transition={{ duration: 0.7 }}>
             {name}
           </motion.h1>
-        {description !== "" && (
-          <motion.div
-          className="post_bottom_gradient"
-          style={{ scaleX: isEven ? "-1" : "1" }}
-          />
-        )}
+          {description !== "" && (
+            <motion.div
+              className="post_bottom_gradient"
+              style={{ scaleX: isEven ? "-1" : "1" }}
+            />
+          )}
         </motion.div>
         {description !== "" && (
-
           <motion.div
-          className="post_description-wrapper"
-          style={{ textAlign: isEven ? "end" : "start" }}
+            className="post_description-wrapper"
+            style={{ textAlign: isEven ? "end" : "start" }}
           >
-          <motion.h2
-            className="post_description"
-            transition={{ duration: 0.7 }}
+            <motion.h2
+              className="post_description"
+              transition={{ duration: 0.7 }}
             >
-            {description}
-          </motion.h2>
-        </motion.div>
-      )}
+              {description}
+            </motion.h2>
+          </motion.div>
+        )}
+        {image !== "" && (
+          <motion.div
+            className="post_description-wrapper"
+            style={{ textAlign: isEven ? "end" : "start" }}
+          >
+            <motion.img src={image}        
+                    className="forum_addpost_description image"
+                    src={image}
+                    alt="IMAGE"
+                    style={{ marginLeft: "8px" }}
+                    whileHover={{ filter: "brightness(0.5)", transition: { duration: 0.3 } }} />
+          </motion.div>
+        )}
         <motion.div
-        className="post_action_container"
-        style={{ justifyContent: isEven ? "end" : "start" }}
+          className="post_action_container"
+          style={{ justifyContent: isEven ? "end" : "start" }}
         >
           <motion.button
             className="post_action action_line"
@@ -391,37 +428,42 @@ const Post = ({
                 if (!isCurrentlyLiked) {
                   if (newIsLiked) {
                     likeAPost(id);
-                  } 
+                  }
                 }
               }
             }}
           >
             <motion.h3 className="post_action-text">
-    LIKES:
-    <motion.div className="post_like_num-wrapper">
-        <motion.h3 className="post_action-text switch"
-                    transition={spring}
-                    style={{ 
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        transform: isLiked ? 'translateY(-100%)' : 'translateY(0%)', 
-                        opacity: isLiked ? 0 : 1 
-                    }}
-        >{noLikes}</motion.h3>
-        <motion.h3 className="post_action-text switch2"
-                    transition={spring}
-                    style={{ 
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        transform: isLiked ? 'translateY(0%)' : 'translateY(100%)', 
-                        opacity: isLiked ? 1 : 0 
-                    }}
-        >{noLikes + 1}</motion.h3>
-    </motion.div>
-</motion.h3>
-
+              LIKES:
+              <motion.div className="post_like_num-wrapper">
+                <motion.h3
+                  className="post_action-text switch"
+                  transition={spring}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    transform: isLiked ? "translateY(-100%)" : "translateY(0%)",
+                    opacity: isLiked ? 0 : 1,
+                  }}
+                >
+                  {noLikes}
+                </motion.h3>
+                <motion.h3
+                  className="post_action-text switch2"
+                  transition={spring}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    transform: isLiked ? "translateY(0%)" : "translateY(100%)",
+                    opacity: isLiked ? 1 : 0,
+                  }}
+                >
+                  {noLikes + 1}
+                </motion.h3>
+              </motion.div>
+            </motion.h3>
           </motion.button>
         </motion.div>
         <motion.div
@@ -436,7 +478,7 @@ const Post = ({
 
       <motion.div
         className="replies_container"
-        style={{ alignItems: isEven ? "end" : "start"}}
+        style={{ alignItems: isEven ? "end" : "start" }}
         variants={repliesVariants}
         initial={controls}
         animate={controls}
@@ -465,8 +507,9 @@ const Post = ({
               handleSubmit();
             }}
           >
-            <motion.h5 className="reply_addPost_title-wrapper-text">POST</motion.h5>
-            
+            <motion.h5 className="reply_addPost_title-wrapper-text">
+              POST
+            </motion.h5>
           </motion.button>
 
           <motion.div
@@ -475,7 +518,6 @@ const Post = ({
               setisFocused(true);
             }}
           >
-            
             <motion.textarea
               type="text"
               name="name"
@@ -486,17 +528,16 @@ const Post = ({
               style={{ textAlign: isEven ? "end" : "start" }}
               maxLength={100}
             />
-
           </motion.div>
-          
         </motion.div>
 
-        <motion.div className="reply_container"
-        // variants={repliesContainerVariants}
-        // initial={controls}
-        // animate={controls}
-        // transition={{ duration: 5 }}
-        // this freaking piece of dirt is so annoying, WHEN I CLOSE THE REPLIES, THERE IS ALL OF A SUDDEN BOOM. I DONT UNDERSTAND IT.
+        <motion.div
+          className="reply_container"
+          // variants={repliesContainerVariants}
+          // initial={controls}
+          // animate={controls}
+          // transition={{ duration: 5 }}
+          // this freaking piece of dirt is so annoying, WHEN I CLOSE THE REPLIES, THERE IS ALL OF A SUDDEN BOOM. I DONT UNDERSTAND IT.
         >
           {replies &&
             replies.map((reply, index) => (
@@ -521,9 +562,7 @@ const Post = ({
         </motion.div>
         {replies.length !== 0 && (
           <motion.button onClick={loadMoreReplies} className="small_button">
-            <motion.h5 className="small_text">
-              LOAD MORE
-            </motion.h5>
+            <motion.h5 className="small_text">LOAD MORE</motion.h5>
           </motion.button>
         )}
       </motion.div>
