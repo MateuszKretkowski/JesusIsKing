@@ -42,8 +42,13 @@ function Forum() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
-        setPostData((prevState) => ({ ...prevState, image: image }));
+        if (typeof reader.result === 'string') {
+          setImage(reader.result);
+          setPostData((prevState) => ({ ...prevState, image: reader.result }));
+          console.log(postData.image, "Image");
+        } else {
+          console.error('FileReader result is not a string.');
+        }
       };
       reader.readAsDataURL(file);
     }

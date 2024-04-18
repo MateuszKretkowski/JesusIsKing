@@ -154,8 +154,8 @@ exports.createPost = functions.https.onCall(async (data, context) => {
       if (data.image) {
         try {
           const bucket = admin.storage().bucket();
-          console.log("Uploading image", data.image);
-          const file = bucket.file(`Posts/${data.image}`);
+          console.log("Uploading image", data.imageURL);
+          const file = bucket.file(`Posts/${data.imageURL}`);
           await file.save(data.image, {
             metadata: {
               contentType: "image/jpg",
