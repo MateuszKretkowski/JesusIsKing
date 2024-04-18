@@ -151,6 +151,21 @@ exports.createPost = functions.https.onCall(async (data, context) => {
           "User data is undefined"
         );
       }
+      if (data.image) {
+        try {
+          const bucket = admin.storage().bucket();
+          console.log("Uploading image", data.image);
+          const file = bucket.file(`Posts/${data.image}`);
+          await file.save(data.image, {
+            metadata: {
+              contentType: "image/png",
+            },
+          });
+          console.log("Uploaded a blob or file!");
+        } catch (error) {
+          console.error("Upload failed", error);
+        }
+      }
       const postData = {
         name: data.name,
         description: data.description,
@@ -158,7 +173,7 @@ exports.createPost = functions.https.onCall(async (data, context) => {
         authorEmail: userData.email,
         author: userData.name,
         date: formattedDate,
-        imageUrl: data.image ? data.image : null,
+        image: data.image,
         likes: [],
         numberOfLikes: 0,
         numberOfReplies: 0,
