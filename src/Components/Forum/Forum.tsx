@@ -42,12 +42,12 @@ function Forum() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
+        if (typeof reader.result === "string") {
           setImage(reader.result);
           setPostData((prevState) => ({ ...prevState, image: reader.result }));
           console.log(postData.image, "Image");
         } else {
-          console.error('FileReader result is not a string.');
+          console.error("FileReader result is not a string.");
         }
       };
       reader.readAsDataURL(file);
@@ -318,8 +318,8 @@ function Forum() {
                 animate={"visible"}
               />
             </div>
-              {!isApplied ? (
-            <div className="addpost_title-wrapper">
+            {!isApplied ? (
+              <div className="addpost_title-wrapper">
                 <motion.textarea
                   name="description"
                   value={postData.description}
@@ -338,64 +338,70 @@ function Forum() {
                   transition={{ type: "spring" }}
                   onFocus={() => {
                     setIsFocused(true);
-                    }}
-                    placeholder="Could You maybe describe it?"
-                  ></motion.textarea>
-                  {image && (
-                    <motion.img
+                  }}
+                  placeholder="Could You maybe describe it?"
+                ></motion.textarea>
+                {image && (
+                  <motion.img
                     className="forum_addpost_description image"
                     src={image}
                     alt="Selected"
                     style={{ marginLeft: "8px" }}
-                    whileHover={{ filter: "brightness(0.5)", transition: { duration: 0.3 } }}
-                    />
-                  )}
-                  </div>
-                ) : (
-                  <div className="addpost_title-wrapper">
-                  <motion.h2
-                    className="forum_addpost_title forum_addpost_description"
-                    variants={addPostDescriptionVariants}
-                    initial={controls}
-                    animate={controls}
-                  >
-                    {postData.description}
-                  </motion.h2>
-                  {image && (
-                    <motion.img
+                    initial={{ opacity: 0, height: "0px" }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    transition={{ duration: 0.2, type: "spring" }}
+                    whileHover={{
+                      filter: "brightness(0.5)",
+                      transition: { duration: 0.3 },
+                    }}
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="addpost_title-wrapper">
+                <motion.h2
+                  className="forum_addpost_title forum_addpost_description"
+                  variants={addPostDescriptionVariants}
+                  initial={controls}
+                  animate={controls}
+                >
+                  {postData.description}
+                </motion.h2>
+                {image && (
+                  <motion.img
                     src={image}
                     alt="Selected"
                     style={{ width: "100px", height: "100px" }}
-                    />
-                  )}
-                  </div>
+                  />
                 )}
-                <div className="addpost_action">
-                  <motion.div
-                  className="post_action_container"
-                  variants={addPostActionContainerVariants}
+              </div>
+            )}
+            <div className="addpost_action">
+              <motion.div
+                className="post_action_container"
+                variants={addPostActionContainerVariants}
+                initial={controls}
+                animate={controls}
+                style={{ justifyContent: isEven ? "end" : "start" }}
+              >
+                <motion.button
+                  className="post_action action_line"
+                  style={{ marginRight: "6%" }}
+                  variants={addPostActionVariants}
                   initial={controls}
                   animate={controls}
-                  style={{ justifyContent: isEven ? "end" : "start" }}
-                  >
-                  <motion.button
-                    className="post_action action_line"
-                    style={{ marginRight: "6%" }}
-                    variants={addPostActionVariants}
-                    initial={controls}
-                    animate={controls}
-                    transition={{ delay: 1 }}
-                  >
-                    <motion.h3 className="post_action-text">REPLY: 0</motion.h3>
-                  </motion.button>
-                  <motion.button
-                    className="post_action action_line"
-                    variants={addPostActionVariants}
-                    initial={controls}
-                    animate={controls}
-                    transition={{ delay: 2 }}
-                  >
-                    <motion.h3
+                  transition={{ delay: 1 }}
+                >
+                  <motion.h3 className="post_action-text">REPLY: 0</motion.h3>
+                </motion.button>
+                <motion.button
+                  className="post_action action_line"
+                  variants={addPostActionVariants}
+                  initial={controls}
+                  animate={controls}
+                  transition={{ delay: 2 }}
+                >
+                  <motion.h3
                     className="post_action-text"
                     onClick={() => {
                       setLiked(!liked);
@@ -414,14 +420,32 @@ function Forum() {
                   <motion.h3 className="post_action-text">REPOST: 0</motion.h3>
                 </motion.button>
               </motion.div>
-              <motion.div>
+              <motion.div
+              className="label-wrapper"
+              style={{ marginRight: "40px" }}
+              >
                 <input
                   type="file"
                   accept="image/*"
+                  id="file-upload"
                   onChange={handleImageChange}
-                  style={{ margin: "20px 0" }}
+                  style={{ display: "none" }}
                 />
-            
+                <motion.label
+                  className="label"
+                  for="file-upload"
+                  variants={addPostPostVariants}
+                  initial={controls}
+                  animate={controls}
+                >
+
+                  <h3 className="forum_addpost_button-text">IMAGE</h3>
+                  <motion.div
+                    animate={controlsGradients}
+                    className="forum_addpost_button_gradient"
+                    />
+                </motion.label>
+
               </motion.div>
               <motion.button
                 className="forum_addpost_button"

@@ -269,3 +269,17 @@ background: radial-gradient(circle, rgba(40,40,40,1) 16%, rgba(40,40,40,0) 100%)
 .image:hover {
 
 }
+
+
+.label {
+  position: relative;
+}
+
+.label-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin: 1% 1%;
+  position: relative;
+}
