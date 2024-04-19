@@ -66,7 +66,7 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".sidebar_container",
-      { width: isNotificationsOpen ? isMobile ? "0%" : "50%" : "100%", opacity: isOpen ? 1 : 0, opacity: isNotificationsOpen ? isMobile ? "0" : "1" : "1", padding: isNotificationsOpen ? isMobile ? "0px" : "24% 10%" : "24% 10%"  },
+      { width: isNotificationsOpen ? isMobile ? "0%" : "50%" : "100%", opacity: isOpen ? 1 : 0, opacity: isNotificationsOpen ? isMobile ? "0" : "1" : isOpen ? "1" : "0", padding: isNotificationsOpen ? isMobile ? "0px" : "24% 10%" : "24% 10%"  },
       {
         duration: 0.5,
         stagger: 2,
@@ -207,6 +207,15 @@ function SideBar() {
       <motion.div className="notifications_container">
         <h3>REPLIES</h3>
         <h3>LIKES</h3>
+        <motion.div className="notif_action-wrapper">
+              <motion.button
+                className="login_btn link"
+                style={{ opacity: isNotificationsOpen ? isMobile ? 1 : 0 : 0 }}
+                onClick={() => setIsOpen(!isOpen)}
+                >
+                HOME
+              </motion.button>
+        </motion.div>
       </motion.div>
       <motion.div className="sidebar_container">
         <div className="account-wrapper">
