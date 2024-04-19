@@ -66,7 +66,7 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".sidebar_container",
-      { width: isNotificationsOpen ? "50%" : "100%", opacity: isOpen ? 1 : 0  },
+      { width: isNotificationsOpen ? isMobile ? "0%" : "50%" : "100%", opacity: isOpen ? 1 : 0, opacity: isNotificationsOpen ? isMobile ? "0" : "1" : "1", padding: isNotificationsOpen ? isMobile ? "0px" : "24% 10%" : "24% 10%"  },
       {
         duration: 0.5,
         stagger: 2,
@@ -76,7 +76,7 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".notifications_container",
-      { width: isNotificationsOpen ? "50%" : "0%", opacity: isOpen ? isNotificationsOpen ? 1 : 0 : 0 },
+      { width: isNotificationsOpen ? isMobile ? "100%" : "50%" : "0%", opacity: isOpen ? isNotificationsOpen ? 1 : 0 : 0 },
       {
         type: "spring",
         duration: 0.2,
