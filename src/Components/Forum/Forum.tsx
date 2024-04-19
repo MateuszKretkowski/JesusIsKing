@@ -347,8 +347,8 @@ function Forum() {
                     src={image}
                     alt="Selected"
                     style={{ marginLeft: "8px" }}
-                    initial={{ opacity: 0, height: "0px" }}
-                    animate={{ opacity: 1, height: "auto" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.2, type: "spring" }}
                     whileHover={{
                       filter: "brightness(0.5)",
