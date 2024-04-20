@@ -211,9 +211,9 @@ function SideBar() {
               <motion.button
                 className="login_btn link"
                 style={{ opacity: isNotificationsOpen ? isMobile ? 1 : 0 : 0 }}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => setIsNotificationsOpen(!setIsNotificationsOpen)}
                 >
-                HOME
+                CLOSE NOTIFICATIONS
               </motion.button>
         </motion.div>
       </motion.div>

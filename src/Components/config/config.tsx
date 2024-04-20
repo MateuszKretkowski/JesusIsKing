@@ -100,6 +100,7 @@ interface User {
   description: string;
   link: string;
   from: string;
+  notifications?: { [key: string]: any };
   uniqueId: string;
 }
 
@@ -187,6 +188,7 @@ export function readUser(setUserData: (userData: User) => void) {
             name: data.name || "",
             uniqueId: data.uniqueId || "",
             description: data.description || "",
+            notifications: data.notifications || {},
             from: data.from || "",
             link: data.link || "",
           };
