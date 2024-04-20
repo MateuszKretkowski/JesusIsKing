@@ -56,7 +56,17 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".sidebar",
-      { width: isOpen ? (isMobile ? "100vw" : isNotificationsOpen ? 640 : 320) : isMobile ? 0 : 50 },
+      {
+        width: isOpen
+          ? isMobile
+            ? "100vw"
+            : isNotificationsOpen
+            ? 640
+            : 320
+          : isMobile
+          ? 0
+          : 50,
+      },
       {
         type: "spring",
         duration: 0.2,
@@ -66,7 +76,22 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".sidebar_container",
-      { width: isNotificationsOpen ? isMobile ? "0%" : "50%" : "100%", opacity: isOpen ? 1 : 0, opacity: isNotificationsOpen ? isMobile ? "0" : "1" : isOpen ? "1" : "0", padding: isNotificationsOpen ? isMobile ? "0px" : "24% 10%" : "24% 10%"  },
+      {
+        width: isNotificationsOpen ? (isMobile ? "0%" : "50%") : "100%",
+        opacity: isOpen ? 1 : 0,
+        opacity: isNotificationsOpen
+          ? isMobile
+            ? "0"
+            : "1"
+          : isOpen
+          ? "1"
+          : "0",
+        padding: isNotificationsOpen
+          ? isMobile
+            ? "0px"
+            : "24% 10%"
+          : "24% 10%",
+      },
       {
         duration: 0.5,
         stagger: 2,
@@ -76,7 +101,10 @@ function SideBar() {
   useEffect(() => {
     animate(
       ".notifications_container",
-      { width: isNotificationsOpen ? isMobile ? "100%" : "50%" : "0%", opacity: isOpen ? isNotificationsOpen ? 1 : 0 : 0 },
+      {
+        width: isNotificationsOpen ? (isMobile ? "100%" : "50%") : "0%",
+        opacity: isOpen ? (isNotificationsOpen ? 1 : 0) : 0,
+      },
       {
         type: "spring",
         duration: 0.2,
@@ -106,6 +134,10 @@ function SideBar() {
     description: "",
     from: "",
     link: "",
+    notifications: {
+      likes: {},
+      replies: {},
+    },
     uniqueId: "",
   });
   useEffect(() => {
@@ -119,6 +151,10 @@ function SideBar() {
           description: "",
           from: "",
           link: "",
+          notifications: {
+            likes: {},
+            replies: {},
+          },
           uniqueId: "",
         });
       }
@@ -189,33 +225,82 @@ function SideBar() {
     }
   };
 
+  const [isLikesOpen, setIsLikesOpen] = useState(false);
+  const [isRepliesOpen, setIsRepliesOpen] = useState(false);
+
   const isRedirectedCookie = getCookie("isRedirected");
   return (
     <motion.div
       className="sidebar"
       style={{ opacity: isRedirectedCookie ? 0 : 1 }}
     >
-
       {isMobile ? null : <motion.div className="stripe" />}
       <div>
         <motion.div className="arrow" onClick={() => setIsOpen(!isOpen)} />
         <motion.div
           className="arrow arrow2"
           onClick={() => setIsOpen(!isOpen)}
-          />
+        />
       </div>
-      <motion.div className="notifications_container">
-        <h3>REPLIES</h3>
-        <h3>LIKES</h3>
-        <motion.div className="notif_action-wrapper">
-              <motion.button
-                className="login_btn link"
-                style={{ opacity: isNotificationsOpen ? isMobile ? 1 : 0 : 0 }}
-                onClick={() => setIsNotificationsOpen(!setIsNotificationsOpen)}
-                >
-                CLOSE NOTIFICATIONS
-              </motion.button>
+      <motion.div
+        className="notifications_container"
+        style={{ padding: isNotificationsOpen ? "24% 10% 12% 10%" : "0px" }}
+      >
+        <motion.h1 className="notifs_title">NOTIFICATIONS</motion.h1>
+        <motion.div className="notifs_action">
+          <motion.div className="notif-wrapper">
+            <motion.button
+              className="notif_btn"
+              style={{
+                opacity: isNotificationsOpen ? (isRepliesOpen ? 0 : 1) : 0,
+              }}
+              onClick={() => {
+                setIsLikesOpen(!isLikesOpen);
+              }}
+            >
+              LIKES
+            </motion.button>
+            <motion.div className="notif_likes">
+              {userData.notifications.likes &&
+                Object.values(userData.notifications.likes).map((like) => (
+                  <div key={like.id}>
+                  </div>
+                ))}
+            </motion.div>
+          </motion.div>
+          <motion.div className="notif-wrapper">
+            <motion.button
+              className="notif_btn"
+              style={{
+                opacity: isNotificationsOpen ? (isLikesOpen ? 0 : 1) : 0,
+              }}
+              onClick={() => {
+                setIsRepliesOpen(!isRepliesOpen);
+              }}
+            >
+              REPLIES
+            </motion.button>
+            <motion.div className="notif_likes">
+              {userData.notifications.replies && isRepliesOpen &&
+                Object.values(userData.notifications.replies).map((reply: any) => (
+                  <div key={reply.id}>
+                    {reply}
+                  </div>
+                ))}
+            </motion.div>
+          </motion.div>
         </motion.div>
+        {isMobile && (
+          <motion.div className="notif_action-wrapper">
+            <motion.button
+              className="login_btn link"
+              style={{ opacity: isNotificationsOpen ? (isMobile ? 1 : 0) : 0 }}
+              onClick={() => setIsNotificationsOpen(!setIsNotificationsOpen)}
+            >
+              CLOSE NOTIFICATIONS
+            </motion.button>
+          </motion.div>
+        )}
       </motion.div>
       <motion.div className="sidebar_container">
         <div className="account-wrapper">
@@ -226,18 +311,34 @@ function SideBar() {
             <h2 className="name">{userData.name}</h2>
             <h2 className="id">@{userData.uniqueId}</h2>
             <div className="link-wrapper">
-              <h5 className="where white" style={{ opacity: isNotificationsOpen ? "0" : "1", height: isNotificationsOpen ? "0px" : "12px" }}>{userData.link}</h5>
-              <h5 className="where white" style={{ opacity: isNotificationsOpen ? "0" : "1", height: isNotificationsOpen ? "0px" : "12px  " }}>{userData.from}</h5>
+              <h5
+                className="where white"
+                style={{
+                  opacity: isNotificationsOpen ? "0" : "1",
+                  height: isNotificationsOpen ? "0px" : "12px",
+                }}
+              >
+                {userData.link}
+              </h5>
+              <h5
+                className="where white"
+                style={{
+                  opacity: isNotificationsOpen ? "0" : "1",
+                  height: isNotificationsOpen ? "0px" : "12px  ",
+                }}
+              >
+                {userData.from}
+              </h5>
             </div>
             <div className="notifications_trigger">
-                           <motion.button
+              <motion.button
                 className="login_btn link"
-                style={{ marginBottom: isNotificationsOpen ? "16px" : "0px"}}
+                style={{ marginBottom: isNotificationsOpen ? "16px" : "0px" }}
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-                >
+              >
                 NOTIFICATIONS
               </motion.button>
-              </div>
+            </div>
           </div>
         </div>
         <div className="login-wrapper">
@@ -247,7 +348,7 @@ function SideBar() {
                 className="login_btn link"
                 style={{ opacity: isHomeOpen ? 0 : 1 }}
                 onClick={() => setIsOpen(!isOpen)}
-                >
+              >
                 HOME
               </motion.button>
             </Link>
@@ -258,7 +359,7 @@ function SideBar() {
                 className="login_btn link"
                 style={{ opacity: location.pathname === "/blogs" ? 0 : 1 }}
                 onClick={() => setIsOpen(!isOpen)}
-                >
+              >
                 BLOGS
               </motion.button>
             </Link>
@@ -269,7 +370,7 @@ function SideBar() {
                 className="login_btn link"
                 style={{ opacity: location.pathname === "/adminpanel" ? 0 : 1 }}
                 onClick={() => setIsOpen(!isOpen)}
-                >
+              >
                 ADMIN PANEL
               </motion.button>
             </Link>
@@ -280,7 +381,7 @@ function SideBar() {
                 className="login_btn link"
                 style={{ opacity: isSettingsOpen ? 0 : 1 }}
                 onClick={() => setIsOpen(!isOpen)}
-                >
+              >
                 PROFILE
               </motion.button>
             </Link>

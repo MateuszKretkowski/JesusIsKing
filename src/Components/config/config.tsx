@@ -100,7 +100,10 @@ interface User {
   description: string;
   link: string;
   from: string;
-  notifications?: { [key: string]: any };
+  notifications: {
+    likes: {};
+    replies: {};
+  },
   uniqueId: string;
 }
 

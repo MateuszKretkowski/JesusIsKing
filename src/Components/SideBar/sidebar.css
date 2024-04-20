@@ -11,16 +11,6 @@
     z-index: 10000;
 }
 
-.notifications_container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    height: 100%;
-    padding: 24% 0%;
-}
-
 .sidebar_container {
     padding: 24% 10%;
     height: 100vh;
@@ -142,4 +132,36 @@
     color: #b9b9b9;
     font-weight: 800;
     margin: 0% 0 4% 0;
+}
+
+.notifications_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    padding: 24% 10%;
+}
+
+.notifs_title {
+    font-size: 36px !important;
+    color: white;
+}
+
+.notifs_action {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    flex-direction: column;
+}
+
+.notif_btn {
+    border: none;
+    background-color: transparent;
+    border: none;
+    color: #f1f0ea;
+    font-weight: 900;
+    padding: 4% 0;
+    font-size: 24px;
+    cursor: pointer;
 }
