@@ -334,7 +334,7 @@ function Forum() {
                   cols="50"
                   layout="position"
                   // layoutId={"post_description"}
-                  style={{ height: isFocused ? "200px" : "30px" }}
+                  style={{ height: isFocused ? image ? "100px" : "200px" : "30px" }}
                   transition={{ type: "spring" }}
                   onFocus={() => {
                     setIsFocused(true);
@@ -367,11 +367,19 @@ function Forum() {
                 >
                   {postData.description}
                 </motion.h2>
-                {image && (
+                {image && isApplied && (
                   <motion.img
+                    className="forum_addpost_description image"
                     src={image}
                     alt="Selected"
-                    style={{ width: "100px", height: "100px" }}
+                    style={{ marginLeft: "8px" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2, type: "spring" }}
+                    whileHover={{
+                      filter: "brightness(0.5)",
+                      transition: { duration: 0.3 },
+                    }}
                   />
                 )}
               </div>
@@ -441,7 +449,8 @@ function Forum() {
 
                   <h3 className="forum_addpost_button-text">IMAGE</h3>
                   <motion.div
-                    animate={controlsGradients}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                     className="forum_addpost_button_gradient"
                     />
                 </motion.label>
