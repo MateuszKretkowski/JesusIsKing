@@ -12,7 +12,6 @@
 }
 
 .sidebar_container {
-    padding: 24% 10%;
     height: 100vh;
     display: flex;
     justify-content: space-between;
@@ -140,7 +139,6 @@
     align-items: center;
     flex-direction: column;
     height: 100%;
-    padding: 24% 10%;
 }
 
 .notifs_title {

@@ -60,8 +60,6 @@ function SideBar() {
         width: isOpen
           ? isMobile
             ? "100vw"
-            : isNotificationsOpen
-            ? 640
             : 320
           : isMobile
           ? 0
@@ -77,19 +75,19 @@ function SideBar() {
     animate(
       ".sidebar_container",
       {
-        width: isNotificationsOpen ? (isMobile ? "0%" : "50%") : "100%",
+        width: isNotificationsOpen ? (isMobile ? "0%" : "0%") : "100%",
         opacity: isOpen ? 1 : 0,
         opacity: isNotificationsOpen
           ? isMobile
             ? "0"
-            : "1"
+            : "0"
           : isOpen
           ? "1"
           : "0",
         padding: isNotificationsOpen
           ? isMobile
             ? "0px"
-            : "24% 10%"
+            : "0%"
           : "24% 10%",
       },
       {
@@ -244,11 +242,15 @@ function SideBar() {
       </div>
       <motion.div
         className="notifications_container"
-        style={{ padding: isNotificationsOpen ? "24% 10% 12% 10%" : "0px" }}
+        style={{ padding: isNotificationsOpen ? "8n% 10% 12% 10%" : "0px" }}
       >
         <motion.h1 className="notifs_title">NOTIFICATIONS</motion.h1>
-        <motion.div className="notifs_action">
-          <motion.div className="notif-wrapper">
+        <motion.div className="notifs_action"
+        style={{ height: "100%" }}
+        >
+          <motion.div className="notif-wrapper"
+          style={{ height: isLikesOpen ? "100%" : "6%" }}
+          >
             <motion.button
               className="notif_btn"
               style={{
@@ -268,7 +270,9 @@ function SideBar() {
                 ))}
             </motion.div>
           </motion.div>
-          <motion.div className="notif-wrapper">
+          <motion.div className="notif-wrapper"
+          style={{ height: isRepliesOpen ? "100%" : "6%" }}
+          >
             <motion.button
               className="notif_btn"
               style={{
@@ -290,19 +294,19 @@ function SideBar() {
             </motion.div>
           </motion.div>
         </motion.div>
-        {isMobile && (
           <motion.div className="notif_action-wrapper">
             <motion.button
               className="login_btn link"
-              style={{ opacity: isNotificationsOpen ? (isMobile ? 1 : 0) : 0 }}
+              style={{ opacity: isNotificationsOpen ? 1 : 0 }}
               onClick={() => setIsNotificationsOpen(!setIsNotificationsOpen)}
             >
               CLOSE NOTIFICATIONS
             </motion.button>
           </motion.div>
-        )}
       </motion.div>
-      <motion.div className="sidebar_container">
+      <motion.div className="sidebar_container"
+      style={{ padding: isNotificationsOpen ? "0%" : "0%" }}
+      >
         <div className="account-wrapper">
           <div className="avatar-wrapper">
             <img className="avatar" src={defaultAvatar} />
