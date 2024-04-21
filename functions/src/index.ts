@@ -254,8 +254,8 @@ exports.createReply = functions.https.onCall(async (data, context) => {
     const userUpdate = {
       notifications: {
         replies: {
-          [currentUserEmail]: admin.
-            firestore.FieldValue.arrayUnion(replyRef.id),
+          [replyRef.id]: admin.
+            firestore.FieldValue.arrayUnion(replyData),
         },
       },
     };
