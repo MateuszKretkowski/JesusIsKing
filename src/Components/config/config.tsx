@@ -10,6 +10,7 @@ import {
   signInWithPopup,
   getRedirectResult,
 } from "firebase/auth";
+import { arrayUnion } from '@firebase/firestore';
 import {
   doc,
   onSnapshot,
@@ -280,23 +281,20 @@ export async function readReplies(postId: string) {
 export async function likeAPost(postId: string) {
   const postRef = doc(db, "Posts", postId);
   const postDoc = await getDoc(postRef);
-  const userEmail = auth.currentUser?.email || "none";
-  const userRef = doc(db, "Users", userEmail);
   
   if (postDoc.exists()) {
     const postData = postDoc.data();
     const authorRef = doc(db, "Users", postData.authorEmail || "none");
     const authorDoc = await getDoc(authorRef);
-    const authorData = authorDoc.data();
+    const authorData = authorDoc?.data();
     
     const likes = postData?.numberOfLikes || 0;
     if (!postData.likes.includes(auth.currentUser?.email || "")) {
 
       await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
       const notificationsUpdate = {
-        [`notifications.likes.${userEmail}`]: postId
+        [`notifications.likes.${postId}`]: arrayUnion(postId, Timestamp.now(), authorData?.email,)
       };
-      await setDoc(authorRef, { notifications: { likes: { [userEmail]: postId } } }, { merge: true });
       await updateDoc(authorRef, notificationsUpdate);
       const userLikesRef = doc(db, "Posts", postId);
       const userLikesDoc = await getDoc(userLikesRef);
