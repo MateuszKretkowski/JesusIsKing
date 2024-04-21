@@ -254,11 +254,12 @@ exports.createReply = functions.https.onCall(async (data, context) => {
     const userUpdate = {
       notifications: {
         replies: {
-          [currentUserEmail]: replyRef.id,
+          [currentUserEmail]: admin.
+            firestore.FieldValue.arrayUnion(replyRef.id),
         },
       },
     };
-    await userRef.update(userUpdate);
+    await userRef.set(userUpdate, {merge: true});
 
     console.log("Reply created and user notified");
     return {result: "Reply created and user notified", id: "replyRef.id"};
