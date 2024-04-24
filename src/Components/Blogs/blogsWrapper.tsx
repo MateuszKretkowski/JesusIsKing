@@ -19,7 +19,6 @@ function BlogsWrapper() {
     date: string;
     description: string;
     name: string;
-    // Inne właściwości, które mogą być potrzebne
   }
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false });

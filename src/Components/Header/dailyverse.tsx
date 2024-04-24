@@ -12,7 +12,7 @@ const BibliaAPI: React.FC = () => {
       const json = await res.json();
       console.log(json)
 
-      const data = json[0]; // Przypuszczamy, że odpowiedź jest tablicą obiektów
+      const data = json[0];
       setBook(data.bookname);
       setChapter(data.chapter);
       setVerse(data.verse);

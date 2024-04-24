@@ -43,14 +43,14 @@ const AdminModal = ({ showModal, setShowModal, isCDE, setIsCDE }: ModalProps) =>
     })
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { name, value } = event.target; // Destrukturyzacja, aby uzyskać `name` i `value`
+        const { name, value } = event.target;
         setFormData(prevState => ({
-          ...prevState, // Kopiowanie istniejących wartości stanu
-          [name]: value // Aktualizacja wartości dla klucza, który odpowiada `name` elementu formularza
+          ...prevState,
+          [name]: value
         }));
 
         const textarea = event.target;
-        textarea.style.height = 'auto'; // Reset wysokości
+        textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
       };
     const functions = getFunctions();
