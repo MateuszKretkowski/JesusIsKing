@@ -136,6 +136,7 @@ exports.createPost = functions.https.onCall(async (data, context) => {
   .toString().padStart(2, "0")} ${currentDate.getHours()
   .toString().padStart(2, "0")}:${currentDate.getMinutes()
   .toString().padStart(2, "0")}`;
+  const bucket = admin.storage().bucket();
   return userRef.get()
     .then(async (userDoc) => {
       if (!userDoc.exists) {
@@ -151,20 +152,13 @@ exports.createPost = functions.https.onCall(async (data, context) => {
           "User data is undefined"
         );
       }
+      let imageURL = null;
+
       if (data.image) {
-        try {
-          const bucket = admin.storage().bucket();
-          console.log("Uploading image", data.imageURL);
-          const file = bucket.file(`Posts/${data.imageURL}`);
-          await file.save(data.image, {
-            metadata: {
-              contentType: "image/jpg",
-            },
-          });
-          console.log("Uploaded a blob or file!");
-        } catch (error) {
-          console.error("Upload failed", error);
-        }
+        const fileName = `${Date.now()}.png`;
+        const file = bucket.file(`Posts/${fileName}`);
+        await file.save(data.image, {metadata: {contentType: "image/jpg"}});
+        imageURL = `gs://${bucket.name}/${file.name}`;
       }
       const postData = {
         name: data.name,
@@ -173,7 +167,7 @@ exports.createPost = functions.https.onCall(async (data, context) => {
         authorEmail: userData.email,
         author: userData.name,
         date: formattedDate,
-        image: data.image,
+        image: imageURL,
         likes: [],
         numberOfLikes: 0,
         numberOfReplies: 0,
