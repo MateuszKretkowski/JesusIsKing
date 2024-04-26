@@ -109,14 +109,14 @@ interface User {
 }
 
 export function isUserLoggedIn() {
-  const isLoggedIn = auth.currentUser !== null; // Jeśli currentUser istnieje, isLoggedIn = true
+  const isLoggedIn = auth.currentUser !== null;
   return isLoggedIn;
 }
 
 export async function checkIfUserExistsById(userId: string): Promise<boolean> {
   const userRef = doc(db, "Users", userId);
   const docSnap = await getDoc(userRef);
-  return docSnap.exists(); // This will return true if the document exists, false otherwise
+  return docSnap.exists();
 }
 
 export async function readUserByUsername(uniqueId: string, setUserData: (userData: User) => void) {
