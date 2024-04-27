@@ -327,6 +327,9 @@ const Post = ({
     stiffness: 700,
     damping: 30,
   };
+  useEffect(() => {
+    console.log(image)
+  }, [image])
 
   const [isFocused, setisFocused] = useState(false);
   return (

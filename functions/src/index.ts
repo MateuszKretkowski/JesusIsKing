@@ -157,7 +157,7 @@ exports.createPost = functions.https.onCall(async (data, context) => {
       if (data.image) {
         const fileName = `${Date.now()}.png`;
         const file = bucket.file(`Posts/${fileName}`);
-        await file.save(data.image, {metadata: {contentType: "image/jpg"}});
+        await file.save(data.image);
         imageURL = `gs://${bucket.name}/${file.name}`;
       }
       const postData = {
