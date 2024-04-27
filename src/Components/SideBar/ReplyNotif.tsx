@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import { db, findUserByEmail } from '../config/config';
+import React, { useEffect, useState } from "react";
+import { db, findUserByEmail } from "../config/config";
+import { doc, getDoc } from "firebase/firestore";
 interface ReplyNotifProps {
-    id: string;
-    postId: string;
-    authorEmail: string;
-    date: string;
+  id: string;
 }
-function ReplyNotif({id, postId, authorEmail, date}: ReplyNotifProps) {
-        const [userData, setUserData] = useState<any>(null);
-        useEffect(() => {
-        const fetchAuthor = async () => {
-                const user = await findUserByEmail(authorEmail);
-                setUserData(user);
-                console.log(authorEmail, "AUTHOR EMAIL")
-                console.log(userData, "uSER DATA")
-                console.log(id, "ID")
+function ReplyNotif({ id }: ReplyNotifProps) {
+  const [userData, setUserData] = useState<any>(null);
+  const [replyData, setReplyData] = useState<any>(null);
+  useEffect(() => {
+    const fetchNotif = async () => {
+      if (id) {
+        const replyRef = doc(db, "Replies", id);
+        const docSnap = await getDoc(replyRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setReplyData(data);
+          console.log(replyData, "REPLY DATA");
         }
-        fetchAuthor();
-        }, []);
-        return (
-        <div className='replyNotif'>
-            <img src={userData?.avatar} />
-            <h1>{userData?.authorEmail}</h1>
-        </div>
-    )
+      } else {
+        console.error("id is undefined");
+      }
+    };
+    fetchNotif();
+  }, []);
+  
+  return (
+    <div className="replyNotif">
+      <img src={userData?.avatar} />
+      <h1>{userData?.authorEmail}</h1>
+    </div>
+  );
 }
 
-export default ReplyNotif
+export default ReplyNotif;

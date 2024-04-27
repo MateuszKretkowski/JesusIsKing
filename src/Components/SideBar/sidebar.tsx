@@ -290,10 +290,7 @@ function SideBar() {
                 Object.values(userData.notifications.replies).map((reply: any) => (
                   <div key={reply.id}>
                     <ReplyNotif
-                      id={reply.id}
-                      postId={reply.postId}
-                      authorEmail={reply.authorEmail}
-                      date={reply.date} />
+                      id={reply} />
                   </div>
                 ))}
             </motion.div>
