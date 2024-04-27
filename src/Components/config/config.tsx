@@ -353,6 +353,7 @@ export const findUserByEmail = async (authorEmail: string) => {
         name: userData.name || "",
         uniqueId: userData.uniqueId || "",
         description: userData.description || "",
+        avatar: userData.avatar || "",
         from: userData.from || "",
         link: userData.link || "",
       };

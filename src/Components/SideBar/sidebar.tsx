@@ -9,6 +9,7 @@ import { readUser } from "../config/config.tsx";
 import { doc, getDoc } from "firebase/firestore";
 import { getCookie, setCookie } from "../../utils/cookieUtils.ts";
 import { get } from "http";
+import ReplyNotif from "./ReplyNotif.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -288,7 +289,11 @@ function SideBar() {
               {userData.notifications.replies && isRepliesOpen &&
                 Object.values(userData.notifications.replies).map((reply: any) => (
                   <div key={reply.id}>
-                    {reply}
+                    <ReplyNotif
+                      id={reply.id}
+                      postId={reply.postId}
+                      authorEmail={reply.authorEmail}
+                      date={reply.date} />
                   </div>
                 ))}
             </motion.div>
