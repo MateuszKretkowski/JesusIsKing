@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db, findUserByEmail } from "../config/config";
 import { doc, getDoc } from "firebase/firestore";
+
 interface ReplyNotifProps {
   id: string;
 }
+
 function ReplyNotif({ id }: ReplyNotifProps) {
   const [userData, setUserData] = useState<any>(null);
   const [replyData, setReplyData] = useState<any>(null);
+
   useEffect(() => {
     const fetchNotif = async () => {
       if (id) {
@@ -15,6 +18,7 @@ function ReplyNotif({ id }: ReplyNotifProps) {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setReplyData(data);
+          console.log(data, "DATA");
           console.log(replyData, "REPLY DATA");
         }
       } else {
@@ -22,12 +26,24 @@ function ReplyNotif({ id }: ReplyNotifProps) {
       }
     };
     fetchNotif();
-  }, []);
-  
+  }, [id]); // Dodaj id jako zależność
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      if (replyData) { // Sprawdź, czy replyData nie jest nullem
+        const user = await findUserByEmail(replyData.authorEmail);
+        setUserData(user);
+        console.log(user, "USER DATA");
+        console.log(id, "ID");
+      }
+    };
+    fetchAuthor();
+  }, [replyData]); // Dodaj replyData jako zależność
+
   return (
     <div className="replyNotif">
-      <img src={userData?.avatar} />
-      <h1>{userData?.authorEmail}</h1>
+      {userData && <img className="avatar" src={userData.avatar} />}
+      {userData && <h1>{userData.authorEmail}</h1>}
     </div>
   );
 }
