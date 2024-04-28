@@ -269,8 +269,8 @@ function SideBar() {
               LIKES
             </motion.button>
             <motion.div className="notif_likes">
-            {userData.notifications.replies && isLikesOpen &&
-                Object.values(userData.notifications.replies).map((like: any) => (
+            {userData.notifications.likes && isLikesOpen &&
+                Object.values(userData.notifications.likes).map((like: any) => (
                   <div key={like.id}>
                     <Notif
                       id={like}

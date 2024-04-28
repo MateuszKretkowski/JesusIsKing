@@ -67,3 +67,72 @@ Dev App Server is now running.
  {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
 [info] i  functions: Watching "D:\Projects\jesusisking-project\jesusiskingfinal\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"D:\\Projects\\jesusisking-project\\jesusiskingfinal\\functions\" for Cloud Functions..."}}
 [debug] [2024-04-28T10:21:29.691Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2024-04-28T10:21:31.642Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-04-28T10:21:31.643Z] Building nodejs source
+[debug] [2024-04-28T10:21:31.643Z] Failed to find version of module node: reached end of search path D:\Projects\jesusisking-project\jesusiskingfinal\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-04-28T10:21:31.647Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-04-28T10:21:31.659Z] Found firebase-functions binary at 'D:\Projects\jesusisking-project\jesusiskingfinal\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8784
+
+[debug] [2024-04-28T10:21:32.873Z] Got response from /__/functions.yaml {"endpoints":{"authenticateUserDocument":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","eventFilters":{"resource":"projects/jesusisking-fb576"},"retry":false},"labels":{},"entryPoint":"authenticateUserDocument"},"updateUser":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"updateUser"},"createBlog":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"createBlog"},"exitBlog":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"exitBlog"},"createPost":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"createPost"},"createReply":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"createReply"},"createUserAt":{"platform":"gcfv1","labels":{},"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"callableTrigger":{},"entryPoint":"createUserAt"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: authenticateUserDocument, updateUser, createBlog, exitBlog, createPost, createReply, createUserAt. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: authenticateUserDocument, updateUser, createBlog, exitBlog, createPost, createReply, createUserAt."}}
+[debug] [2024-04-28T10:21:37.905Z] addAuthTrigger {"eventTrigger":{"eventType":"providers/firebase.auth/eventTypes/user.create","resource":"projects/jesusisking-fb576"}}
+[info] +  functions[us-central1-authenticateUserDocument]: auth function initialized. {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mauth\u001b[22m function initialized."}}
+[info] +  functions[us-central1-updateUser]: http function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/updateUser). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/updateUser)."}}
+[info] +  functions[us-central1-createBlog]: http function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createBlog). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createBlog)."}}
+[info] +  functions[us-central1-exitBlog]: http function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/exitBlog). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/exitBlog)."}}
+[info] +  functions[us-central1-createPost]: http function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createPost). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createPost)."}}
+[info] +  functions[us-central1-createReply]: http function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createReply). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createReply)."}}
+[info] +  functions[us-central1-createUserAt]: http function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createUserAt). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/jesusisking-fb576/us-central1/createUserAt)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Firestore │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Storage   │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage   │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

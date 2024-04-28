@@ -193,3 +193,9 @@
     font-size: 14px !important;
     color: #ffffffb0 !important;
 }
+
+.notif_reply_text {
+    margin-top: 24px;
+    color: #ffffffB0;
+    font-size: 16px !important;
+}

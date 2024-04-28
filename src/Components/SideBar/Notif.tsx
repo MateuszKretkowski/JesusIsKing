@@ -10,7 +10,6 @@ interface NotifProps {
 function Notif({ id, isReply }: NotifProps) {
   const [userData, setUserData] = useState<any>(null);
   const [notifData, setNotifData] = useState<any>(null);
-  const [notifData2, setNotifData2] = useState<any>(null);
   const [postData, setPostData] = useState<any>(null);
 
   useEffect(() => {
@@ -81,7 +80,7 @@ function Notif({ id, isReply }: NotifProps) {
             className="author_name dopowiedzenie"
             style={{ color: "#ffffff" }}
           >
-            Has Liked Your Post:
+            {isReply ? "Has Replied To Your Post:" : "Has Liked Your Post:"}
           </h5>
         }
       </div>
@@ -92,6 +91,15 @@ function Notif({ id, isReply }: NotifProps) {
             style={{ color: "#ffffff", fontSize: "24px" }}
           >
             {postData.name}
+          </h5>
+        )}
+      </div>
+      <div className="post-wrapper">
+        {notifData && isReply && (
+          <h5
+            className="post_title notif_reply_text"
+          >
+            "{notifData.name}"
           </h5>
         )}
       </div>
