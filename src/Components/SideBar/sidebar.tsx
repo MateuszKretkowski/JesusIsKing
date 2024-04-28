@@ -101,7 +101,7 @@ function SideBar() {
     animate(
       ".notifications_container",
       {
-        width: isNotificationsOpen ? (isMobile ? "100%" : "50%") : "0%",
+        width: isNotificationsOpen ? (isMobile ? "100%" : "100%") : "0%",
         opacity: isOpen ? (isNotificationsOpen ? 1 : 0) : 0,
       },
       {

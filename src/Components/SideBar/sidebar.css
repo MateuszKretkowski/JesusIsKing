@@ -5,6 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
     width: 24vw;
     height: 100vh;
     background-color: #f1f0ea2a;
@@ -139,6 +140,14 @@
     align-items: center;
     flex-direction: column;
     height: 100%;
+    width: 100%;
+}
+
+.notif-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .notifs_title {
@@ -151,6 +160,7 @@
     justify-content: end;
     align-items: center;
     flex-direction: column;
+    width: 100%;
 }
 
 .notif_btn {
@@ -166,4 +176,21 @@
 
 .login_btn {
     width: 100%;
+}
+
+.replyNotif {
+    position: relative;
+}
+
+.author-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    margin: 4px 0 6px 0;
+    gap: 12px;
+}
+
+.dopowiedzenie {
+    font-size: 14px !important;
+    color: #ffffffb0 !important;
 }
