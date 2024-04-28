@@ -25,14 +25,20 @@ import {
   getDocs,
   getDoc,
   doc,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { getCookie } from "../../utils/cookieUtils.ts";
 import LoadingScreen from "../Loading Screen/LoadingScreen.tsx";
 import ProfilePicture from "../Forum/ProfilePicture.tsx";
+import Post from "../Forum/post.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
+  const [posts, setPosts] = useState([]);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { name } = useParams<{ name?: string }>();
   const [userId, setUserId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -46,8 +52,54 @@ function Settings() {
     description: "",
     from: "",
     link: "",
+    email: "",
     uniqueId: "",
   });
+
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+        if (userData.email) {
+            setLoading(true);
+            console.log(userData.email, "userData.email");
+            const userRef = doc(db, "Users", userData.email);
+            const q = query(
+                collection(userRef, "UserPosts"),
+                limit(4)
+            );
+            const querySnapshot = await getDocs(q);
+            const postsArray: any = [];
+            querySnapshot.forEach((doc) => {
+                postsArray.push({ id: doc.id, ...doc.data() });
+            });
+            console.log(postsArray, "postsArray");
+
+            const posts = {}; // Initialize an object to store posts
+
+            // Iterate over each postArray item and fetch corresponding posts
+            for (const post of postsArray) {
+                const postId = post.id;
+                const postDocRef = doc(db, "Posts", postId);
+                const postDocSnapshot = await getDoc(postDocRef);
+                if (postDocSnapshot.exists()) {
+                    posts[postId] = postDocSnapshot.data();
+                }
+            }
+
+            setPosts(posts);
+            console.log(posts);
+
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+            setLoading(false);
+        }
+    };
+    
+    fetchUserPosts();
+}, [userData.email]);
+
+useEffect(() => {
+  console.log(posts, "posts");
+}, [posts])
+
 
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
@@ -62,7 +114,7 @@ function Settings() {
   }, [userData.id]);
   useEffect(() => {
     isMyPage ? setCanEditPFP(true) : setCanEditPFP(false);
-  }, [isMyPage])
+  }, [isMyPage]);
 
   const fetchUserData = async () => {
     setIsLoading(true); // Indicate loading
@@ -71,6 +123,7 @@ function Settings() {
       if (userData.id) {
         console.log(userData.id);
         const docRef = doc(userRef, userData.id);
+        console.log(userData.id, "userData.id");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setUserData({
@@ -78,6 +131,7 @@ function Settings() {
             name: docSnap.data().name,
             description: docSnap.data().description,
             from: docSnap.data().from,
+            email: docSnap.data().email,
             link: docSnap.data().link,
             uniqueId: docSnap.data().uniqueId,
           });
@@ -106,6 +160,7 @@ function Settings() {
           name: "",
           description: "",
           from: "",
+          email: "",
           link: "",
           uniqueId: "",
         });
@@ -210,8 +265,8 @@ function Settings() {
               {nameMAPPED}
             </motion.div>
             <motion.div
-                className="link-settings-wrapper"
-                initial={{ opacity: 0 }}
+              className="link-settings-wrapper"
+              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
             >
@@ -226,77 +281,75 @@ function Settings() {
               </motion.div>
             </motion.div>
             <motion.div
-                className="link-settings-wrapper"
-                initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 1 }}
+              className="link-settings-wrapper"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
             >
-            <motion.h2
-              className=""
-              variants={variantsDescription}
-              initial={controls}
-              animate={controls}
-              exit={controls}
-              transition={{ type: "spring", bounce: 1, damping: 12 }}
+              <motion.h2
+                className=""
+                variants={variantsDescription}
+                initial={controls}
+                animate={controls}
+                exit={controls}
+                transition={{ type: "spring", bounce: 1, damping: 12 }}
               >
-              {userData.description}
-            </motion.h2>
-              </motion.div>
+                {userData.description}
+              </motion.h2>
+            </motion.div>
             <div className="links-wrapper">
               <motion.div
                 className="link-settings-wrapper"
                 initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 1.2 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
               >
-              <motion.a
-                className="desc link-settings"
-                variants={variantsAction}
-                initial={controls}
-                animate={controls}
-                exit={controls}
+                <motion.a
+                  className="desc link-settings"
+                  variants={variantsAction}
+                  initial={controls}
+                  animate={controls}
+                  exit={controls}
                 >
-                <h5 className="where">{userData.link}</h5>
-              </motion.a>
-                </motion.div>
-                <motion.div
+                  <h5 className="where">{userData.link}</h5>
+                </motion.a>
+              </motion.div>
+              <motion.div
                 className="link-settings-wrapper"
-
-                                          initial={{ opacity: 0 }}
-                                          animate={{ opacity: 1 }}
-                                          transition={{ delay: 1.3 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.3 }}
+              >
+                <motion.a
+                  className="desc link-settings"
+                  variants={variantsAction}
+                  initial={controls}
+                  animate={controls}
+                  exit={controls}
                 >
-                  
-              <motion.a
-                className="desc link-settings"
-                variants={variantsAction}
-                initial={controls}
-                animate={controls}
-                exit={controls}
-                >
-                <h5 className="where">MESSAGE</h5>
-              </motion.a>
-                </motion.div>
-                <motion.div
+                  <h5 className="where">MESSAGE</h5>
+                </motion.a>
+              </motion.div>
+              <motion.div
                 className="link-settings-wrapper"
-                                          initial={{ opacity: 0 }}
-                                          animate={{ opacity: 1 }}
-                                          transition={{ delay: 1.4 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.4 }}
+              >
+                <motion.a
+                  className="desc link-settings"
+                  variants={variantsAction}
+                  initial={controls}
+                  animate={controls}
+                  exit={controls}
                 >
-
-              <motion.a
-                className="desc link-settings"
-                variants={variantsAction}
-                initial={controls}
-                animate={controls}
-                exit={controls}
-                >
-                <motion.h5 className="where">{userData.from}</motion.h5>
-              </motion.a>
-                </motion.div>
+                  <motion.h5 className="where">{userData.from}</motion.h5>
+                </motion.a>
+              </motion.div>
             </div>
-            <div className="helper-edit-wrapper"
-                  style={{ opacity: showModal ? 0 : 1 }}
+            <div
+              className="helper-edit-wrapper"
+              style={{ opacity: showModal ? 0 : 1 }}
             >
               {isMyPage && (
                 <motion.button
@@ -320,21 +373,44 @@ function Settings() {
           }}
         />
         <motion.div
-                                                  initial={{ opacity: 0 }}
-                                                  animate={{ opacity: 1 }}
-                                                  transition={{ delay: 1.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
         >
-        <motion.button
-          className="action-wrapper settings_action-wrapper"
-          variants={variantsDescription}
-          initial={controls}
-          animate={controls}
-          exit={controls}
-          transition={{ delay: 1 }}
+          <motion.button
+            className="action-wrapper settings_action-wrapper"
+            variants={variantsDescription}
+            initial={controls}
+            animate={controls}
+            exit={controls}
+            transition={{ delay: 1 }}
           >
-          <h5 className="edit">OPEN POSTS</h5>
-        </motion.button>
+            <h5 className="edit">OPEN POSTS</h5>
+          </motion.button>
+          <motion.div className="post_container">
+            {posts.length >= 0 && posts.map((post: any) => (
+              <Post
+                key={post.id}
+                id={post.id}
+                index={post.id}
+                authorId={post.authorEmail}
+                author={post.author}
+                date={post.date}
+                description={post.description}
+                name={post.name}
+                noReposts={post.numberOfReposts}
+                noLikes={post.numberOfLikes}
+                image={post.image}
+                noReplies={post.numberOfReplies}
+                isApplied={false}
+                localName={""}
+                localDescription={""}
+                firstPostTitle={""}
+                firstPostDescription={""}
+              />
+            ))}
           </motion.div>
+        </motion.div>
       </div>
     </div>
   );

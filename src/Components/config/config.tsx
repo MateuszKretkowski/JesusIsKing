@@ -10,7 +10,7 @@ import {
   signInWithPopup,
   getRedirectResult,
 } from "firebase/auth";
-import { arrayUnion } from '@firebase/firestore';
+import { arrayUnion } from "@firebase/firestore";
 import {
   doc,
   onSnapshot,
@@ -53,7 +53,7 @@ export const app = firebase.initializeApp(firebaseConfig);
 // STORAGE
 
 function encodeEmail(email: string): string {
-  return email.replace(/\./g, '_dot_').replace(/@/g, '_at_');
+  return email.replace(/\./g, "_dot_").replace(/@/g, "_at_");
 }
 
 // Get a reference to the storage service, which is used to create references in your storage bucket
@@ -73,8 +73,8 @@ export async function upload(file: File, email: string) {
   try {
     const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(snapshot.ref);
-    
-    const userRef = doc(db, 'Users', email);
+
+    const userRef = doc(db, "Users", email);
     await setDoc(userRef, { avatar: photoURL }, { merge: true });
     alert("Photo uploaded successfully!");
   } catch (error) {
@@ -92,7 +92,7 @@ export function signInWithGoogle() {
 
 export function saveUserTokenToFirestore(userToken: any) {
   if (!auth.currentUser) return;
-  const userRef = doc(db, "Users", )
+  const userRef = doc(db, "Users");
 }
 
 interface User {
@@ -104,7 +104,7 @@ interface User {
   notifications: {
     likes: {};
     replies: {};
-  },
+  };
   uniqueId: string;
 }
 
@@ -119,9 +119,14 @@ export async function checkIfUserExistsById(userId: string): Promise<boolean> {
   return docSnap.exists();
 }
 
-export async function readUserByUsername(uniqueId: string, setUserData: (userData: User) => void) {
+export async function readUserByUsername(
+  uniqueId: string,
+  setUserData: (userData: User) => void
+) {
   // Decode the uniqueId from URL
-  const formattedUniqueId = decodeURIComponent(uniqueId).replace(/\+/g, ' ').trim();
+  const formattedUniqueId = decodeURIComponent(uniqueId)
+    .replace(/\+/g, " ")
+    .trim();
 
   // Create a query to the 'Users' collection where the 'uniqueId' field matches 'formattedUniqueId'
   const usersRef = collection(db, "Users");
@@ -138,6 +143,7 @@ export async function readUserByUsername(uniqueId: string, setUserData: (userDat
         description: userDoc.data().description,
         from: userDoc.data().from,
         link: userDoc.data().link,
+        email: userDoc.data().email,
         uniqueId: userDoc.data().uniqueId,
       };
       setUserData(userData);
@@ -152,12 +158,10 @@ export async function readUserByUsername(uniqueId: string, setUserData: (userDat
       };
       setUserData(userData);
     }
-
   } catch (error) {
     console.error("Error fetching user data:", error);
   }
 }
-
 
 export async function isUserAnAdmin() {
   const q = query(collection(db, "Users"), where("admin", "==", true));
@@ -180,9 +184,12 @@ export const db = getFirestore(app);
 export function readUser(setUserData: (userData: User) => void) {
   const userId = auth.currentUser ? auth.currentUser.email : "-1";
   if (auth.currentUser) {
-
     const unsub = onSnapshot(
-      doc(db, "Users", auth.currentUser.email ? auth.currentUser.email : "none"),
+      doc(
+        db,
+        "Users",
+        auth.currentUser.email ? auth.currentUser.email : "none"
+      ),
       (doc) => {
         const data = doc.data();
         if (data) {
@@ -200,12 +207,11 @@ export function readUser(setUserData: (userData: User) => void) {
           return user;
         } else {
           return console.log("User has no Values");
-        };
+        }
       }
-      );
-    }
+    );
+  }
 }
-
 
 export async function readBlogs() {
   try {
@@ -241,39 +247,62 @@ export async function readPosts() {
   }
 }
 
+export async function readUserPosts(authorEmail: string) {
+  try {
+    const userRef = doc(db, "Users", authorEmail);
+    const docSnapshot = await getDoc(userRef);
+    if (!docSnapshot.exists()) {
+      console.log("No post found.");
+      return [];
+    }
+    const userData = docSnapshot.data();
+    const q = query(collection(userRef, "UserPosts"));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.docs.length != 0) {
+      const userDoc = querySnapshot.docs;
+    }
+  } catch (error) {
+    console.error("Error fetching posts: ", error);
+    return [];
+  }
+}
+
 export async function readReplies(postId: string) {
   try {
-    const postRef = doc(db, 'Posts', postId);
+    const postRef = doc(db, "Posts", postId);
     console.log(`Fetching post document to read replies for post: ${postId}`);
 
     const docSnapshot = await getDoc(postRef);
 
     if (!docSnapshot.exists()) {
-      console.log('No post found.');
+      console.log("No post found.");
       return [];
     }
 
     const postData = docSnapshot.data();
 
-    const replies = await Promise.all(postData.Replies.map(async (replyId: string) => {
-      const replyRef = doc(db, "Replies", replyId);
-      const replyDoc = await getDoc(replyRef);
-      if (replyDoc.exists()) {
-        const replyData = replyDoc.data();
-        return {
-          id: replyDoc.id,
-          ...replyData
-        };
-      } else {
-        return null;
-      }
-    }));
+    const replies = await Promise.all(
+      postData.Replies.map(async (replyId: string) => {
+        const replyRef = doc(db, "Replies", replyId);
+        const replyDoc = await getDoc(replyRef);
+        if (replyDoc.exists()) {
+          const replyData = replyDoc.data();
+          return {
+            id: replyDoc.id,
+            ...replyData,
+          };
+        } else {
+          return null;
+        }
+      })
+    );
 
     const filteredReplies = replies.filter((reply: any) => reply !== null);
 
     return filteredReplies;
   } catch (error) {
-    console.error('Error fetching replies:', error);
+    console.error("Error fetching replies:", error);
     return [];
   }
 }
@@ -281,13 +310,13 @@ export async function readReplies(postId: string) {
 export async function likeAPost(postId: string) {
   const postRef = doc(db, "Posts", postId);
   const postDoc = await getDoc(postRef);
-  
+
   if (postDoc.exists()) {
     const postData = postDoc.data();
     const authorRef = doc(db, "Users", postData.authorEmail);
     const authorDoc = await getDoc(authorRef);
     const authorData = authorDoc?.data();
-    
+
     const likes = postData?.numberOfLikes || 0;
     if (!postData.likes.includes(auth.currentUser?.email || "")) {
       const currentDate = new Date();
@@ -301,16 +330,20 @@ export async function likeAPost(postId: string) {
       };
       await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
       const likeRef = await addDoc(collection(db, "Likes"), likeData);
-      await setDoc(authorRef, { notifications: {likes: arrayUnion(likeRef.id)} }, { merge: true });
+      await setDoc(
+        authorRef,
+        { notifications: { likes: arrayUnion(likeRef.id) } },
+        { merge: true }
+      );
       const userLikesRef = doc(db, "Posts", postId);
       const userLikesDoc = await getDoc(userLikesRef);
-      
+
       await addDoc(collection(db, "Likes"), likeData);
-      
+
       if (userLikesDoc.exists()) {
         const userLikesData = userLikesDoc.data();
         const likesArray = userLikesData.likes || [];
-        console.log("User likes doc", likesArray)
+        console.log("User likes doc", likesArray);
         likesArray.push(auth.currentUser?.email);
         await updateDoc(userLikesRef, { likes: likesArray });
       }
@@ -329,21 +362,27 @@ export async function unlikeAPost(postId: string) {
     const authorRef = doc(db, "Users", postData.authorEmail || "none");
     const authorDoc = await getDoc(authorRef);
     const authorData = authorDoc.data();
-      console.log("User has liked this post", postId, authorData?.notifications?.likes?.[userEmail])
-      const likes = postData?.numberOfLikes || 0;
-      await setDoc(postRef, { numberOfLikes: likes - 1 }, { merge: true });
-      await updateDoc(authorRef, {
-        [`notifications.likes.${userEmail}`]: deleteField()
-      });
-      const userLikesRef = doc(db, "Posts", postId);
-      const userLikesDoc = await getDoc(userLikesRef);
+    console.log(
+      "User has liked this post",
+      postId,
+      authorData?.notifications?.likes?.[userEmail]
+    );
+    const likes = postData?.numberOfLikes || 0;
+    await setDoc(postRef, { numberOfLikes: likes - 1 }, { merge: true });
+    await updateDoc(authorRef, {
+      [`notifications.likes.${userEmail}`]: deleteField(),
+    });
+    const userLikesRef = doc(db, "Posts", postId);
+    const userLikesDoc = await getDoc(userLikesRef);
 
-      if (userLikesDoc.exists()) {
-        const userLikesData = userLikesDoc.data();
-        const likesArray = userLikesData.likes || [];
-        const updatedLikesArray = likesArray.filter((email: string) => email !== auth.currentUser?.email);
-        await updateDoc(userLikesRef, { likes: updatedLikesArray });
-      }
+    if (userLikesDoc.exists()) {
+      const userLikesData = userLikesDoc.data();
+      const likesArray = userLikesData.likes || [];
+      const updatedLikesArray = likesArray.filter(
+        (email: string) => email !== auth.currentUser?.email
+      );
+      await updateDoc(userLikesRef, { likes: updatedLikesArray });
+    }
   }
 }
 
