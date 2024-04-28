@@ -284,20 +284,28 @@ export async function likeAPost(postId: string) {
   
   if (postDoc.exists()) {
     const postData = postDoc.data();
-    const authorRef = doc(db, "Users", postData.authorEmail || "none");
+    const authorRef = doc(db, "Users", postData.authorEmail);
     const authorDoc = await getDoc(authorRef);
     const authorData = authorDoc?.data();
     
     const likes = postData?.numberOfLikes || 0;
     if (!postData.likes.includes(auth.currentUser?.email || "")) {
-
-      await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
-      const notificationsUpdate = {
-        [`notifications.likes.${postId}`]: arrayUnion(postId, Timestamp.now(), authorData?.email,)
+      const currentDate = new Date();
+      const day = currentDate.getDate();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+      const likeData = {
+        authorEmail: auth.currentUser?.email,
+        date: `${day}/${month}/${year}`,
+        postId: postId,
       };
-      await updateDoc(authorRef, notificationsUpdate);
+      await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
+      const likeRef = await addDoc(collection(db, "Likes"), likeData);
+      await setDoc(authorRef, { notifications: {likes: arrayUnion(likeRef.id)} }, { merge: true });
       const userLikesRef = doc(db, "Posts", postId);
       const userLikesDoc = await getDoc(userLikesRef);
+      
+      await addDoc(collection(db, "Likes"), likeData);
       
       if (userLikesDoc.exists()) {
         const userLikesData = userLikesDoc.data();

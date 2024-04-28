@@ -9,7 +9,7 @@ import { readUser } from "../config/config.tsx";
 import { doc, getDoc } from "firebase/firestore";
 import { getCookie, setCookie } from "../../utils/cookieUtils.ts";
 import { get } from "http";
-import ReplyNotif from "./ReplyNotif.tsx";
+import Notif from "./Notif.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -224,6 +224,11 @@ function SideBar() {
     }
   };
 
+
+  useEffect(() => {
+    console.log(userData, "USER DATA");
+  }, [userData])
+
   const [isLikesOpen, setIsLikesOpen] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
@@ -264,9 +269,12 @@ function SideBar() {
               LIKES
             </motion.button>
             <motion.div className="notif_likes">
-              {userData.notifications.likes &&
-                Object.values(userData.notifications.likes).map((like) => (
+            {userData.notifications.replies && isLikesOpen &&
+                Object.values(userData.notifications.replies).map((like: any) => (
                   <div key={like.id}>
+                    <Notif
+                      id={like}
+                      isReply={false} />
                   </div>
                 ))}
             </motion.div>
@@ -289,8 +297,9 @@ function SideBar() {
               {userData.notifications.replies && isRepliesOpen &&
                 Object.values(userData.notifications.replies).slice(0, 1).map((reply: any) => (
                   <div key={reply.id}>
-                    <ReplyNotif
-                      id={reply} />
+                    <Notif
+                      id={reply}
+                      isReply={true} />
                   </div>
                 ))}
             </motion.div>
