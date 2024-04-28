@@ -15,6 +15,15 @@ const defaultAvatar = require("../../Images/avatar.webp");
 
 function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [ToggleSearch, setToggleSearch] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleChange = (event: any) => {
+    setSearchInput(event.target.value);
+    console.log(searchInput);
+  };
+
   useEffect(() => {
     animate(
       ".arrow",
@@ -357,7 +366,18 @@ function SideBar() {
           </div>
         </div>
         <div className="login-wrapper">
-          {isUserLoggedIn() ? (
+        {isUserLoggedIn() ? (
+            <div className="search-wrapper">
+              <motion.input className="search_input" style={{ opacity: ToggleSearch ? 1 : 0 }} value={searchInput} onChange={handleChange} placeholder="USER'S @" />
+              <motion.button
+                className="login_btn link"
+                onClick={() => {setToggleSearch(!ToggleSearch); if (searchInput != "") {navigate(`/user/${searchInput}`); setSearchInput("");}}}
+              >
+                SEARCH
+              </motion.button>
+            </div>
+          ) : null}
+        {isUserLoggedIn() ? (
             <Link to="/">
               <motion.button
                 className="login_btn link"
@@ -368,6 +388,7 @@ function SideBar() {
               </motion.button>
             </Link>
           ) : null}
+        
           {isUserLoggedIn() ? (
             <Link to="/blogs">
               <motion.button
