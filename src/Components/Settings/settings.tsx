@@ -56,7 +56,6 @@ function Settings() {
     uniqueId: "",
   });
 
-  useEffect(() => {
     const fetchUserPosts = async () => {
       console.log(userData.email, "userData.email");
       if (userData.email !== "") {
@@ -89,14 +88,6 @@ function Settings() {
         }
     };
     
-    fetchUserPosts();
-}, [userData.email]);
-
-useEffect(() => {
-  console.log(posts, "posts");
-})
-
-
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
   });
@@ -372,7 +363,10 @@ useEffect(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
+          className="posts-wrapper-settings"
         >
+          <motion.div>
+
           <motion.button
             className="action-wrapper settings_action-wrapper"
             variants={variantsDescription}
@@ -380,15 +374,23 @@ useEffect(() => {
             animate={controls}
             exit={controls}
             transition={{ delay: 1 }}
-          >
-            <h5 className="edit">OPEN POSTS</h5>
+            onClick={() => {
+              fetchUserPosts();
+            }}
+            >
+            <motion.h5 className="edit">OPEN POSTS</motion.h5>
           </motion.button>
+            </motion.div>
           <motion.div className="post_container">
-            {posts.length >= 0 && posts.map((post: any) => (
+            {posts && Array.isArray(posts) && posts.length >= 0 && posts.map((post: any, i: number) => (
+              <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+                >
               <Post
                 key={post.id}
                 id={post.id}
-                index={post.id}
+                index={i+1}
                 authorId={post.authorEmail}
                 author={post.author}
                 date={post.date}
@@ -404,6 +406,7 @@ useEffect(() => {
                 firstPostTitle={""}
                 firstPostDescription={""}
               />
+              </motion.div>
             ))}
           </motion.div>
         </motion.div>
