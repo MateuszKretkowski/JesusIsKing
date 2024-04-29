@@ -16,6 +16,23 @@
   padding: 0 0.5%;
 }
 
+.edit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+}
+
+.word {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.letter {
+  margin: 0 -2px;
+}
+
 .post_line {
   content: "";
   position: absolute;

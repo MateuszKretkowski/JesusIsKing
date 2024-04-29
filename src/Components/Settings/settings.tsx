@@ -44,6 +44,7 @@ function Settings() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isMyPage, setIsMyPage] = useState(false);
+  const [isPostsOpen, setIsPostsOpen] = useState(false);
   const [canEditPFP, setCanEditPFP] = useState(false);
   const controls = useAnimation();
   const [userData, setUserData] = useState({
@@ -133,6 +134,10 @@ function Settings() {
       setIsLoading(false); // Data fetched or error occurred, stop indicating loading
     }
   };
+
+  const deletePosts = async () => {
+    setPosts({});
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -349,6 +354,21 @@ function Settings() {
                   <h5 className="edit">EDIT YOUR ACCOUNT</h5>
                 </motion.button>
               )}
+                              <motion.button
+            className="action-wrapper settings_action-wrapper"
+            variants={variantsDescription}
+            initial={controls}
+            animate={controls}
+            exit={controls}
+            style={{ opacity: isPostsOpen ? 1 : 0 }}
+            transition={{ delay: 1 }}
+            onClick={() => {
+              deletePosts();
+              setIsPostsOpen(false);
+            }}
+            >
+            <motion.h5 className="edit">CLOSE POSTS</motion.h5>
+          </motion.button>
             </div>
           </motion.div>
         </div>
@@ -373,9 +393,11 @@ function Settings() {
             initial={controls}
             animate={controls}
             exit={controls}
+            style={{ opacity: isPostsOpen ? 0 : 1 }}
             transition={{ delay: 1 }}
             onClick={() => {
               fetchUserPosts();
+              setIsPostsOpen(true);
             }}
             >
             <motion.h5 className="edit">OPEN POSTS</motion.h5>
