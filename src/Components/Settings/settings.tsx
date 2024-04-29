@@ -354,6 +354,10 @@ function Settings() {
                   <h5 className="edit">EDIT YOUR ACCOUNT</h5>
                 </motion.button>
               )}
+              <motion.div
+              style={{ opacity: isPostsOpen ? 1 : 0 }}
+              >
+
                               <motion.button
             className="action-wrapper settings_action-wrapper"
             variants={variantsDescription}
@@ -369,6 +373,7 @@ function Settings() {
             >
             <motion.h5 className="edit">CLOSE POSTS</motion.h5>
           </motion.button>
+              </motion.div>
             </div>
           </motion.div>
         </div>
@@ -386,14 +391,16 @@ function Settings() {
           className="posts-wrapper-settings"
         >
           <motion.div>
-
+          <motion.div
+              style={{ opacity: isPostsOpen ? 0 : 1 }}
+              >
+                
           <motion.button
             className="action-wrapper settings_action-wrapper"
             variants={variantsDescription}
             initial={controls}
             animate={controls}
             exit={controls}
-            style={{ opacity: isPostsOpen ? 0 : 1 }}
             transition={{ delay: 1 }}
             onClick={() => {
               fetchUserPosts();
@@ -402,6 +409,7 @@ function Settings() {
             >
             <motion.h5 className="edit">OPEN POSTS</motion.h5>
           </motion.button>
+              </motion.div>
             </motion.div>
           <motion.div className="post_container">
             {posts && Array.isArray(posts) && posts.length >= 0 && posts.map((post: any, i: number) => (
