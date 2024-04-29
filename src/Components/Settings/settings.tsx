@@ -36,7 +36,7 @@ import Post from "../Forum/post.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState({});
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
   const { name } = useParams<{ name?: string }>();
@@ -58,34 +58,30 @@ function Settings() {
 
   useEffect(() => {
     const fetchUserPosts = async () => {
-        if (userData.email) {
+      console.log(userData.email, "userData.email");
+      if (userData.email !== "") {
             setLoading(true);
             console.log(userData.email, "userData.email");
             const userRef = doc(db, "Users", userData.email);
             const q = query(
                 collection(userRef, "UserPosts"),
-                limit(4)
             );
             const querySnapshot = await getDocs(q);
-            const postsArray: any = [];
+            const postsIdArray: any = [];
             querySnapshot.forEach((doc) => {
-                postsArray.push({ id: doc.id, ...doc.data() });
+              postsIdArray.push({ id: doc.id, ...doc.data() });
             });
-            console.log(postsArray, "postsArray");
-
-            const posts = {}; // Initialize an object to store posts
-
-            // Iterate over each postArray item and fetch corresponding posts
-            for (const post of postsArray) {
-                const postId = post.id;
-                const postDocRef = doc(db, "Posts", postId);
-                const postDocSnapshot = await getDoc(postDocRef);
-                if (postDocSnapshot.exists()) {
-                    posts[postId] = postDocSnapshot.data();
-                }
+            console.log(postsIdArray, "postsArray");
+            
+            const postsArray: any = [];
+            for (const post of postsIdArray) {
+                const postRef = doc(db, "Posts", post.id);
+                const postDoc = await getDoc(postRef);
+                postsArray.push({ id: post.id, ...postDoc.data() });
             }
 
-            setPosts(posts);
+
+            await setPosts(postsArray);
             console.log(posts);
 
             setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
@@ -98,7 +94,7 @@ function Settings() {
 
 useEffect(() => {
   console.log(posts, "posts");
-}, [posts])
+})
 
 
   useEffect(() => {
