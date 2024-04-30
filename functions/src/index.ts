@@ -126,70 +126,38 @@ exports.createPost = functions.https.onCall(async (data, context) => {
   if (!userEmail) {
     throw new functions.https.HttpsError("not-found", "Unable.");
   }
-  const userRef = admin.firestore()
-    .collection("Users")
-    .doc(userEmail);
   const currentDate = new Date();
-  const formattedDate = `${currentDate.getFullYear()}
-    -${(currentDate.getMonth() + 1)
-    .toString().padStart(2, "0")}-${currentDate.getDate()
-  .toString().padStart(2, "0")} ${currentDate.getHours()
-  .toString().padStart(2, "0")}:${currentDate.getMinutes()
-  .toString().padStart(2, "0")}`;
-  const bucket = admin.storage().bucket();
-  return userRef.get()
-    .then(async (userDoc) => {
-      if (!userDoc.exists) {
-        throw new functions.https.HttpsError(
-          "not-found",
-          "User data not found"
-        );
-      }
-      const userData = userDoc.data();
-      if (!userData) {
-        throw new functions.https.HttpsError(
-          "internal",
-          "User data is undefined"
-        );
-      }
-      let imageURL = null;
+  const formattedDate = `${currentDate.getFullYear()}-${
+    (currentDate.getMonth() + 1).toString().padStart(2, "0")
+  }-${currentDate.getDate().toString().padStart(2, "0")} ${
+    currentDate.getHours().toString().padStart(2, "0")
+  }:${currentDate.getMinutes().toString().padStart(2, "0")}`;
 
-      if (data.image) {
-        const fileName = `${Date.now()}.png`;
-        const file = bucket.file(`Posts/${fileName}`);
-        await file.save(data.image);
-        imageURL = `gs://${bucket.name}/${file.name}`;
-      }
-      const postData = {
-        name: data.name,
-        description: data.description,
-        authorId: userEmail,
-        authorEmail: userData.email,
-        author: userData.name,
-        date: formattedDate,
-        image: imageURL,
-        likes: [],
-        numberOfLikes: 0,
-        numberOfReplies: 0,
-        numberOfReposts: 0,
-      };
-      const docRef = admin.firestore().collection("Posts").doc();
-      const savePostPromise = docRef.set(postData);
-      const userPostRef = userRef.collection("UserPosts").doc(docRef.id);
-      const saveUserPostPromise = userPostRef.set({id: docRef.id});
-      return Promise.all([savePostPromise, saveUserPostPromise])
-        .then(() => {
-          console.log("Post Created with id: ", docRef.id);
-          return {result: "Post Created successfully!", id: docRef.id};
-        })
-        .catch((error) => {
-          throw new functions.https.HttpsError(
-            "internal",
-            `Could not create post: ${error.message}`
-          );
-        });
-    });
+  const postData = {
+    name: data.name,
+    description: data.description,
+    authorId: userEmail,
+    date: formattedDate,
+    image: data.image,
+    likes: [],
+    numberOfLikes: 0,
+    numberOfReplies: 0,
+    numberOfReposts: 0,
+  };
+
+  try {
+    await admin.firestore().collection("Posts").add(postData);
+    console.log("Post Created");
+    return {result: "Post Created successfully!"};
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw new functions.https.HttpsError(
+      "internal",
+      "Error creating post."
+    );
+  }
 });
+
 
 exports.createReply = functions.https.onCall(async (data, context) => {
   if (!context.auth) {

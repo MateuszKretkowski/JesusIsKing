@@ -29,10 +29,12 @@ import {
   auth,
   db,
   likeAPost,
+  readImage,
   readReplies,
   unlikeAPost,
 } from "../config/config";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Reply from "./Reply";
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -317,6 +319,35 @@ const Post = ({
     }
   }, []);
 
+  const [imgREAD, setImgREAD] = useState("");
+
+  useEffect(() => {
+    const fetchImageURL = async () => {
+      if (image) {
+        try {
+          const storage = getStorage();
+          const fileRef = ref(storage, image);
+          const url = await getDownloadURL(fileRef);
+          setImgREAD(url);
+        } catch (error) {
+          console.error("Error fetching image URL:", error);
+        }
+      }
+    };
+
+    fetchImageURL();
+  }, [image]);
+
+  const [photo, setPhoto] = useState<File | null>(null);
+  function handleChangeIMG(e: any) {
+    if (e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+      console.log("Photo selected.", e.target.files[0]);
+    } else {
+      console.error("No file selected.");
+    }
+  }
+
   useEffect(() => {}, [isCurrentlyLiked]);
 
   // LIKE SWITCHING ANIMATION
@@ -392,15 +423,14 @@ const Post = ({
             </motion.h2>
           </motion.div>
         )}
-        {image !== "" && (
+        {imgREAD && (
           <motion.div
             className="post_description-wrapper"
             style={{ textAlign: isEven ? "end" : "start" }}
           >
-            <motion.img src={image}        
+            <motion.img
                     className="forum_addpost_description image"
-                    src={image}
-                    alt="IMAGE"
+                    src={imgREAD}
                     style={{ marginLeft: "8px" }}
                     whileHover={{ filter: "brightness(0.5)", transition: { duration: 0.3 } }} />
           </motion.div>

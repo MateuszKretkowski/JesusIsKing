@@ -12,7 +12,7 @@ import {
 import SideBar from "../SideBar/sidebar";
 import Post from "./post";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { auth, db, readPosts } from "../config/config";
+import { auth, db, readPosts, upload } from "../config/config";
 import { findUserByEmail } from "../config/config.tsx";
 import {
   collection,
@@ -35,22 +35,24 @@ function Forum() {
   const [error, setError] = useState(false);
   const [liked, setLiked] = useState(false);
 
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState();
 
   const handleImageChange = (event: any) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]; // Get the file object, not just the name
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
-          setImage(reader.result);
+          setImage(reader.result); // Use reader.result as the image source
+          console.log(reader.result, "ImageEEEEEEEE");
+          console.log(file.name, "TARGET FILES 0");
           setPostData((prevState) => ({ ...prevState, image: reader.result }));
           console.log(postData.image, "Image");
         } else {
           console.error("FileReader result is not a string.");
         }
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Pass the file object to readAsDataURL
     }
   };
 
@@ -103,6 +105,7 @@ function Forum() {
       var createPost = httpsCallable(functions, "createPost");
       if (postData.name !== "") {
         startAnimation();
+        upload(postData.image, userEmail);
         const result = await createPost(postData);
         await setIsApplied(true);
         await setIsAppliedAddPost(true);

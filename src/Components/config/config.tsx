@@ -62,6 +62,20 @@ const storage = getStorage();
 // Create a storage reference from our storage service
 const storageRef = ref(storage);
 
+export async function readImage(fileRef: any) {
+  getDownloadURL(fileRef)
+  .then((url) => {
+    // Zwraca URL zdjęcia
+    console.log("URL zdjęcia:", url);
+    return url;
+    // Tutaj możesz użyć URL do wyświetlenia zdjęcia w twojej aplikacji
+  })
+  .catch((error) => {
+    // Obsługa błędu
+    console.error("Błąd pobierania URL zdjęcia:", error);
+  });
+}
+
 export async function upload(file: File, email: string) {
   if (!auth.currentUser || !auth.currentUser.email) {
     console.error("No authenticated user with an email address.");
