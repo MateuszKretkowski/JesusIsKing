@@ -134,11 +134,12 @@ exports.createPost = functions.https.onCall(async (data, context) => {
   }:${currentDate.getMinutes().toString().padStart(2, "0")}`;
 
   const postData = {
+    id: data.id,
     name: data.name,
     description: data.description,
     authorId: userEmail,
     date: formattedDate,
-    image: data.image,
+    image: "",
     likes: [],
     numberOfLikes: 0,
     numberOfReplies: 0,
@@ -146,7 +147,7 @@ exports.createPost = functions.https.onCall(async (data, context) => {
   };
 
   try {
-    await admin.firestore().collection("Posts").add(postData);
+    await admin.firestore().collection("Posts").doc(postData.id).set(postData);
     console.log("Post Created");
     return {result: "Post Created successfully!"};
   } catch (error) {

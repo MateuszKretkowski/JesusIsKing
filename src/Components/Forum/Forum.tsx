@@ -16,6 +16,8 @@ import { auth, db, readPosts, upload } from "../config/config";
 import { findUserByEmail } from "../config/config.tsx";
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -37,6 +39,35 @@ function Forum() {
 
   const [image, setImage] = useState();
 
+  const checkIfExists = async (postId: string) => {
+    try {
+      const postRef = doc(db, "Posts", postId);
+      const docSnapshot = await getDoc(postRef);
+      return docSnapshot.exists(); // Zwraca true, jeśli dokument istnieje, false w przeciwnym razie
+    } catch (error) {
+      console.error("Błąd podczas sprawdzania istnienia dokumentu: ", error);
+      return false; // W przypadku błędu zwracamy false
+    }
+  };
+  
+  // Funkcja generująca unikalny identyfikator dla dokumentu w kolekcji Posts
+  const generateUniquePostId = async () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const idLength = 10; // Długość generowanego identyfikatora
+    let postId = "";
+  
+    do {
+      // Generowanie nowego identyfikatora
+      postId = "";
+      for (let i = 0; i < idLength; i++) {
+        postId += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      // Sprawdzenie, czy identyfikator już istnieje w kolekcji Posts
+    } while (await checkIfExists(postId));
+  
+    return postId;
+  };
+
   const handleImageChange = (event: any) => {
     const file = event.target.files[0]; // Get the file object, not just the name
     if (file) {
@@ -57,24 +88,24 @@ function Forum() {
   };
 
   interface PostData {
+    id: string;
     name: string;
     description: string;
     author: string;
     authorId: string;
     date: string;
-    image: string;
     numberOfLikes: number;
     numberOfReplies: number;
     numberOfReposts: number;
   }
 
   const [postData, setPostData] = useState<PostData>({
+    id: "",
     name: "",
     description: "",
     author: "",
     authorId: "",
     date: "",
-    image: image,
     numberOfLikes: 0,
     numberOfReplies: 0,
     numberOfReposts: 0,
@@ -102,11 +133,21 @@ function Forum() {
   const handleSubmit = async () => {
     try {
       getUser();
+      generateUniquePostId()
+        .then((postId) => {
+          setPostData((prevState) => ({
+            ...prevState,
+            id: postId,
+          }));
+        })
+        .catch((error) => {
+          console.error("Błąd podczas generowania unikalnego ID: ", error);
+        });
       var createPost = httpsCallable(functions, "createPost");
-      if (postData.name !== "") {
+      if (postData.name !== "" && postData.id !== "") {
         startAnimation();
-        upload(postData.image, userEmail);
         const result = await createPost(postData);
+        await upload(postData.image, userEmail, true, postData.id);
         await setIsApplied(true);
         await setIsAppliedAddPost(true);
         setIsLoading(true);

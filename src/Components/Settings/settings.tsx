@@ -94,10 +94,10 @@ function Settings() {
   });
   useEffect(() => {
     if (auth.currentUser) {
-      getCookie("email") == userData.id
+      getCookie("email") == userData.email
         ? setIsMyPage(true)
         : setIsMyPage(false);
-      console.log(isMyPage);
+      console.log(isMyPage, "isMyPage!");
     }
   }, [userData.id]);
   useEffect(() => {

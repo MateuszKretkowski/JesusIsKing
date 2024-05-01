@@ -76,23 +76,39 @@ export async function readImage(fileRef: any) {
   });
 }
 
-export async function upload(file: File, email: string) {
+export async function upload(file: File, email: string, posts: boolean, postId: string) {
   if (!auth.currentUser || !auth.currentUser.email) {
     console.error("No authenticated user with an email address.");
     return;
   }
-
-  const encodedEmail = encodeEmail(email);
-  const fileRef = ref(storage, `Avatars/${encodedEmail}.png`);
+  if (posts) {
+  const fileRef = ref(storage, `Posts/${postId}.png`);
   try {
     const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(snapshot.ref);
 
-    const userRef = doc(db, "Users", email);
-    await setDoc(userRef, { avatar: photoURL }, { merge: true });
+    const postRef = doc(db, "Posts", postId);
+    console.log(postId)
+    await setDoc(postRef, { image: photoURL }, { merge: true });
     alert("Photo uploaded successfully!");
   } catch (error) {
     console.error("Upload failed:", error);
+  }
+  }
+  else {
+
+    const encodedEmail = encodeEmail(email);
+    const fileRef = ref(storage, `Avatars/${encodedEmail}.png`);
+    try {
+      const snapshot = await uploadBytes(fileRef, file);
+      const photoURL = await getDownloadURL(snapshot.ref);
+      
+      const userRef = doc(db, "Users", email);
+      await setDoc(userRef, { avatar: photoURL }, { merge: true });
+      alert("Photo uploaded successfully!");
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
   }
 }
 

@@ -48,7 +48,7 @@ function ProfilePicture({
 
     setLoading(true);
     controls.start("uploaded");
-    upload(photo, email)
+    upload(photo, email, false, "avatar")
       .then(() => {
         setLoading(false);
       })
