@@ -10,6 +10,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { getCookie, setCookie } from "../../utils/cookieUtils.ts";
 import { get } from "http";
 import Notif from "./Notif.tsx";
+import ProfilePicture from "../Forum/ProfilePicture.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -329,7 +330,7 @@ function SideBar() {
       >
         <div className="account-wrapper">
           <div className="avatar-wrapper">
-            <img className="avatar" src={defaultAvatar} />
+            <ProfilePicture email={auth.currentUser.email} isAbleToChange={false} />
           </div>
           <div className="desc-wrapper-account">
             <h2 className="name">{userData.name}</h2>
