@@ -330,7 +330,7 @@ function SideBar() {
       >
         <div className="account-wrapper">
           <div className="avatar-wrapper">
-            <ProfilePicture email={auth.currentUser.email} isAbleToChange={false} />
+            <ProfilePicture email={auth?.currentUser?.email} isAbleToChange={false} />
           </div>
           <div className="desc-wrapper-account">
             <h2 className="name">{userData.name}</h2>

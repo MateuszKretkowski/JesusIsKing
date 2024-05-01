@@ -131,6 +131,7 @@ interface User {
   description: string;
   link: string;
   from: string;
+  email: string;
   notifications: {
     likes: {};
     replies: {};
@@ -172,8 +173,8 @@ export async function readUserByUsername(
         name: userDoc.data().name,
         description: userDoc.data().description,
         from: userDoc.data().from,
-        link: userDoc.data().link,
         email: userDoc.data().email,
+        link: userDoc.data().link,
         uniqueId: userDoc.data().uniqueId,
       };
       setUserData(userData);
@@ -225,9 +226,9 @@ export function readUser(setUserData: (userData: User) => void) {
         if (data) {
           const user: User = {
             id: userId,
-            email: data.email || "",
             name: data.name || "",
             uniqueId: data.uniqueId || "",
+            email: data.email || "",
             description: data.description || "",
             notifications: data.notifications || {},
             from: data.from || "",

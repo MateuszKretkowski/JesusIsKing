@@ -20,7 +20,7 @@ function ProfilePicture({
   email: string;
   isAbleToChange: boolean;
 }) {
-  const { currentUser } = auth?.currentUser;
+  const currentUser = auth?.currentUser;
   const storage = getStorage();
   const storageRef = ref(storage);
   const [photo, setPhoto] = useState(null);
