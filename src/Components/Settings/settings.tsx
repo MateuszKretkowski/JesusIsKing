@@ -245,7 +245,7 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <ProfilePicture email={userData.id} isAbleToChange={canEditPFP} />
+            <ProfilePicture email={userData.id} isAbleToChange={canEditPFP} classname="avatar" />
           </motion.div>
           <motion.div className="desc-wrapper-account-settings">
             <motion.div

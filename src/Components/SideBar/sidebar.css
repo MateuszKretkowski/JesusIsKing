@@ -28,9 +28,10 @@
     margin-bottom: 10%;
 }
 
-.avatar {
-    width: 100%;
+.avatar_sidebar {
+    width: 90%;
     border-radius: 12px;
+    margin: 12px 12px;
 }
 
 

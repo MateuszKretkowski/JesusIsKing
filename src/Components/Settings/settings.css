@@ -30,8 +30,8 @@
     align-items: center;
 }
 
-.avatar-settings {
-    width: 40%;
+.avatar {
+    width: 100%;
     border-radius: 24px;
 }
 

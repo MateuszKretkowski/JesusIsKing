@@ -16,9 +16,11 @@ import {
 function ProfilePicture({
   email,
   isAbleToChange,
+  classname
 }: {
   email: string;
   isAbleToChange: boolean;
+  classname: string;
 }) {
   const currentUser = auth?.currentUser;
   const storage = getStorage();
@@ -116,7 +118,7 @@ function ProfilePicture({
               className="avatar_input"
             />
         )}
-          <img src={photoURL} alt="Avatar" className="avatar" />
+          <img src={photoURL} alt="Avatar" className={classname} />
         {isAbleToChange && (
             <motion.h2
               className="avatar_edit"
