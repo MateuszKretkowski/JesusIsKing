@@ -82,7 +82,7 @@ export async function upload(file: File, email: string, posts: boolean, postId: 
     return;
   }
   if (posts) {
-  const fileRef = ref(storage, `Posts/${postId}.png`);
+  const fileRef = ref(storage, `Avatars/${postId}.png`);
   try {
     const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(snapshot.ref);

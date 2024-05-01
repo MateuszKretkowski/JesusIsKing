@@ -338,16 +338,6 @@ const Post = ({
     fetchImageURL();
   }, [image]);
 
-  const [photo, setPhoto] = useState<File | null>(null);
-  function handleChangeIMG(e: any) {
-    if (e.target.files[0]) {
-      setPhoto(e.target.files[0]);
-      console.log("Photo selected.", e.target.files[0]);
-    } else {
-      console.error("No file selected.");
-    }
-  }
-
   useEffect(() => {}, [isCurrentlyLiked]);
 
   // LIKE SWITCHING ANIMATION

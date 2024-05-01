@@ -74,10 +74,10 @@ function Forum() {
       const reader = new FileReader();
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
-          setImage(reader.result); // Use reader.result as the image source
+          setImage(event.target.files[0]); // Use reader.result as the image source
           console.log(reader.result, "ImageEEEEEEEE");
           console.log(file.name, "TARGET FILES 0");
-          setPostData((prevState) => ({ ...prevState, image: reader.result }));
+          setPostData((prevState) => ({ ...prevState, image: event.target.files[0] }));
           console.log(postData.image, "Image");
         } else {
           console.error("FileReader result is not a string.");
