@@ -38,6 +38,7 @@ function Forum() {
   const [liked, setLiked] = useState(false);
 
   const [image, setImage] = useState();
+  const [loaclImg, setLocalImg]: any = useState();
 
   const checkIfExists = async (postId: string) => {
     try {
@@ -75,6 +76,7 @@ function Forum() {
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
           setImage(event.target.files[0]); // Use reader.result as the image source
+          setLocalImg(reader.result);
           console.log(reader.result, "ImageEEEEEEEE");
           console.log(file.name, "TARGET FILES 0");
           setPostData((prevState) => ({ ...prevState, image: event.target.files[0] }));
@@ -388,7 +390,7 @@ function Forum() {
                 {image && (
                   <motion.img
                     className="forum_addpost_description image"
-                    src={image}
+                    src={loaclImg}
                     alt="Selected"
                     style={{ marginLeft: "8px" }}
                     initial={{ opacity: 0 }}
