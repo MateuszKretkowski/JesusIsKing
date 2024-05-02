@@ -68,13 +68,7 @@ function SideBar() {
     animate(
       ".sidebar",
       {
-        width: isOpen
-          ? isMobile
-            ? "100vw"
-            : 320
-          : isMobile
-          ? 0
-          : 50,
+        width: isOpen ? (isMobile ? "100vw" : 320) : isMobile ? 0 : 50,
       },
       {
         type: "spring",
@@ -95,11 +89,7 @@ function SideBar() {
           : isOpen
           ? "1"
           : "0",
-        padding: isNotificationsOpen
-          ? isMobile
-            ? "0px"
-            : "0%"
-          : "24% 10%",
+        padding: isNotificationsOpen ? (isMobile ? "0px" : "0%") : "24% 10%",
       },
       {
         duration: 0.5,
@@ -234,11 +224,20 @@ function SideBar() {
     }
   };
 
-
   useEffect(() => {
     console.log(userData, "USER DATA");
-  }, [userData])
+  }, [userData]);
 
+  useEffect(() => {
+    if (auth.currentUser == null) {
+      setIsAngry(true);      
+    }
+    else {
+      setIsAngry(false);
+    }
+  }, [auth.currentUser])
+
+  const [isAngry, setIsAngry] = useState(false);
   const [isLikesOpen, setIsLikesOpen] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
@@ -250,9 +249,12 @@ function SideBar() {
     >
       {isMobile ? null : <motion.div className="stripe" />}
       <div>
-        <motion.div className="arrow" onClick={() => setIsOpen(!isOpen)} />
         <motion.div
-          className="arrow arrow2"
+          className={"arrow " + (isAngry ? "angry" : "")}
+          onClick={() => setIsOpen(!isOpen)}
+        />
+        <motion.div
+          className={"arrow arrow2 " + (isAngry ? "angry" : "")}
           onClick={() => setIsOpen(!isOpen)}
         />
       </div>
@@ -261,11 +263,10 @@ function SideBar() {
         style={{ padding: isNotificationsOpen ? "8n% 10% 12% 10%" : "0px" }}
       >
         <motion.h1 className="notifs_title">NOTIFICATIONS</motion.h1>
-        <motion.div className="notifs_action"
-        style={{ height: "100%" }}
-        >
-          <motion.div className="notif-wrapper"
-          style={{ height: isLikesOpen ? "100%" : "6%" }}
+        <motion.div className="notifs_action" style={{ height: "100%" }}>
+          <motion.div
+            className="notif-wrapper"
+            style={{ height: isLikesOpen ? "100%" : "6%" }}
           >
             <motion.button
               className="notif_btn"
@@ -279,18 +280,18 @@ function SideBar() {
               LIKES
             </motion.button>
             <motion.div className="notif_likes">
-            {userData.notifications.likes && isLikesOpen &&
+              {userData.notifications.likes &&
+                isLikesOpen &&
                 Object.values(userData.notifications.likes).map((like: any) => (
                   <div key={like.id}>
-                    <Notif
-                      id={like}
-                      isReply={false} />
+                    <Notif id={like} isReply={false} />
                   </div>
                 ))}
             </motion.div>
           </motion.div>
-          <motion.div className="notif-wrapper"
-          style={{ height: isRepliesOpen ? "100%" : "6%" }}
+          <motion.div
+            className="notif-wrapper"
+            style={{ height: isRepliesOpen ? "100%" : "6%" }}
           >
             <motion.button
               className="notif_btn"
@@ -304,33 +305,42 @@ function SideBar() {
               REPLIES
             </motion.button>
             <motion.div className="notif_likes">
-              {userData.notifications.replies && isRepliesOpen &&
-                Object.values(userData.notifications.replies).slice(0, 1).map((reply: any) => (
-                  <div key={reply.id}>
-                    <Notif
-                      id={reply}
-                      isReply={true} />
-                  </div>
-                ))}
+              {userData.notifications.replies &&
+                isRepliesOpen &&
+                Object.values(userData.notifications.replies)
+                  .slice(0, 1)
+                  .map((reply: any) => (
+                    <div key={reply.id}>
+                      <Notif id={reply} isReply={true} />
+                    </div>
+                  ))}
             </motion.div>
           </motion.div>
         </motion.div>
-          <motion.div className="notif_action-wrapper">
-            <motion.button
-              className="login_btn link"
-              style={{ opacity: isNotificationsOpen ? 1 : 0 }}
-              onClick={() => setIsNotificationsOpen(!setIsNotificationsOpen)}
-            >
-              CLOSE NOTIFICATIONS
-            </motion.button>
-          </motion.div>
+        <motion.div className="notif_action-wrapper">
+          <motion.button
+            className="login_btn link"
+            style={{ opacity: isNotificationsOpen ? 1 : 0 }}
+            onClick={() => setIsNotificationsOpen(!setIsNotificationsOpen)}
+          >
+            CLOSE NOTIFICATIONS
+          </motion.button>
+        </motion.div>
       </motion.div>
-      <motion.div className="sidebar_container"
-      style={{ padding: isNotificationsOpen ? "0%" : "0%", pointerEvents: isNotificationsOpen ? "none" : isOpen ? "all" : "none" }}
+      <motion.div
+        className="sidebar_container"
+        style={{
+          padding: isNotificationsOpen ? "0%" : "0%",
+          pointerEvents: isNotificationsOpen ? "none" : isOpen ? "all" : "none",
+        }}
       >
         <div className="account-wrapper">
           <div className="avatar-wrapper">
-            <ProfilePicture email={auth?.currentUser?.email} isAbleToChange={false} classname="avatar_sidebar" />
+            <ProfilePicture
+              email={auth?.currentUser?.email}
+              isAbleToChange={false}
+              classname="avatar_sidebar"
+            />
           </div>
           <div className="desc-wrapper-account">
             <h2 className="name">{userData.name}</h2>
@@ -367,18 +377,30 @@ function SideBar() {
           </div>
         </div>
         <div className="login-wrapper">
-        {isUserLoggedIn() ? (
+          {isUserLoggedIn() ? (
             <div className="search-wrapper">
-              <motion.input className="search_input" style={{ opacity: ToggleSearch ? 1 : 0 }} value={searchInput} onChange={handleChange} placeholder="USER'S @" />
+              <motion.input
+                className="search_input"
+                style={{ opacity: ToggleSearch ? 1 : 0 }}
+                value={searchInput}
+                onChange={handleChange}
+                placeholder="USER'S @"
+              />
               <motion.button
                 className="login_btn link"
-                onClick={() => {setToggleSearch(!ToggleSearch); if (searchInput != "") {navigate(`/user/${searchInput}`); setSearchInput("");}}}
+                onClick={() => {
+                  setToggleSearch(!ToggleSearch);
+                  if (searchInput != "") {
+                    navigate(`/user/${searchInput}`);
+                    setSearchInput("");
+                  }
+                }}
               >
                 SEARCH
               </motion.button>
             </div>
           ) : null}
-        {isUserLoggedIn() ? (
+          {isUserLoggedIn() ? (
             <Link to="/">
               <motion.button
                 className="login_btn link"
@@ -389,7 +411,7 @@ function SideBar() {
               </motion.button>
             </Link>
           ) : null}
-        
+
           {isUserLoggedIn() ? (
             <Link to="/blogs">
               <motion.button
@@ -431,7 +453,7 @@ function SideBar() {
               SIGN OUT
             </button>
           ) : (
-            <button className="login_btn" onClick={signInWithGoogle}>
+            <button className={"login_btn " + auth.currentUser ? "" : "angry_text"} onClick={signInWithGoogle}>
               SIGN IN WITH GOOGLE
             </button>
           )}

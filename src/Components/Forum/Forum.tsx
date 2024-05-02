@@ -195,7 +195,9 @@ function Forum() {
       setLoading(false);
     };
 
-    fetchInitialPosts();
+    if (auth.currentUser) {
+      fetchInitialPosts();
+    }
   }, []);
 
   const loadMorePosts = async () => {
@@ -279,7 +281,6 @@ function Forum() {
     }
   };
 
-  // IMAGE
 
   return (
     <div className="forum">
@@ -547,15 +548,22 @@ function Forum() {
                 />
               ))}
           </div>
-          <button
+          {auth.currentUser && (
+            <button
             onClick={loadMorePosts}
             disabled={loading}
             className="small_button"
-          >
+            >
             <motion.h5 className="small_text">
               {loading ? "LOADING..." : "LOAD MORE"}
             </motion.h5>
           </button>
+          )}
+          {auth.currentUser == null && (
+                        <motion.h5 className="small_text">
+                        LOG IN TO SEE MORE JESUSISKING.COM
+                      </motion.h5>
+          )}
         </div>
       </div>
     </div>
