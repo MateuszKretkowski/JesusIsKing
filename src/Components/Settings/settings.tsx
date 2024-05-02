@@ -245,7 +245,7 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <ProfilePicture email={userData.id} isAbleToChange={canEditPFP} classname="avatar" />
+            <ProfilePicture email={userData.email} isAbleToChange={canEditPFP} classname="avatar" />
           </motion.div>
           <motion.div className="desc-wrapper-account-settings">
             <motion.div
@@ -364,14 +364,14 @@ function Settings() {
             initial={controls}
             animate={controls}
             exit={controls}
-            style={{ opacity: isPostsOpen ? 1 : 0 }}
+            style={{ opacity: isPostsOpen ? 1 : 0, pointerEvents: isPostsOpen ? "all" : "none" }}
             transition={{ delay: 1 }}
             onClick={() => {
               deletePosts();
               setIsPostsOpen(false);
             }}
             >
-            <motion.h5 className="edit">CLOSE POSTS</motion.h5>
+            <motion.h5 className="edit">CLOSE USER'S POSTS</motion.h5>
           </motion.button>
               </motion.div>
             </div>
@@ -392,7 +392,7 @@ function Settings() {
         >
           <motion.div>
           <motion.div
-              style={{ opacity: isPostsOpen ? 0 : 1 }}
+              style={{ opacity: isPostsOpen ? 0 : 1, pointerEvents: isPostsOpen ? "none" : "all" }}
               >
                 
           <motion.button
@@ -407,7 +407,7 @@ function Settings() {
               setIsPostsOpen(true);
             }}
             >
-            <motion.h5 className="edit">OPEN POSTS</motion.h5>
+            <motion.h5 className="edit">OPEN USER'S POSTS</motion.h5>
           </motion.button>
               </motion.div>
             </motion.div>

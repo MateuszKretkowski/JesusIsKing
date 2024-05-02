@@ -122,7 +122,7 @@ function ProfilePicture({
         {isAbleToChange && (
             <motion.h2
               className="avatar_edit"
-            >EDIT</motion.h2>
+            >EDIT AVATAR</motion.h2>
         )}
       {isAbleToChange && (
         <motion.div className="avatar_upload-wrapper">
