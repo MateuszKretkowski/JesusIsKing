@@ -326,7 +326,7 @@ function SideBar() {
           </motion.div>
       </motion.div>
       <motion.div className="sidebar_container"
-      style={{ padding: isNotificationsOpen ? "0%" : "0%", pointerEvents: isNotificationsOpen ? "none" : "all" }}
+      style={{ padding: isNotificationsOpen ? "0%" : "0%", pointerEvents: isNotificationsOpen ? "none" : isOpen ? "all" : "none" }}
       >
         <div className="account-wrapper">
           <div className="avatar-wrapper">

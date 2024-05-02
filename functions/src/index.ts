@@ -17,6 +17,7 @@ exports.authenticateUserDocument = functions.auth.user().onCreate((user) => {
     uniqueId: "DEFAULT",
     email: user.email,
     name: user.displayName || "DEFAULT",
+    avatar: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
     description: "DEAFULT_DESCRIPTION",
     link: "JESUSISKING.COM",
     from: "LOCATION",
