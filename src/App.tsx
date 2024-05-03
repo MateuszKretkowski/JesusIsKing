@@ -15,7 +15,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "./Components/config/config.tsx";
+import { auth, db, isUserLoggedIn, signInWithGoogle } from "./Components/config/config.tsx";
 import { doc } from "firebase/firestore";
 import { setCookie } from "./utils/cookieUtils.ts";
 import LoadingScreen from "./Components/Loading Screen/LoadingScreen.tsx";
@@ -52,7 +52,16 @@ function App() {
               <Navbar />
               <Header />
               <BlogsWrapper />
+              {(isUserLoggedIn() &&
               <Forum />
+              )}
+              {!isUserLoggedIn() && (
+                  <div className="section-title" style={{ cursor: "pointer" }}>
+              <motion.h5 className="small_text">
+              LOG IN TO SEE MORE JESUSISKING.COM
+            </motion.h5>
+            </div>
+              )}
               <Footer />
               </>
            } />
