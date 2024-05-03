@@ -453,7 +453,7 @@ function SideBar() {
               SIGN OUT
             </button>
           ) : (
-            <button className={"login_btn " + auth.currentUser ? "" : "angry_text"} onClick={signInWithGoogle}>
+            <button className={"login_btn"} onClick={signInWithGoogle}>
               SIGN IN WITH GOOGLE
             </button>
           )}
