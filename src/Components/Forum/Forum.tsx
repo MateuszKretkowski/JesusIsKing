@@ -290,7 +290,6 @@ function Forum() {
   return (
     <div className="forum">
       {user && (
-
         <div className="forum_container">
         <div className="section-title">
           <h1 className="">FORUM</h1>

@@ -32,6 +32,7 @@ import { useEffect, useState } from "react";
 import { setCookie } from "../../utils/cookieUtils";
 import { firestore } from "firebase-admin";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "firebase/app-check";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
@@ -49,6 +50,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig);
+
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider("pojgsdnf163489fjn"),
+  isTokenAutoRefreshEnabled: true // Set to true to allow auto-refresh.
+});
 
 // STORAGE
 

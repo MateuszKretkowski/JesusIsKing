@@ -44,7 +44,6 @@ function BlogsWrapper() {
     <div className="blogs"
     ref={ref}
     >
-      {user && (
 
       <div className="blogs_container">
         <div className="section-title">
@@ -64,7 +63,6 @@ function BlogsWrapper() {
           </motion.div>
         </motion.div>
       </div>
-      )}
       </div>
   )
 }

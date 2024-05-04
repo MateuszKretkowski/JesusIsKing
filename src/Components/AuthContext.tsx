@@ -8,6 +8,7 @@ import {
   } from "firebase/auth";
   import { auth } from "./config/config";
 import firebase from 'firebase/compat/app';
+import LoadingScreen from './Loading Screen/LoadingScreen';
 
 const authContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -44,7 +45,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
   
     // Jeśli dane użytkownika są wciąż ładowane, możemy zwrócić komunikat o ładowaniu, zamiast renderować dzieci
     if (loading) {
-      return <div>Loading...</div>;
+      return <LoadingScreen />;
     }
   
     return <authContext.Provider value={{user, googleSignIn, logOut }}>{children}</authContext.Provider>;

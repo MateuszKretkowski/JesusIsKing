@@ -134,3 +134,28 @@ Dev App Server is now running.
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[debug] [2024-05-04T15:38:53.804Z] ----------------------------------------------------------------------
+[debug] [2024-05-04T15:38:53.808Z] Command:       C:\Program FIles\nodejs\node.exe C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-05-04T15:38:53.808Z] CLI Version:   13.1.0
+[debug] [2024-05-04T15:38:53.808Z] Platform:      win32
+[debug] [2024-05-04T15:38:53.809Z] Node Version:  v20.10.0
+[debug] [2024-05-04T15:38:53.809Z] Time:          Sat May 04 2024 17:38:53 GMT+0200 (czas środkowoeuropejski letni)
+[debug] [2024-05-04T15:38:53.809Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-05-04T15:38:53.916Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-05-04T15:38:53.917Z] > authorizing via signed-in user (mkretkowski13@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  D:\Projects\jesusisking-project\jesusiskingfinal
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
