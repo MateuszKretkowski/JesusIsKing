@@ -9,7 +9,7 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
-import { readBlogs } from "../config/config";
+import { auth, readBlogs } from "../config/config";
 
 function BlogsWrapper() {
   interface Blog {
@@ -51,11 +51,14 @@ function BlogsWrapper() {
         <motion.div className="blogs_wrapper_container">
           <motion.div className="blogs-wrapper"
           >
+              {auth.currentUser && (
             <div className="blogs-wrapper-wrapper">
-            {blogs.slice(0, 2).map(blog => (
-  <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
-))}
+
+                {blogs.slice(0, 2).map(blog => (
+                  <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
+                ))}
                 </div>
+              )}
           </motion.div>
         </motion.div>
       </div>

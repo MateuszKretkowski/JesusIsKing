@@ -245,12 +245,14 @@ export function readUser(setUserData: (userData: User) => void) {
 }
 
 export async function readBlogs() {
-  try {
-    const blogsCollectionRef = collection(db, "Blogs");
-    const q = query(blogsCollectionRef, orderBy("date", "desc"));
+  if (auth.currentUser) {
 
-    const querySnapshot = await getDocs(q);
-    const blogs = querySnapshot.docs.map((doc) => ({
+    try {
+      const blogsCollectionRef = collection(db, "Blogs");
+      const q = query(blogsCollectionRef, orderBy("date", "desc"));
+      
+      const querySnapshot = await getDocs(q);
+      const blogs = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
@@ -259,6 +261,7 @@ export async function readBlogs() {
     console.error("Error fetching blogs: ", error);
     return [];
   }
+}
 }
 
 export async function readPosts() {
