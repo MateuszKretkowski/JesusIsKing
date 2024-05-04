@@ -24,6 +24,7 @@ import {
   query,
   startAfter,
 } from "firebase/firestore";
+import { UserAuth } from "../AuthContext.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Forum() {
@@ -281,10 +282,16 @@ function Forum() {
     }
   };
 
+  const { user, googleSignIn, logOut } = UserAuth();
 
+  useEffect(() => {
+    console.log(isApplied, "IS APPLIED");
+  }, [isApplied])
   return (
     <div className="forum">
-      <div className="forum_container">
+      {user && (
+
+        <div className="forum_container">
         <div className="section-title">
           <h1 className="">FORUM</h1>
         </div>
@@ -296,14 +303,14 @@ function Forum() {
                 justifyContent: isEven ? "end" : "start",
                 height: isApplied ? "50px" : "0px",
               }}
-            >
+              >
               <motion.div
                 className="post_author-wrapper-wrapper"
                 style={{ flexDirection: isEven ? "row-reverse" : "row" }}
                 variants={addPostAuthorContainerVariants}
                 initial={controls}
                 animate={controls}
-              >
+                >
                 <motion.img
                   src={defaultAvatar}
                   className="author_img"
@@ -316,7 +323,7 @@ function Forum() {
                   variants={addPostAuthorVariants}
                   initial={controls}
                   animate={controls}
-                >
+                  >
                   {author}
                 </motion.h5>
               </motion.div>
@@ -326,34 +333,34 @@ function Forum() {
                 animate={controls}
                 className="post_bottom_gradient"
                 style={{ scaleX: isEven ? "-1" : "1" }}
-              />
+                />
             </motion.div>
             <div className="addpost_title-wrapper">
               {!isApplied ? (
                 <motion.textarea
-                  name="name"
-                  value={postData.name}
-                  onChange={handleChange}
-                  className="forum_addpost_title"
-                  variants={addPostTitleVariants}
-                  initial={controls}
-                  animate={controls}
-                  maxLength="40"
-                  minLength="1"
-                  rows="1"
-                  cols="50"
-                  layout="position"
-                  // layoutId={"post_title"}
-                  transition={{ duration: 0.5 }}
-                  placeholder="WHAT'S ON YOUR MIND TODAY?"
-                  style={{ height: "100%" }}
+                name="name"
+                value={postData.name}
+                onChange={handleChange}
+                className="forum_addpost_title"
+                variants={addPostTitleVariants}
+                initial={controls}
+                animate={controls}
+                maxLength="40"
+                minLength="1"
+                rows="1"
+                cols="50"
+                layout="position"
+                // layoutId={"post_title"}
+                transition={{ duration: 0.5 }}
+                placeholder="WHAT'S ON YOUR MIND TODAY?"
+                style={{ height: "100%" }}
                 ></motion.textarea>
               ) : (
                 <motion.h1
-                  className="forum_addpost_title"
-                  variants={addPostTitleVariants}
-                  initial={controls}
-                  animate={controls}
+                className="forum_addpost_title"
+                variants={addPostTitleVariants}
+                initial={controls}
+                animate={controls}
                 >
                   {postData.name}
                 </motion.h1>
@@ -363,7 +370,7 @@ function Forum() {
                 variants={gradientVariants}
                 initial={"hidden"}
                 animate={"visible"}
-              />
+                />
             </div>
             {!isApplied ? (
               <div className="addpost_title-wrapper">
@@ -387,20 +394,20 @@ function Forum() {
                     setIsFocused(true);
                   }}
                   placeholder="Could You maybe describe it?"
-                ></motion.textarea>
+                  ></motion.textarea>
                 {image && (
                   <motion.img
-                    className="forum_addpost_description image"
-                    src={loaclImg}
-                    alt="Selected"
-                    style={{ marginLeft: "8px" }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2, type: "spring" }}
-                    whileHover={{
-                      filter: "brightness(0.5)",
-                      transition: { duration: 0.3 },
-                    }}
+                  className="forum_addpost_description image"
+                  src={loaclImg}
+                  alt="Selected"
+                  style={{ marginLeft: "8px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, type: "spring" }}
+                  whileHover={{
+                    filter: "brightness(0.5)",
+                    transition: { duration: 0.3 },
+                  }}
                   />
                 )}
               </div>
@@ -411,22 +418,22 @@ function Forum() {
                   variants={addPostDescriptionVariants}
                   initial={controls}
                   animate={controls}
-                >
+                  >
                   {postData.description}
                 </motion.h2>
                 {image && isApplied && (
                   <motion.img
-                    className="forum_addpost_description image"
-                    src={image}
-                    alt="Selected"
-                    style={{ marginLeft: "8px" }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2, type: "spring" }}
-                    whileHover={{
-                      filter: "brightness(0.5)",
-                      transition: { duration: 0.3 },
-                    }}
+                  className="forum_addpost_description image"
+                  src={image}
+                  alt="Selected"
+                  style={{ marginLeft: "8px" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, type: "spring" }}
+                  whileHover={{
+                    filter: "brightness(0.5)",
+                    transition: { duration: 0.3 },
+                  }}
                   />
                 )}
               </div>
@@ -438,7 +445,7 @@ function Forum() {
                 initial={controls}
                 animate={controls}
                 style={{ justifyContent: isEven ? "end" : "start" }}
-              >
+                >
                 <motion.button
                   className="post_action action_line"
                   style={{ marginRight: "6%" }}
@@ -446,7 +453,7 @@ function Forum() {
                   initial={controls}
                   animate={controls}
                   transition={{ delay: 1 }}
-                >
+                  >
                   <motion.h3 className="post_action-text">REPLY: 0</motion.h3>
                 </motion.button>
                 <motion.button
@@ -455,13 +462,13 @@ function Forum() {
                   initial={controls}
                   animate={controls}
                   transition={{ delay: 2 }}
-                >
+                  >
                   <motion.h3
                     className="post_action-text"
                     onClick={() => {
                       setLiked(!liked);
                     }}
-                  >
+                    >
                     LIKE: {liked ? 1 : 0}
                   </motion.h3>
                 </motion.button>
@@ -471,7 +478,7 @@ function Forum() {
                   initial={controls}
                   animate={controls}
                   transition={{ delay: 3 }}
-                >
+                  >
                   <motion.h3 className="post_action-text">REPOST: 0</motion.h3>
                 </motion.button>
               </motion.div>
@@ -485,21 +492,21 @@ function Forum() {
                   id="file-upload"
                   onChange={handleImageChange}
                   style={{ display: "none" }}
-                />
+                  />
                 <motion.label
                   className="label"
                   for="file-upload"
                   variants={addPostPostVariants}
                   initial={controls}
                   animate={controls}
-                >
+                  >
 
                   <h3 className="forum_addpost_button-text">IMAGE</h3>
                   <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                    className="forum_addpost_button_gradient"
-                    />
+                  className="forum_addpost_button_gradient"
+                  />
                 </motion.label>
 
               </motion.div>
@@ -508,19 +515,19 @@ function Forum() {
                 variants={addPostPostVariants}
                 initial={controls}
                 animate={controls}
-              >
+                >
                 <h3
                   className="forum_addpost_button-text"
                   onClick={() => {
                     handleSubmit();
                   }}
-                >
+                  >
                   POST IT
                 </h3>
                 <motion.div
                   animate={controlsGradients}
                   className="forum_addpost_button_gradient"
-                />
+                  />
               </motion.button>
             </div>
           </motion.div>
@@ -528,23 +535,23 @@ function Forum() {
             {posts &&
               posts.map((post, index) => (
                 <Post
-                  key={post.id}
-                  id={post.id}
-                  index={index}
-                  authorId={post.authorId}
-                  author={post.author}
-                  date={post.date}
-                  description={post.description}
-                  name={post.name}
-                  image={post.image}
-                  noReposts={post.numberOfLikes}
-                  noLikes={post.numberOfLikes}
-                  noReplies={post.numberOfLikes}
-                  isApplied={isApplied}
-                  localName={postData.name}
-                  localDescription={postData.description}
-                  firstPostTitle={firstPostTitle}
-                  firstPostDescription={firstPostDescription}
+                key={post.id}
+                id={post.id}
+                index={index}
+                authorId={post.authorId}
+                author={post.author}
+                date={post.date}
+                description={post.description}
+                name={post.name}
+                image={post.image}
+                noReposts={post.numberOfLikes}
+                noLikes={post.numberOfLikes}
+                noReplies={post.numberOfLikes}
+                isApplied={isApplied}
+                localName={postData.name}
+                localDescription={postData.description}
+                firstPostTitle={firstPostTitle}
+                firstPostDescription={firstPostDescription}
                 />
               ))}
           </div>
@@ -559,13 +566,16 @@ function Forum() {
             </motion.h5>
           </button>
           )}
-          {auth.currentUser == null && (
-                        <motion.h5 className="small_text">
-                        LOG IN TO SEE MORE JESUSISKING.COM
-                      </motion.h5>
-          )}
         </div>
       </div>
+      )}
+      {!user && (
+        <div className="section-title" style={{ cursor: "pointer" }}>
+        <motion.h5 className="small_text">
+        LOG IN TO SEE MORE JESUSISKING.COM
+        </motion.h5>
+        </div>
+      )}
     </div>
   );
 }

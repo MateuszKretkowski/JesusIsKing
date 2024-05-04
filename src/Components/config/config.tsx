@@ -139,9 +139,9 @@ interface User {
   uniqueId: string;
 }
 
+export let isLoggedIn = false;
 export function isUserLoggedIn() {
-  const isLoggedIn = auth.currentUser !== null;
-  return isLoggedIn;
+  isLoggedIn = auth.currentUser;
 }
 
 export async function checkIfUserExistsById(userId: string): Promise<boolean> {

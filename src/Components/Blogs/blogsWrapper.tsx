@@ -9,7 +9,8 @@ import {
   useAnimation,
   useInView,
 } from "framer-motion";
-import { auth, readBlogs } from "../config/config";
+import { auth, isLoggedIn, isUserLoggedIn, readBlogs } from "../config/config";
+import { UserAuth } from "../AuthContext";
 
 function BlogsWrapper() {
   interface Blog {
@@ -38,10 +39,13 @@ function BlogsWrapper() {
     fetchBlogs();
   }, []);
 
+  const { user, googleSignIn, logOut } = UserAuth();
   return (
     <div className="blogs"
     ref={ref}
     >
+      {user && (
+
       <div className="blogs_container">
         <div className="section-title">
             <motion.h1
@@ -51,18 +55,17 @@ function BlogsWrapper() {
         <motion.div className="blogs_wrapper_container">
           <motion.div className="blogs-wrapper"
           >
-              {auth.currentUser && (
             <div className="blogs-wrapper-wrapper">
 
-                {blogs.slice(0, 2).map(blog => (
+                {blogs && blogs.slice(0, 2).map(blog => (
                   <Blog key={blog.id} id={blog.id} authorId={blog.authorId} author={blog.author} date={blog.date} description={blog.description} name={blog.name} />
                 ))}
                 </div>
-              )}
           </motion.div>
         </motion.div>
       </div>
-    </div>
+      )}
+      </div>
   )
 }
 

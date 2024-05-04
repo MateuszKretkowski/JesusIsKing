@@ -16,12 +16,20 @@
     height: 100%;
 }
 
+.small_text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100% !important;
+}
+
 .section-title {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 84%;
+    width: 100%;
     height: 100%;
 }
 

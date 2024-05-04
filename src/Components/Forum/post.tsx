@@ -36,6 +36,7 @@ import {
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Reply from "./Reply";
+import { UserAuth } from "../AuthContext";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
@@ -349,21 +350,25 @@ const Post = ({
     damping: 30,
   };
   useEffect(() => {
-    console.log(image)
-  }, [image])
+    console.log(image);
+  }, [image]);
 
   const [isFocused, setisFocused] = useState(false);
+  const { user, googleSignIn, logOut } = UserAuth();
   return (
     <motion.div
-      className="post"
-      style={{
-        marginLeft: isEven ? "250px" : "0",
-        marginRight: isEven ? "0" : "250px",
-      }}
-      initial={{ opacity: 0, height: "0px" }}
-      animate={{ opacity: 1, height: "100%" }}
-      transition={{ duration: 2, delay: 0.1 * index }}
+    className="post"
+    style={{
+      marginLeft: isEven ? "250px" : "0",
+      marginRight: isEven ? "0" : "250px",
+    }}
+    initial={{ opacity: 0, height: "0px" }}
+    animate={{ opacity: 1, height: "100%" }}
+    transition={{ duration: 2, delay: 0.1 * index }}
     >
+    {user && (
+      <div>
+
       <motion.div
         className="post_container"
         style={{ alignItems: isEven ? "end" : "start" }}
@@ -419,16 +424,20 @@ const Post = ({
             style={{ textAlign: isEven ? "end" : "start" }}
           >
             <motion.img
-                    className="forum_addpost_description image"
-                    src={imgREAD}
-                    style={{ marginLeft: "8px" }}
-                    whileHover={{ filter: "brightness(0.5)", transition: { duration: 0.3 } }} />
+              className="forum_addpost_description image"
+              src={imgREAD}
+              style={{ marginLeft: "8px" }}
+              whileHover={{
+                filter: "brightness(0.5)",
+                transition: { duration: 0.3 },
+              }}
+            />
           </motion.div>
         )}
         <motion.div
           className="post_action_container"
           style={{ justifyContent: isEven ? "end" : "start" }}
-        >
+          >
           <motion.button
             className="post_action action_line"
             style={{ marginRight: "6%" }}
@@ -496,8 +505,6 @@ const Post = ({
           <motion.h5 className="post_date-text">{date}</motion.h5>
         </motion.div>
       </motion.div>
-
-      {/* REPLIES */}
 
       <motion.div
         className="replies_container"
@@ -579,7 +586,7 @@ const Post = ({
                   noLikes={reply.numberOfLikes}
                   isRepliesOpen={isRepliesOpen}
                   i={index}
-                />
+                  />
               </motion.div>
             ))}
         </motion.div>
@@ -589,7 +596,10 @@ const Post = ({
           </motion.button>
         )}
       </motion.div>
+      </div>
+    )}
     </motion.div>
+
   );
 };
 

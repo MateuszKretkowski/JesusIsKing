@@ -15,10 +15,11 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "./Components/config/config.tsx";
+import { auth, db, isUserLoggedIn } from "./Components/config/config.tsx";
 import { doc } from "firebase/firestore";
 import { setCookie } from "./utils/cookieUtils.ts";
 import LoadingScreen from "./Components/Loading Screen/LoadingScreen.tsx";
+import { AuthContextProvider } from "./Components/AuthContext.tsx";
 
 function App() {
 
@@ -38,6 +39,8 @@ function App() {
   const [isLoading, setIsLoading]: any = useState(false);
 
   return (
+    <AuthContextProvider>
+
       <BrowserRouter>
       <IsLoadingContext.Provider value={{ isLoading, setIsLoading }}>
 
@@ -45,7 +48,7 @@ function App() {
          <SideBar />
          {isLoading && <LoadingScreen />}
          {!isLoading && (
-
+           
            <Routes>
            <Route path="/" element={
              <>
@@ -66,6 +69,7 @@ function App() {
         </div>
            </IsLoadingContext.Provider>
       </BrowserRouter>
+      </AuthContextProvider>
   );
 }
 

@@ -11,6 +11,7 @@ import { getCookie, setCookie } from "../../utils/cookieUtils.ts";
 import { get } from "http";
 import Notif from "./Notif.tsx";
 import ProfilePicture from "../Forum/ProfilePicture.tsx";
+import { UserAuth } from "../AuthContext.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 
@@ -242,6 +243,27 @@ function SideBar() {
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
   const isRedirectedCookie = getCookie("isRedirected");
+
+
+  const { user, googleSignIn, logOut } = UserAuth();
+  const [loading, setLoading] = useState(true);
+  const handleSignIn = async () => {
+      try {
+        await googleSignIn();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const handleSignOut = async () => {
+      try {
+        await logOut();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+
   return (
     <motion.div
       className="sidebar"
@@ -377,7 +399,7 @@ function SideBar() {
           </div>
         </div>
         <div className="login-wrapper">
-          {isUserLoggedIn() ? (
+          {user ? (
             <div className="search-wrapper">
               <motion.input
                 className="search_input"
@@ -400,7 +422,7 @@ function SideBar() {
               </motion.button>
             </div>
           ) : null}
-          {isUserLoggedIn() ? (
+          {user ? (
             <Link to="/">
               <motion.button
                 className="login_btn link"
@@ -412,7 +434,7 @@ function SideBar() {
             </Link>
           ) : null}
 
-          {isUserLoggedIn() ? (
+          {user ? (
             <Link to="/blogs">
               <motion.button
                 className="login_btn link"
@@ -423,7 +445,7 @@ function SideBar() {
               </motion.button>
             </Link>
           ) : null}
-          {isUserLoggedIn() ? (
+          {user ? (
             <Link to="/adminpanel">
               <motion.button
                 className="login_btn link"
@@ -434,7 +456,7 @@ function SideBar() {
               </motion.button>
             </Link>
           ) : null}
-          {isUserLoggedIn() ? (
+          {user ? (
             <Link to={`/user/${userData.uniqueId}`}>
               <motion.button
                 className="login_btn link"
@@ -448,12 +470,12 @@ function SideBar() {
             <h1></h1>
           )}
 
-          {isUserLoggedIn() ? (
-            <button className="login_btn" onClick={signOutUser}>
+          {user ? (
+            <button className="login_btn" onClick={handleSignOut}>
               SIGN OUT
             </button>
           ) : (
-            <button className={"login_btn"} onClick={signInWithGoogle}>
+            <button className={"login_btn"} onClick={handleSignIn}>
               SIGN IN WITH GOOGLE
             </button>
           )}
