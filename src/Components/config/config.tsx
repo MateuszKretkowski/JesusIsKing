@@ -349,45 +349,63 @@ export async function readReplies(postId: string) {
 
 export async function likeAPost(postId: string) {
   const postRef = doc(db, "Posts", postId);
-  const postDoc = await getDoc(postRef);
-
-  if (postDoc.exists()) {
-    const postData = postDoc.data();
-    const authorRef = doc(db, "Users", postData.authorEmail);
-    const authorDoc = await getDoc(authorRef);
-    const authorData = authorDoc?.data();
-
-    const likes = postData?.numberOfLikes || 0;
-    if (!postData.likes.includes(auth.currentUser?.email || "")) {
-      const currentDate = new Date();
-      const day = currentDate.getDate();
-      const month = currentDate.getMonth() + 1;
-      const year = currentDate.getFullYear();
-      const likeData = {
-        authorEmail: auth.currentUser?.email,
-        date: `${day}/${month}/${year}`,
-        postId: postId,
-      };
-      await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
-      const likeRef = await addDoc(collection(db, "Likes"), likeData);
-      await setDoc(
-        authorRef,
-        { notifications: { likes: arrayUnion(likeRef.id) } },
-        { merge: true }
-      );
-      const userLikesRef = doc(db, "Posts", postId);
-      const userLikesDoc = await getDoc(userLikesRef);
-
-      await addDoc(collection(db, "Likes"), likeData);
-
-      if (userLikesDoc.exists()) {
-        const userLikesData = userLikesDoc.data();
-        const likesArray = userLikesData.likes || [];
-        console.log("User likes doc", likesArray);
-        likesArray.push(auth.currentUser?.email);
-        await updateDoc(userLikesRef, { likes: likesArray });
+  
+  try {
+    const postDoc = await getDoc(postRef);
+    
+    if (postDoc.exists()) {
+      const postData = postDoc.data();
+      
+      if (postData && postData.likes) {
+        const likes = postData.numberOfLikes || 0;
+        const currentUserEmail = auth.currentUser?.email || "";
+        
+        if (!postData.likes.includes(currentUserEmail)) {
+          const currentDate = new Date();
+          const day = currentDate.getDate();
+          const month = currentDate.getMonth() + 1;
+          const year = currentDate.getFullYear();
+          
+          const likeData = {
+            authorEmail: currentUserEmail,
+            date: `${day}/${month}/${year}`,
+            postId: postId,
+          };
+          
+          // Increase the number of likes on the post document
+          await setDoc(postRef, { numberOfLikes: likes + 1 }, { merge: true });
+          
+          // Add like data to the "Likes" collection
+          const likeRef = await addDoc(collection(db, "Likes"), likeData);
+          
+          // Add like notification to the author's document
+          if (postData.authorEmail) {
+            const authorRef = doc(db, "Users", postData.authorEmail);
+            await setDoc(
+              authorRef,
+              { notifications: { likes: arrayUnion(likeRef.id) } },
+              { merge: true }
+            );
+          }
+          
+          // Update user's likes in the post document
+          const userLikesRef = doc(db, "Posts", postId);
+          const userLikesDoc = await getDoc(userLikesRef);
+          
+          if (userLikesDoc.exists()) {
+            const userLikesData = userLikesDoc.data();
+            const likesArray = userLikesData.likes || [];
+            
+            if (!likesArray.includes(currentUserEmail)) {
+              likesArray.push(currentUserEmail);
+              await updateDoc(userLikesRef, { likes: likesArray });
+            }
+          }
+        }
       }
     }
+  } catch (error) {
+    console.error("Error while processing like:", error);
   }
 }
 
