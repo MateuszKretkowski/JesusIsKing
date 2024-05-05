@@ -61,6 +61,7 @@ interface Post {
 interface AuthorData {
   author: string;
   authorId: string;
+  authorAvatar: string;
 }
 const Post = ({
   id,
@@ -88,6 +89,7 @@ const Post = ({
   const [authorData, setAuthorData] = useState<AuthorData>({
     author: "",
     authorId: "",
+    authorAvatar: "",
   });
 
   useEffect(() => {
@@ -99,6 +101,7 @@ const Post = ({
         setAuthorData({
           author: userData?.name || "",
           authorId: userData?.id || "",
+          authorAvatar: userData.avatar || "",
         });
       }
     };
@@ -339,6 +342,25 @@ const Post = ({
     fetchImageURL();
   }, [image]);
 
+  const [imgAvatarREAD, setImgAvatarREAD] = useState("");
+  useEffect(() => {
+    const fetchImageAvatarURL = async () => {
+      if (authorData.authorAvatar) {
+        try {
+          const storage = getStorage();
+          const fileRef = ref(storage, authorData.authorAvatar);
+          const url = await getDownloadURL(fileRef);
+          setImgAvatarREAD(url);
+          console.log("img:", imgAvatarREAD);
+        } catch (error) {
+          console.error("Error fetching image URL:", error);
+        }
+      }
+    };
+
+    fetchImageAvatarURL();
+  }, [authorData.authorAvatar]);
+
   useEffect(() => {}, [isCurrentlyLiked]);
 
   // LIKE SWITCHING ANIMATION
@@ -385,7 +407,7 @@ const Post = ({
             className="post_author-wrapper-wrapper"
             style={{ flexDirection: isEven ? "row-reverse" : "row" }}
           >
-            <motion.img src={defaultAvatar} className="author_img" />
+              <motion.img src={imgAvatarREAD ? imgAvatarREAD : defaultAvatar} className="author_img" />
             <motion.h5 className="author_name">{authorData.author}</motion.h5>
           </motion.div>
           <motion.div className="author_description"></motion.div>
