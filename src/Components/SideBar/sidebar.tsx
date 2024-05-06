@@ -364,9 +364,10 @@ function SideBar() {
               classname="avatar_sidebar"
             />
           </div>
-          <div className="desc-wrapper-account">
-            <h2 className="name">{userData.name}</h2>
-            <h2 className="id">@{userData.uniqueId}</h2>
+
+            <div className="desc-wrapper-account">
+            {user ? <h2 className="name">{userData.name}</h2> : <h2 className="name">LOGGED OUT</h2>}
+            {user ? <h2 className="id">@{userData.uniqueId}</h2> : null}
             <div className="link-wrapper">
               <h5
                 className="where white"
@@ -374,7 +375,7 @@ function SideBar() {
                   opacity: isNotificationsOpen ? "0" : "1",
                   height: isNotificationsOpen ? "0px" : "12px",
                 }}
-              >
+                >
                 {userData.link}
               </h5>
               <h5
@@ -383,18 +384,21 @@ function SideBar() {
                   opacity: isNotificationsOpen ? "0" : "1",
                   height: isNotificationsOpen ? "0px" : "12px  ",
                 }}
-              >
+                >
                 {userData.from}
               </h5>
             </div>
             <div className="notifications_trigger">
-              <motion.button
+              {user ? (
+
+                <motion.button
                 className="login_btn link"
                 style={{ marginBottom: isNotificationsOpen ? "16px" : "0px" }}
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              >
+                >
                 NOTIFICATIONS
               </motion.button>
+                ) : null}
             </div>
           </div>
         </div>
