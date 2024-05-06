@@ -51,10 +51,10 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = firebase.initializeApp(firebaseConfig);
 
-const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider("pojgsdnf163489fjn"),
-  isTokenAutoRefreshEnabled: true // Set to true to allow auto-refresh.
-});
+// initializeAppCheck(app, {
+//   provider: new ReCaptchaV3Provider(""),
+//   isTokenAutoRefreshEnabled: true // Set to true to allow auto-refresh.
+// });
 
 // STORAGE
 

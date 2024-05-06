@@ -416,7 +416,7 @@ const Post = ({
             style={{ scaleX: isEven ? "-1" : "1" }}
           />
         </motion.div>
-        <motion.div className="post_title-wrapper">
+        <motion.div className="post_title-wrapper" style={{ textAlign: isEven ? "end" : "start" }}>
           <motion.h1 className="post_title" transition={{ duration: 0.7 }}>
             {name}
           </motion.h1>
