@@ -37,6 +37,7 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Reply from "./Reply";
 import { UserAuth } from "../AuthContext";
+import BusinessCard from "./BusinessCard";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Post {
@@ -100,7 +101,7 @@ const Post = ({
         const userData = userDoc.data();
         setAuthorData({
           author: userData?.name || "",
-          authorId: userData?.id || "",
+          authorId: userData?.email || "",
           authorAvatar: userData.avatar || "",
         });
       }
@@ -395,6 +396,7 @@ const Post = ({
         className="post_container"
         style={{ alignItems: isEven ? "end" : "start" }}
       >
+        <BusinessCard email={authorData.authorId} />
         <motion.div
           className="post_line"
           style={{ left: isEven ? "100%" : "0%" }}
