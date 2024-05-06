@@ -58,7 +58,7 @@ exports.createBlog = functions.https.onCall(async (data, context) => {
       HttpsError("failed-precondition", "while authenticated.");
   }
 
-  const userId = context.auth.uid;
+  const userId = data.email;
   const userRef = admin.firestore().collection("Users").doc(userId);
   const userDoc = await userRef.get();
   const user = userDoc.data();

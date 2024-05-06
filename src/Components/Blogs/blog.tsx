@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import { readBlogs } from "../config/config";
 import SideBar from "../SideBar/sidebar";
+import BusinessCard from "../Forum/BusinessCard";
 const defaultAvatar = require("../../Images/avatar.webp");
 const blogImageTest = require("../../Images/blogtestimage.jpg");
 interface Blog {
@@ -176,22 +177,7 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
         </motion.div>
         <motion.div className="blog_lower-wrapper">
           <motion.div className="blog_author-wrapper">
-            <motion.img
-              src={defaultAvatar}
-              className="author-avatar"
-              variants={avatarVariants}
-              initial={controls}
-              animate={controls}
-              exit={controls}
-            />
-            <motion.h5
-              variants={avatarVariantsName}
-              initial={controls}
-              animate={controls}
-              exit={controls}
-            >
-              {blogData.author}
-            </motion.h5>
+            <BusinessCard email={authorId} isEven={false} isPosts={true} />
           </motion.div>
           <motion.div className="blog_date-wrapper">
             <motion.h5

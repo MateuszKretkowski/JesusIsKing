@@ -86,14 +86,16 @@ function BusinessCard({ email, isPosts, isEven }: BusinessCardProps) {
           }}
         >
           <motion.h5 className="author_name">{authorData.name}</motion.h5>
-          <motion.img className="author_img" style={{ filter: isHovered ? "brightness(0.8)" : "brightness(1)" }} src={image} />
+          <motion.img className="author_img"
+    onClick={() => {window.location.href = `/user/${authorData.uniqueId}`}}
+          style={{ filter: isHovered ? "brightness(0.8)" : "brightness(1)", cursor: "pointer" }} src={image} />
         </motion.div>
         <motion.div
         className="description_wrapper"
-        style={{ opacity: isHovered ? "1" : "0", height: isHovered ? "100%" : "0px"}}
+        style={{ opacity: isHovered ? "1" : "0", height: isHovered ? "200px" : "0px"}}
         >
           <motion.div className="description_container">
-            <motion.h5 style={{ opacity: 0.6 }}>{authorData.description.slice(0, 90)} {authorData.description.length > 90 ? <h5 style={{ opacity: 0. }}>...</h5> : ""}</motion.h5>
+            <motion.h5 style={{ opacity: 0.6 }}>{authorData.description.slice(0, 90)} {authorData.description.length > 90 ? <h5 style={{ opacity: 0.3 }}>...</h5> : ""}</motion.h5>
           </motion.div>
           <motion.div className="location_container">
             <motion.h5>{authorData.location}</motion.h5>
