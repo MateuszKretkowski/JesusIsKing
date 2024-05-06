@@ -396,7 +396,6 @@ const Post = ({
         className="post_container"
         style={{ alignItems: isEven ? "end" : "start" }}
       >
-        <BusinessCard email={authorData.authorId} />
         <motion.div
           className="post_line"
           style={{ left: isEven ? "100%" : "0%" }}
@@ -405,13 +404,7 @@ const Post = ({
           className="post_author-wrapper"
           style={{ justifyContent: isEven ? "end" : "start" }}
         >
-          <motion.div
-            className="post_author-wrapper-wrapper"
-            style={{ flexDirection: isEven ? "row-reverse" : "row" }}
-          >
-              <motion.img src={imgAvatarREAD ? imgAvatarREAD : defaultAvatar} className="author_img" />
-            <motion.h5 className="author_name">{authorData.author}</motion.h5>
-          </motion.div>
+        <BusinessCard email={authorData.authorId} isEven={isEven} isPosts={true} />
           <motion.div className="author_description"></motion.div>
           <motion.div
             className="post_bottom_gradient"

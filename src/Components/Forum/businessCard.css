@@ -1,0 +1,42 @@
+.bc {
+    max-width: 18vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    max-height: 20vh;
+}
+
+.bc_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.name_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.description_wrapper {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.description_container {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.location_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+}
