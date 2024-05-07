@@ -171,8 +171,11 @@ const Post = ({
   const functions = getFunctions();
   const handleSubmit = async () => {
     try {
+      startAnimation();
       var createReply = httpsCallable(functions, "createReply");
+      setIsLoading(true);
       const result = await createReply(postData);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error creating Reply: ", error);
     }
@@ -376,6 +379,27 @@ const Post = ({
     console.log(image);
   }, [image]);
 
+  const controlsGradients = useAnimation();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const startAnimation = async () => {
+    await controlsGradients.start({
+      width: "70%",
+      x: "50%",
+      transition: { duration: 0.4, type: "linear", at: ">" },
+    });
+    while (isLoading) {
+      await controlsGradients.start({
+        x: "-80%",
+        transition: { duration: 0.5, type: "linear", bounce: 0.5 },
+      });
+      await controlsGradients.start({
+        x: "200%",
+        transition: { duration: 0.5, type: "linear", bounce: 0.5 },
+      });
+    }
+  };
+
   const [isFocused, setisFocused] = useState(false);
   const { user, googleSignIn, logOut } = UserAuth();
   return (
@@ -549,15 +573,24 @@ const Post = ({
           animate={controls}
         >
           <motion.button
-            className="reply_addPost_title-wrapper"
-            onClick={() => {
-              handleSubmit();
-            }}
-          >
-            <motion.h5 className="reply_addPost_title-wrapper-text">
-              POST
-            </motion.h5>
-          </motion.button>
+                className="forum_addpost_button small_button"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                style={{ width: "100%" }}
+                >
+                <h3
+                  className="forum_addpost_button-text"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  >
+                  POST IT
+                </h3>
+                <motion.div
+                  animate={controlsGradients}
+                  className="forum_addpost_button_gradient"
+                  />
+              </motion.button>
 
           <motion.div
             className="reply_addPost_input-wrapper"
@@ -579,12 +612,13 @@ const Post = ({
         </motion.div>
 
         <motion.div
-          className="reply_container"
+          className="replyreply_container"
           // variants={repliesContainerVariants}
           // initial={controls}
           // animate={controls}
           // transition={{ duration: 5 }}
           // this freaking piece of dirt is so annoying, WHEN I CLOSE THE REPLIES, THERE IS ALL OF A SUDDEN BOOM. I DONT UNDERSTAND IT.
+          style={{ alignItems: isEven ? "end" : "end" }}
         >
           {replies &&
             replies.map((reply, index) => (
@@ -600,6 +634,7 @@ const Post = ({
                   author={reply.author}
                   authorEmail={reply.authorEmail}
                   date={reply.date}
+                  isEven={isEven}
                   noLikes={reply.numberOfLikes}
                   isRepliesOpen={isRepliesOpen}
                   i={index}

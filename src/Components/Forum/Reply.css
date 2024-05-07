@@ -2,12 +2,11 @@
     margin: 2% 0 2% 0%;
     opacity: 0;
     height: 0px;
+    display: flex;
 }
 
 .reply_name-wrapper {
     display: inline;
-    justify-content: start;
-    align-items: center;
     width: 70%;
     flex-wrap: wrap;
 }

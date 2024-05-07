@@ -201,6 +201,20 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   margin: 2% 1% 2% 1%;
 }
 
+.reply_container {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.reply {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; 
+}
+
 .replies_title-wrapper {
   margin-bottom: 2%;
 }
@@ -216,6 +230,9 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   align-items: end;
   height: auto;
   overflow-y: hidden;
+  overflow-x: visible;
+  height: 50px !important;
+  width: 40%;
   margin-bottom: 6%;
 }
 
@@ -261,7 +278,7 @@ background: radial-gradient(circle, #72726f 16%, #babab500 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20%;
+  width: 100% !important;
 }
 
 .small_button:hover {

@@ -13,6 +13,7 @@ interface Reply {
   date: string;
   noLikes: number;
   isRepliesOpen: boolean;
+  isEven: boolean;
   i: number;
 }
 
@@ -24,6 +25,7 @@ function Reply({
   date,
   noLikes,
   isRepliesOpen,
+  isEven,
   i,
 }: Reply) {
   const [expanded, setExpanded] = useState(false);
@@ -79,6 +81,10 @@ function Reply({
     exit: { height: "0px", opacity: 0, transition: { duration: 0.5 } },
   }
 
+  useEffect(() => {
+    console.log("isEven: ", isEven);
+  }, [isEven])
+
   return (
     <AnimatePresence>
       <motion.div
@@ -88,9 +94,12 @@ function Reply({
         animate={controlsForReply}
         exit={controlsForReply}
         transition={{ duration: 0.2, delay: 0.1 * i }}
+        style={{ justifyContent: isEven ? "end" : "start" }}
         onClick={handleClick}
       >
-        <motion.div className="reply_container">
+        <motion.div className="reply_container"
+        style={{ alignItems: isEven ? "end" : "start" }}
+        >
           <div className="reply_author-wrapper">
             <img src={defaultAvatar} className="author_img" />
             <motion.h5 className="author_name">{author}</motion.h5>

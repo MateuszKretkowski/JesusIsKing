@@ -423,7 +423,7 @@ function Forum() {
                 {image && isApplied && (
                   <motion.img
                   className="forum_addpost_description image"
-                  src={image}
+                  src={loaclImg}
                   alt="Selected"
                   style={{ marginLeft: "8px" }}
                   initial={{ opacity: 0 }}
