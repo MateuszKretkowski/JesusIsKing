@@ -28,12 +28,17 @@ function ProfilePicture({
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isUploadVisible, setIsUploadVisible] = useState(false);
+  const [photoURLLocal, setPhotoURLLocal] = useState("");
   const [photoURL, setPhotoURL] = useState(
     "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
   );
   function handleChange(e: any) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
     if (e.target.files[0]) {
       setPhoto(e.target.files[0]);
+      setPhotoURLLocal(reader.result);
+      console.log("URL LOCAL.", photoURLLocal);
       console.log("Photo selected.", e.target.files[0]);
       setIsUploadVisible(true);
     } else {
@@ -134,7 +139,7 @@ function ProfilePicture({
             initial={controls}
             animate={controls}
           >
-            UPLOAD
+            UPLOAD YOUR AVATAR
           </motion.button>
         </motion.div>
       )}

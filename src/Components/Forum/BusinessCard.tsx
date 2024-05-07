@@ -87,7 +87,7 @@ function BusinessCard({ email, isPosts, isEven }: BusinessCardProps) {
         >
           <motion.h5 className="author_name">{authorData.name}</motion.h5>
           <motion.img className="author_img"
-    onClick={() => {window.location.href = `/user/${authorData.uniqueId}`}}
+          onClick={() => {window.location.href = `/user/${authorData.uniqueId}`}}
           style={{ filter: isHovered ? "brightness(0.8)" : "brightness(1)", cursor: "pointer" }} src={image} />
         </motion.div>
         <motion.div
