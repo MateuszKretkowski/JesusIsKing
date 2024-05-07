@@ -31,23 +31,25 @@ function Redirect() {
 
   const navigate = useNavigate();
   const handleSubmit = async () => {
-    if (!userIdExists && userId.length > 2) {
-      const currentUserEmail = auth.currentUser ? auth.currentUser.email : null;
-      if (currentUserEmail) {
-        const q = query(
-          collection(db, "Users"),
-          where("uniqueId", "==", userId)
-        );
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.size === 0) {
-          const userRef = doc(db, "Users", currentUserEmail);
+    if (getCookie("isRedirected") == false) {
+    
+      if (!userIdExists && userId.length > 2) {
+        const currentUserEmail = auth.currentUser ? auth.currentUser.email : null;
+        if (currentUserEmail) {
+          const q = query(
+            collection(db, "Users"),
+            where("uniqueId", "==", userId)
+          );
+          const querySnapshot = await getDocs(q);
+          if (querySnapshot.size === 0) {
+            const userRef = doc(db, "Users", currentUserEmail);
           alert("Your uniqueId has been updated");
-          deleteCookie("isRedirected");
+          setCookie("isRedirected", true);
           if (auth.currentUser) {
-          const userEmail = auth.currentUser.email;
-          setCookie("email", userEmail, 100000000000000000000000000);
-        }
-          navigate("/");
+            const userEmail = auth.currentUser.email;
+            setCookie("email", userEmail, 100000000000000000000000000);
+          }
+          navigate(`/user/${userId}`);
           return updateDoc(userRef, { uniqueId: userId });
         } else {
           alert("This Id is already taken");
@@ -56,6 +58,9 @@ function Redirect() {
         console.error("updateUserUniqueId does not exist or is too short");
       }
     }
+  } else {
+    alert("You have already created a uniqueId");
+  }
   };
 
   const handleChange = (event: any) => {
@@ -82,7 +87,7 @@ function Redirect() {
             className="redirect-input"
             maxlength="15"
             minlength="10"
-            placeholder="WRITE YOUR @ HERE"
+            placeholder="CREATE YOUR @ HERE"
             value={userId}
             onChange={handleChange}
           />

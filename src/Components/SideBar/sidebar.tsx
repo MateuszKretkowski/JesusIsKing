@@ -267,7 +267,7 @@ function SideBar() {
   return (
     <motion.div
       className="sidebar"
-      style={{ opacity: isRedirectedCookie ? 0 : 1 }}
+      style={{ opacity: isRedirectedCookie ? 1 : 0 }}
     >
       {isMobile ? null : <motion.div className="stripe" />}
       <div>
