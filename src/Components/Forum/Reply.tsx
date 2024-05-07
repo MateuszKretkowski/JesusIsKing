@@ -3,6 +3,7 @@ import "./Reply.css";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { db, likeAPost, unlikeAPost } from "../config/config";
 import { collection, getDoc } from "firebase/firestore";
+import BusinessCard from "./BusinessCard";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 interface Reply {
@@ -85,6 +86,8 @@ function Reply({
     console.log("isEven: ", isEven);
   }, [isEven])
 
+  const [isHoveredPFP, setIsHoveredPFP] = useState(false);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -94,16 +97,19 @@ function Reply({
         animate={controlsForReply}
         exit={controlsForReply}
         transition={{ duration: 0.2, delay: 0.1 * i }}
-        style={{ justifyContent: isEven ? "end" : "start" }}
+        style={{ justifyContent: isEven ? "end" : "start", marginTop: isHoveredPFP ? "60px" : "0px"}}
         onClick={handleClick}
       >
         <motion.div className="reply_container"
         style={{ alignItems: isEven ? "end" : "start" }}
         >
-          <div className="reply_author-wrapper">
-            <img src={defaultAvatar} className="author_img" />
-            <motion.h5 className="author_name">{author}</motion.h5>
-          </div>
+          <motion.div className="reply_author-wrapper"
+          onHoverStart={() => setIsHoveredPFP(true)}
+          onHoverEnd={() => setIsHoveredPFP(false)}
+          >
+          <BusinessCard email={authorEmail} isEven={isEven} isPosts={true} />
+
+          </motion.div>
           <motion.h2 className="reply_name-wrapper">
             {name.slice(0, 50)}
             {name.length > 50 ? <motion.h2
