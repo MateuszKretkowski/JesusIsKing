@@ -6,9 +6,9 @@ import {
     onAuthStateChanged,
     GoogleAuthProvider,
   } from "firebase/auth";
-  import { auth } from "./config/config";
+  import { auth } from "../config/config";
 import firebase from 'firebase/compat/app';
-import LoadingScreen from './Loading Screen/LoadingScreen';
+import LoadingScreen from '../Loading Screen/LoadingScreen';
 
 const authContext = createContext<AuthContextType | undefined>(undefined);
 

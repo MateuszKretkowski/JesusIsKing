@@ -36,7 +36,7 @@ import {
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import Reply from "./Reply";
-import { UserAuth } from "../AuthContext";
+import { UserAuth } from "../Contexts/AuthContext";
 import BusinessCard from "./BusinessCard";
 const defaultAvatar = require("../../Images/avatar.webp");
 

@@ -19,7 +19,7 @@ import { auth, db, isUserLoggedIn } from "./Components/config/config.tsx";
 import { doc } from "firebase/firestore";
 import { getCookie, setCookie } from "./utils/cookieUtils.ts";
 import LoadingScreen from "./Components/Loading Screen/LoadingScreen.tsx";
-import { AuthContextProvider } from "./Components/AuthContext.tsx";
+import { AuthContextProvider } from "./Components/Contexts/AuthContext.tsx";
 import Addnotation from "./Components/Addnotation/Addnotation.tsx";
 
 function App() {
@@ -72,7 +72,6 @@ const [isLoading, setIsLoading]: any = useState(false);
                       <BlogsWrapper />
                       <Forum />
                       <Footer />
-                      <Addnotation />
                     </>
                   } />
                   <Route path="/user/:name" element={<Settings />} />

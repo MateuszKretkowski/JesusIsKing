@@ -11,7 +11,7 @@ import { getCookie, setCookie } from "../../utils/cookieUtils.ts";
 import { get } from "http";
 import Notif from "./Notif.tsx";
 import ProfilePicture from "../Forum/ProfilePicture.tsx";
-import { UserAuth } from "../AuthContext.tsx";
+import { UserAuth } from "../Contexts/AuthContext.tsx";
 // import Settings from '../Settings/settings.js';
 const defaultAvatar = require("../../Images/avatar.webp");
 

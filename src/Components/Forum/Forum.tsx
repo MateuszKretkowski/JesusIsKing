@@ -24,7 +24,7 @@ import {
   query,
   startAfter,
 } from "firebase/firestore";
-import { UserAuth } from "../AuthContext.tsx";
+import { UserAuth } from "../Contexts/AuthContext.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Forum() {

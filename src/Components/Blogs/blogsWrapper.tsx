@@ -10,7 +10,7 @@ import {
   useInView,
 } from "framer-motion";
 import { auth, isLoggedIn, isUserLoggedIn, readBlogs } from "../config/config";
-import { UserAuth } from "../AuthContext";
+import { UserAuth } from "../Contexts/AuthContext";
 
 function BlogsWrapper() {
   interface Blog {
