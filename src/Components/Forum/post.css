@@ -60,11 +60,15 @@
   display: flex;
   justify-content: center;
   align-items: end;
+  width: 100%;
   gap: 10px;
 }
 
 .author_img {
-  width: 42px;
+  width: 62px;
+  height: 62px;
+  object-fit: cover;  
+  overflow: hidden;
   border-radius: 12px;
   
 }

@@ -29,8 +29,11 @@
 }
 
 .avatar_sidebar {
-    width: 90%;
+    width: 300px;
+    height: 300px;
     border-radius: 12px;
+    overflow: hidden;
+    object-fit: cover;
     margin: 12px 12px;
 }
 
