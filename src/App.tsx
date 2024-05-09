@@ -16,7 +16,7 @@ import { motion, AnimatePresence, animate, stagger } from "framer-motion";
 import './App.css';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db, isUserLoggedIn } from "./Components/config/config.tsx";
-import { doc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { getCookie, setCookie } from "./utils/cookieUtils.ts";
 import LoadingScreen from "./Components/Loading Screen/LoadingScreen.tsx";
 import { AuthContextProvider } from "./Components/Contexts/AuthContext.tsx";
@@ -41,11 +41,26 @@ function NavigationHandler() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const cookie = getCookie("isRedirected");
-    console.log(cookie, "cookie");
-    if (cookie == false && auth.currentUser || cookie == null && auth.currentUser) {
-      navigate("/redirect");
-    }
+    const fetchUserData = async () => {
+      if (auth?.currentUser?.email) {
+        const userDocRef = doc(db, "Users", auth.currentUser.email); // Reference to the document
+        const docSnap = await getDoc(userDocRef); // Fetch the document
+
+        if (docSnap.exists()) {
+          const user = docSnap.data(); // Get document data
+          console.log(user, "user");
+          if (user.uniqueId === "DEFAULT") {
+            navigate("/redirect");
+          }
+        } else {
+          console.log("No such document!");
+        }
+      } else {
+        console.log("No user email found");
+      }
+    };
+
+    fetchUserData();
   }, [navigate]);
 
   return null; // This component does not need to render anything

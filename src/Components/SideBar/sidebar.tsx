@@ -193,13 +193,12 @@ function SideBar() {
         if (docSnap.exists()) {
           const userData = docSnap.data();
           if (
-            userData.uniqueId !== "DEFAULT" ||
-            getCookie("isRedirected") === "true"
+            userData.uniqueId === "DEFAULT"
           ) {
-            console.log("Logged user:", userData.uniqueId);
-          } else {
+            console.log(userData, "USER DATA TODAY");
             navigate("/redirect");
-            setCookie("isRedirected", "true", 1);
+          } else {
+            console.log("Logged user:", userData.uniqueId);
           }
         } else {
         }
@@ -242,9 +241,6 @@ function SideBar() {
   const [isLikesOpen, setIsLikesOpen] = useState(false);
   const [isRepliesOpen, setIsRepliesOpen] = useState(false);
 
-  const isRedirectedCookie = getCookie("isRedirected");
-
-
   const { user, googleSignIn, logOut } = UserAuth();
   const [loading, setLoading] = useState(true);
   const handleSignIn = async () => {
@@ -267,7 +263,6 @@ function SideBar() {
   return (
     <motion.div
       className="sidebar"
-      style={{ opacity: isRedirectedCookie ? 1 : 0 }}
     >
       {isMobile ? null : <motion.div className="stripe" />}
       <div>

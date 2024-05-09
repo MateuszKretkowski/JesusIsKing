@@ -31,9 +31,9 @@ function Redirect() {
 
   const navigate = useNavigate();
   const handleSubmit = async () => {
-    if (getCookie("isRedirected") == false) {
-    
-      if (!userIdExists && userId.length > 2) {
+    const userDoc = await getDoc(doc(db, "Users", auth?.currentUser?.email));
+    const user = userDoc.data();
+    if (user?.uniqueId == "DEFAULT") {
         const currentUserEmail = auth.currentUser ? auth.currentUser.email : null;
         if (currentUserEmail) {
           const q = query(
@@ -44,7 +44,6 @@ function Redirect() {
           if (querySnapshot.size === 0) {
             const userRef = doc(db, "Users", currentUserEmail);
           alert("Your uniqueId has been updated");
-          setCookie("isRedirected", true);
           if (auth.currentUser) {
             const userEmail = auth.currentUser.email;
             setCookie("email", userEmail, 100000000000000000000000000);
@@ -57,7 +56,6 @@ function Redirect() {
       } else {
         console.error("updateUserUniqueId does not exist or is too short");
       }
-    }
   } else {
     alert("You have already created a uniqueId");
   }
