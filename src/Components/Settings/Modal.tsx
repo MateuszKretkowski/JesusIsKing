@@ -76,12 +76,19 @@ const Modal = ({ showModal, setShowModal, onUpdate }: ModalProps) => {
     const functions = getFunctions();
     const handleSubmit = async () => {
         try {
-            var updateUser = httpsCallable(functions, "updateUser");
-            const result = await updateUser(formData);
-            console.log(result.data);
-            onUpdate();
-            setShowModal(false);
-            
+            const filteredFormData = Object.fromEntries(
+                Object.entries(formData).filter(([key, value]) => value.trim() !== '')
+            );
+    
+            if (Object.keys(filteredFormData).length > 0) {
+                var updateUser = httpsCallable(functions, "updateUser");
+                const result = await updateUser(filteredFormData);
+                console.log(result.data);
+                onUpdate();
+                setShowModal(false);
+            } else {
+                console.error("No data to update");
+            }
         } catch (error) {
             console.error("Error updating User: ", error);
         }

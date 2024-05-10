@@ -55,6 +55,7 @@ function ProfilePicture({
 
     setLoading(true);
     controls.start("uploaded");
+    setIsUploadVisible(false);
     upload(photo, email, false, "avatar")
       .then(() => {
         setLoading(false);
@@ -110,6 +111,10 @@ function ProfilePicture({
       },
     }
   }
+
+  useEffect(() => {
+    isUploadVisible ? controls.start("visible") : controls.start("hidden");
+  })
 
   return (
     <motion.div className="ProfilePicture-wrapper">

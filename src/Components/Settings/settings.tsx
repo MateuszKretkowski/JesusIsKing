@@ -33,6 +33,7 @@ import { getCookie } from "../../utils/cookieUtils.ts";
 import LoadingScreen from "../Loading Screen/LoadingScreen.tsx";
 import ProfilePicture from "../Forum/ProfilePicture.tsx";
 import Post from "../Forum/post.tsx";
+import { UserAuth } from "../Contexts/AuthContext.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Settings() {
@@ -92,9 +93,11 @@ function Settings() {
   useEffect(() => {
     showModal ? controls.start("hidden") : controls.start("visible");
   });
+
+  const { user, googleSignIn, logOut } = UserAuth();
   useEffect(() => {
     if (auth.currentUser) {
-      getCookie("email") == userData.email
+      auth.currentUser.email == userData.email
         ? setIsMyPage(true)
         : setIsMyPage(false);
       console.log(isMyPage, "isMyPage!");
@@ -232,11 +235,12 @@ function Settings() {
   const nameMAPPED = wrapWordsAndLettersInSpan(userData.name);
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return <LoadingScreen isFullScreen={true} />;
   }
 
   return (
     <div className="settings">
+      <LoadingScreen isFullScreen={false} />
       <div className="settings_container">
         <div className="account-wrapper-settings">
           <motion.div
