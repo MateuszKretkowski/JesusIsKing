@@ -40,6 +40,7 @@ function Settings() {
   const [posts, setPosts] = useState({});
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isLoadingSmall, setIsSmallLoading] = useState(false);
   const { name } = useParams<{ name?: string }>();
   const [userId, setUserId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -238,9 +239,26 @@ function Settings() {
     return <LoadingScreen isFullScreen={true} />;
   }
 
+  
+  const handleDataChange = (newData: boolean) => {
+    setIsSmallLoading(newData);
+  };
+
   return (
     <div className="settings">
-      <LoadingScreen isFullScreen={false} />
+      <AnimatePresence>
+
+       {isLoadingSmall && (
+         
+         <motion.div
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         exit={{ opacity: 0 }}
+         >
+        <LoadingScreen isFullScreen={false} />
+      </motion.div>
+      )}
+      </AnimatePresence>
       <div className="settings_container">
         <div className="account-wrapper-settings">
           <motion.div
@@ -249,7 +267,7 @@ function Settings() {
             initial={controls}
             exit={controls}
           >
-            <ProfilePicture email={userData.email} isAbleToChange={canEditPFP} classname="avatar" />
+            <ProfilePicture email={userData.email} isAbleToChange={canEditPFP} classname="avatar" data={handleDataChange} />
           </motion.div>
           <motion.div className="desc-wrapper-account-settings">
             <motion.div

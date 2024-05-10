@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ProfilePicture.css";
-import { motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { getStorage, ref } from "firebase/storage";
 import { auth, db, upload } from "../config/config";
 import {
@@ -12,15 +12,18 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import LoadingScreen from "../Loading Screen/LoadingScreen";
 
 function ProfilePicture({
   email,
   isAbleToChange,
-  classname
+  classname,
+  data,
 }: {
   email: string;
   isAbleToChange: boolean;
   classname: string;
+  data: any;
 }) {
   const currentUser = auth?.currentUser;
   const storage = getStorage();
@@ -45,27 +48,29 @@ function ProfilePicture({
       console.error("No file selected.");
     }
   }
-
+  
   function handleClick() {
     if (!photo) {
       console.error("No photo to upload.");
       return;
     }
     console.log("Uploading photo...");
-
+    
     setLoading(true);
     controls.start("uploaded");
-    setIsUploadVisible(false);
+    data(true);
     upload(photo, email, false, "avatar")
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error uploading photo:", error);
-        setLoading(false);
-      });
+    .then(() => {
+      setLoading(false);
+      data(false);
+      setIsUploadVisible(false);
+    })
+    .catch((error) => {
+      console.error("Error uploading photo:", error);
+      setLoading(false);
+    });
   }
-
+  
   useEffect(() => {
     const setPhoto = async () => {
       console.log("Email is:", email);
@@ -88,7 +93,7 @@ function ProfilePicture({
     };
     setPhoto();
   }, [handleClick]);
-
+  
   const controls = useAnimation();
   const uploadVariants = {
     hidden: {
@@ -111,10 +116,13 @@ function ProfilePicture({
       },
     }
   }
-
+  
   useEffect(() => {
     isUploadVisible ? controls.start("visible") : controls.start("hidden");
   })
+
+  const [isSmallLoading, setIsSmallLoading] = useState(false);
+
 
   return (
     <motion.div className="ProfilePicture-wrapper">

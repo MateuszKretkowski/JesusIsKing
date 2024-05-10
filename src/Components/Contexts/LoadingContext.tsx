@@ -3,9 +3,7 @@ import { createContext, useContext, useState } from 'react';
 const OpacityContext = createContext(OpacityContextType | undefined);
 
 interface OpacityContextType {
-    user: firebase.User | null; 
-    googleSignIn: () => void;
-    logOut: () => void;
+    isLoading: boolean; 
   }
 
 export function useOpacity() {

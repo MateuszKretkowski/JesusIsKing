@@ -75,7 +75,7 @@ const [isLoading, setIsLoading]: any = useState(false);
         <IsLoadingContext.Provider value={{ isLoading, setIsLoading }}>
           <div className="App">
             <SideBar />
-            {isLoading && <LoadingScreen />}
+            {isLoading && <LoadingScreen isFullScreen={false} />}
             {!isLoading && (
               <>
                 <NavigationHandler />  {/* Here is the new component */}
