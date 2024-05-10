@@ -229,6 +229,35 @@ background: radial-gradient(circle, rgba(40,40,40,1) 16%, rgba(40,40,40,0) 100%)
   }
 }
 
+@media only screen and (max-width: 768px) {
+  .post {
+    margin: 0 !important; /* Remove margin for tablet devices */
+  }
+
+  .author_img {
+    width: 36px !important; /* Adjust avatar size */
+  }
+
+  .author_name, .post_title, .post_description {
+    font-size: 1.45rem; /* Adjust font size for readability */
+  }
+
+  .post_title {
+    font-size: 1.6rem !important; /* Adjust action text font size */
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .post {
+    margin: 0 !important; /* Remove margin for very small devices */
+    width: 90vw !important; /* Adjust post width for very small devices */
+  }
+
+  .post_author-wrapper, .post_title-wrapper, .post_description-wrapper {
+    text-align: center; /* Ensure text is centered */
+  }
+}
+
 .image {
   position: relative;
   max-width: 320px;

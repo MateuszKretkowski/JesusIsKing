@@ -24,15 +24,9 @@
 }
 
 .avatar-wrapper-settings {
-    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.avatar {
-    width: 100%;
-    border-radius: 24px;
 }
 
 .desc-wrapper-account-settings {

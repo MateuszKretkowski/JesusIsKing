@@ -82,7 +82,7 @@ function BusinessCard({ email, isPosts, isEven }: BusinessCardProps) {
         <motion.div
           className="post_author-wrapper-wrapper"
           style={{
-            flexDirection: isEven ? "row" : isPosts ? "row-reverse" : "row",
+            flexDirection: isEven ? "row" : isPosts ? "row-reverse" : "row", justifyContent: isEven ? "flex-end" : "flex-end",
           }}
         >
           <motion.h5 className="author_name">{authorData.name}</motion.h5>
