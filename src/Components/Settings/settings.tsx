@@ -59,142 +59,133 @@ function Settings() {
     uniqueId: "",
   });
 
-    const fetchUserPosts = async () => {
-      console.log(userData.email, "userData.email");
-      if (userData.email !== "") {
-            setLoading(true);
-            console.log(userData.email, "userData.email");
-            const userRef = doc(db, "Users", userData.email);
-            const q = query(
-                collection(userRef, "UserPosts"),
-            );
-            const querySnapshot = await getDocs(q);
-            const postsIdArray: any = [];
-            querySnapshot.forEach((doc) => {
-              postsIdArray.push({ id: doc.id, ...doc.data() });
-            });
-            console.log(postsIdArray, "postsArray");
-            
-            const postsArray: any = [];
-            for (const post of postsIdArray) {
-                const postRef = doc(db, "Posts", post.id);
-                const postDoc = await getDoc(postRef);
-                postsArray.push({ id: post.id, ...postDoc.data() });
-            }
-
-
-            await setPosts(postsArray);
-            console.log(posts);
-
-            setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-            setLoading(false);
-        }
-    };
-    
-  useEffect(() => {
-    showModal ? controls.start("hidden") : controls.start("visible");
-  });
-
-  const { user, googleSignIn, logOut } = UserAuth();
-  useEffect(() => {
-    if (auth.currentUser) {
-      auth.currentUser.email == userData.email
-        ? setIsMyPage(true)
-        : setIsMyPage(false);
-      console.log(isMyPage, "isMyPage!");
-    }
-  }, [userData.id]);
-  useEffect(() => {
-    isMyPage ? setCanEditPFP(true) : setCanEditPFP(false);
-  }, [isMyPage]);
-
-  const fetchUserData = async () => {
-    setIsLoading(true); // Indicate loading
-    const userRef = collection(db, "Users");
-    try {
-      if (userData.id) {
-        console.log(userData.id);
-        const docRef = doc(userRef, userData.id);
-        console.log(userData.id, "userData.id");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserData({
-            id: docSnap.data().id,
-            name: docSnap.data().name,
-            description: docSnap.data().description,
-            from: docSnap.data().from,
-            email: docSnap.data().email,
-            link: docSnap.data().link,
-            uniqueId: docSnap.data().uniqueId,
+  const fetchUserPosts = async () => {
+    console.log(userData.email, "userData.email");
+    if (userData.email !== "") {
+          setLoading(true);
+          console.log(userData.email, "userData.email");
+          const userRef = doc(db, "Users", userData.email);
+          const q = query(
+              collection(userRef, "UserPosts"),
+          );
+          const querySnapshot = await getDocs(q);
+          const postsIdArray: any = [];
+          querySnapshot.forEach((doc) => {
+            postsIdArray.push({ id: doc.id, ...doc.data() });
           });
-          console.log(userData);
-        } else {
-          console.log("No such document!");
-        }
+          console.log(postsIdArray, "postsArray");
+          
+          const postsArray: any = [];
+          for (const post of postsIdArray) {
+              const postRef = doc(db, "Posts", post.id);
+              const postDoc = await getDoc(postRef);
+              postsArray.push({ id: post.id, ...postDoc.data() });
+          }
+          await setPosts(postsArray);
+          console.log(posts);
+          setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+          setLoading(false);
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false); // Data fetched or error occurred, stop indicating loading
-    }
   };
 
-  const deletePosts = async () => {
+  function deletePosts() {
     setPosts({});
   }
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        readUserByUsername(name, (userData) => {
-          setUserData(userData);
-          setIsLoading(false); // Ensure loading is stopped after user data is set
-        });
-      } else {
+useEffect(() => {
+  console.log(posts, "posts");
+}, [posts])
+
+
+useEffect(() => {
+  showModal ? controls.start("hidden") : controls.start("visible");
+});
+useEffect(() => {
+  if (auth.currentUser) {
+    getCookie("email") == userData.id
+      ? setIsMyPage(true)
+      : setIsMyPage(false);
+    console.log(isMyPage);
+  }
+}, [userData.id]);
+useEffect(() => {
+  isMyPage ? setCanEditPFP(true) : setCanEditPFP(false);
+}, [isMyPage]);
+const fetchUserData = async () => {
+  setIsLoading(true); // Indicate loading
+  const userRef = collection(db, "Users");
+  try {
+    if (userData.id) {
+      console.log(userData.id);
+      const docRef = doc(userRef, userData.id);
+      console.log(userData.id, "userData.id");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
         setUserData({
-          id: "",
-          name: "",
-          description: "",
-          from: "",
-          email: "",
-          link: "",
-          uniqueId: "",
+          id: docSnap.data().id,
+          name: docSnap.data().name,
+          description: docSnap.data().description,
+          from: docSnap.data().from,
+          email: docSnap.data().email,
+          link: docSnap.data().link,
+          uniqueId: docSnap.data().uniqueId,
         });
-        setIsLoading(false); // Ensure loading is stopped if no user
+        console.log(userData);
+      } else {
+        console.log("No such document!");
       }
-    });
-
-    // This will call fetchUserData if needed or any other logic to ensure data is loaded
-
-    return () => unsubscribe();
-  }, [name]);
-
-  const even = {
-    hidden: { x: -200, opacity: 0, scale: 1 },
-    visible: { x: 0, opacity: 1, scale: 1 },
-    exit: { x: -200, opacity: 0, scale: 1 },
-  };
-
-  const odd = {
-    hidden: { x: 200, opacity: 0, scale: 1 },
-    visible: { x: 0, opacity: 1, scale: 1 },
-    exit: { x: 200, opacity: 0, scale: 1 },
-  };
-
-  const variantsDescription = {
-    hidden: { opacity: 0, scale: 0 },
-    visible: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0 },
-  };
-
-  const variantsAction = {
-    hidden: { opacity: 0, scale: 0, y: 100 },
-    visible: { opacity: 1, scale: 1, y: 0 },
-    exit: { opacity: 0, scale: 0, y: 100 },
-  };
-
-  function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
-    const words = name.split(" ");
+    }
+  } catch (e) {
+    console.log(e);
+  } finally {
+    setIsLoading(false); // Data fetched or error occurred, stop indicating loading
+  }
+};
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      readUserByUsername(name, (userData) => {
+        setUserData(userData);
+        setIsLoading(false); // Ensure loading is stopped after user data is set
+      });
+    } else {
+      setUserData({
+        id: "",
+        name: "",
+        description: "",
+        from: "",
+        email: "",
+        link: "",
+        uniqueId: "",
+      });
+      setIsLoading(false); // Ensure loading is stopped if no user
+    }
+  });
+  // This will call fetchUserData if needed or any other logic to ensure data is loaded
+  return () => unsubscribe();
+}, [name]);
+const even = {
+  hidden: { x: -200, opacity: 0, scale: 1 },
+  visible: { x: 0, opacity: 1, scale: 1 },
+  exit: { x: -200, opacity: 0, scale: 1 },
+};
+const odd = {
+  hidden: { x: 200, opacity: 0, scale: 1 },
+  visible: { x: 0, opacity: 1, scale: 1 },
+  exit: { x: 200, opacity: 0, scale: 1 },
+};
+const variantsDescription = {
+  hidden: { opacity: 0, scale: 0 },
+  visible: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0 },
+};
+const variantsAction = {
+  hidden: { opacity: 0, scale: 0, y: 100 },
+  visible: { opacity: 1, scale: 1, y: 0 },
+  exit: { opacity: 0, scale: 0, y: 100 },
+};
+function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
+  const words = name.split(" ");
 
     return words.map((word, wordIndex) => (
       <motion.div
@@ -417,7 +408,7 @@ function Settings() {
               style={{ opacity: isPostsOpen ? 0 : 1, pointerEvents: isPostsOpen ? "none" : "all" }}
               >
                 
-          <motion.button
+          {/* <motion.button
             className="action-wrapper settings_action-wrapper"
             variants={variantsDescription}
             initial={controls}
@@ -430,17 +421,17 @@ function Settings() {
             }}
             >
             <motion.h5 className="edit">OPEN USER'S POSTS</motion.h5>
-          </motion.button>
+          </motion.button> */}
               </motion.div>
             </motion.div>
           <motion.div className="post_container">
-            {posts && Array.isArray(posts) && posts.length >= 0 && posts.map((post: any, i: number) => (
+            {posts && Array.isArray(posts) && posts.length > 0 && posts.map((post: any, i: number) => (
               <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-                >
+              >
               <Post
-                key={post.id}
+              key={post.id}
                 id={post.id}
                 index={i+1}
                 authorId={post.authorEmail}

@@ -124,6 +124,10 @@ exports.createPost = functions.https.onCall(async (data, context) => {
     );
   }
   const userEmail = context.auth.token.email || null;
+  const userRef = admin.firestore().collection("Users").doc(userEmail || "");
+  userRef.update({
+    UserPosts: admin.firestore.FieldValue.arrayUnion(data.id),
+  });
   if (!userEmail) {
     throw new functions.https.HttpsError("not-found", "Unable.");
   }
@@ -146,9 +150,11 @@ exports.createPost = functions.https.onCall(async (data, context) => {
     numberOfReplies: 0,
     numberOfReposts: 0,
   };
-
+  const userPostRef = userRef.collection("UserPosts").doc(data.id);
+  const saveUserPostPromise = userPostRef.set({id: data.id});
   try {
     await admin.firestore().collection("Posts").doc(postData.id).set(postData);
+    Promise.all([saveUserPostPromise]);
     console.log("Post Created");
     return {result: "Post Created successfully!"};
   } catch (error) {
