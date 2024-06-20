@@ -102,7 +102,7 @@ useEffect(() => {
 });
 useEffect(() => {
   if (auth.currentUser) {
-    getCookie("email") == userData.id
+    auth.currentUser.email == userData.id
       ? setIsMyPage(true)
       : setIsMyPage(false);
     console.log(isMyPage);
@@ -292,7 +292,7 @@ function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
               transition={{ delay: 1 }}
             >
               <motion.h2
-                className=""
+                className="description-settings"
                 variants={variantsDescription}
                 initial={controls}
                 animate={controls}

@@ -30,7 +30,7 @@ const BibliaAPI: React.FC = () => {
             <h1 className="Bibleverse_Title">BIBLE VERSE OF THE DAY</h1>
           </div>
           <div className="desc-wrapper">
-            <h3 id="viewing"><p className='verse'>{text.toUpperCase()}</p></h3>
+            <h3 id="viewing"><p className='verse'>"{text.toUpperCase()}"</p></h3>
             <h5 className="Bibleverse_chapter">{book.toUpperCase()}: {chapter}:{verse}</h5>
           </div>
 

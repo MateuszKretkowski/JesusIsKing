@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Forum&display=swap');
 .blog {
     position: relative;
     width: 100%;
@@ -58,6 +59,10 @@
 
 .blog_description {
     font-size: 2rem;
+    font-family: "Forum", serif;
+    font-weight: 400;
+    font-style: normal;
+    white-space: pre-line;
     font-weight: 800;
 }
 

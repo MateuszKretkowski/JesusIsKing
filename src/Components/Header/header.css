@@ -64,11 +64,13 @@
 }
 
 .verse {
-    font-weight: 900;
     color: #000000bd;
     font-size: 32px;
     letter-spacing: 1px;
     word-spacing: 1px;
+    font-family: "Forum", serif;
+    font-weight: 900 !important;
+    font-style: normal;
 }
 
 .Bibleverse_chapter {

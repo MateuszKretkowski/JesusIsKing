@@ -1,0 +1,158 @@
+[debug] [2024-06-20T09:25:02.490Z] ----------------------------------------------------------------------
+[debug] [2024-06-20T09:25:02.494Z] Command:       C:\Program FIles\nodejs\node.exe C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2024-06-20T09:25:02.494Z] CLI Version:   13.8.1
+[debug] [2024-06-20T09:25:02.495Z] Platform:      win32
+[debug] [2024-06-20T09:25:02.495Z] Node Version:  v20.10.0
+[debug] [2024-06-20T09:25:02.495Z] Time:          Thu Jun 20 2024 11:25:02 GMT+0200 (Central European Summer Time)
+[debug] [2024-06-20T09:25:02.495Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-06-20T09:25:02.499Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-06-20T09:25:02.665Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-06-20T09:25:02.665Z] > authorizing via signed-in user (mkretkowski13@gmail.com)
+[debug] [2024-06-20T09:25:02.973Z] openjdk version "21.0.2" 2024-01-16
+
+[debug] [2024-06-20T09:25:02.974Z] OpenJDK Runtime Environment (build 21.0.2+13-58)
+OpenJDK 64-Bit Server VM (build 21.0.2+13-58, mixed mode, sharing)
+
+[debug] [2024-06-20T09:25:02.993Z] Parsed Java major version: 21
+[info] i  emulators: Starting emulators: functions, firestore, hosting, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, firestore, hosting, storage"}}
+[debug] [2024-06-20T09:25:03.013Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.014Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.014Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.014Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.014Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.014Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-06-20T09:25:03.021Z] [hub] writing locator at C:\Users\mati\AppData\Local\Temp\hub-jesusisking-fb576.json
+[debug] [2024-06-20T09:25:03.033Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.033Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-20T09:25:03.033Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, database, pubsub, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, database, pubsub, dataconnect\u001b[22m"}}
+[debug] [2024-06-20T09:25:03.037Z] defaultcredentials: writing to file C:\Users\mati\AppData\Roaming\firebase\mkretkowski13_gmail_com_application_default_credentials.json
+[debug] [2024-06-20T09:25:03.039Z] Setting GAC to C:\Users\mati\AppData\Roaming\firebase\mkretkowski13_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\mati\\AppData\\Roaming\\firebase\\mkretkowski13_gmail_com_application_default_credentials.json"}}
+[debug] [2024-06-20T09:25:03.041Z] > refreshing access token with scopes: []
+[debug] [2024-06-20T09:25:03.042Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-06-20T09:25:03.042Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-06-20T09:25:24.401Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-06-20T09:25:24.401Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-06-20T09:25:28.071Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-06-20T09:25:28.071Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-06-20T09:25:28.083Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576/adminSdkConfig [none]
+[debug] [2024-06-20T09:25:36.058Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576/adminSdkConfig 200
+[debug] [2024-06-20T09:25:36.058Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576/adminSdkConfig {"projectId":"jesusisking-fb576","databaseURL":"https://jesusisking-fb576-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"jesusisking-fb576.appspot.com","locationId":"europe-west"}
+[debug] [2024-06-20T09:25:36.261Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-06-20T09:25:36.261Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-06-20T09:25:36.261Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\mati\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.5.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","jesusisking-fb576","--rules","D:\\Projects\\jesusisking-project\\jesusiskingfinal\\firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\mati\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.5.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"jesusisking-fb576\",\"--rules\",\"D:\\\\Projects\\\\jesusisking-project\\\\jesusiskingfinal\\\\firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2024-06-20T09:25:38.254Z] Jun 20, 2024 11:25:38 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Jun 20, 2024 11:25:38 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\r\nINFO: Started WebSocket server on ws://127.0.0.1:9150\r\n"}}
+[debug] [2024-06-20T09:25:38.329Z] API endpoint: http:// {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://"}}
+[debug] [2024-06-20T09:25:38.330Z] 127.0.0.1:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\r\n\n   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080\n\nIf you are running a Firestore in Datastore Mode project, run:\r\n\n   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\r\nDev App Server is now running.\n\r\n"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2024-06-20T09:25:39.906Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-06-20T09:25:40.988Z] Temp file directory for storage emulator: C:\Users\mati\AppData\Local\Temp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: C:\\Users\\mati\\AppData\\Local\\Temp/firebase/storage/blobs"}}
+[debug] [2024-06-20T09:25:40.997Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/jesusisking-fb576/sites 
+[debug] [2024-06-20T09:25:46.147Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/jesusisking-fb576/sites 200
+[debug] [2024-06-20T09:25:46.147Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/jesusisking-fb576/sites {"sites":[{"name":"projects/jesusisking-fb576/sites/jesusisking-fb576","defaultUrl":"https://jesusisking-fb576.web.app","appId":"1:402878700894:web:dd7941f0b1b151a281c3cf","type":"DEFAULT_SITE"}]}
+[debug] [2024-06-20T09:25:46.147Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576/webApps/1:402878700894:web:dd7941f0b1b151a281c3cf/config [none]
+[debug] [2024-06-20T09:26:10.675Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576/webApps/1:402878700894:web:dd7941f0b1b151a281c3cf/config 200
+[debug] [2024-06-20T09:26:10.675Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576/webApps/1:402878700894:web:dd7941f0b1b151a281c3cf/config {"projectId":"jesusisking-fb576","appId":"1:402878700894:web:dd7941f0b1b151a281c3cf","databaseURL":"https://jesusisking-fb576-default-rtdb.europe-west1.firebasedatabase.app","storageBucket":"jesusisking-fb576.appspot.com","locationId":"europe-west","apiKey":"AIzaSyCKSENADRJbScBhkqtj0lafN6nVx5bXfVI","authDomain":"jesusisking-fb576.firebaseapp.com","messagingSenderId":"402878700894","measurementId":"G-E027LNF97N"}
+[debug] [2024-06-20T09:26:10.680Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576 [none]
+[debug] [2024-06-20T09:26:20.497Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576 200
+[debug] [2024-06-20T09:26:20.498Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/jesusisking-fb576 {"projectId":"jesusisking-fb576","projectNumber":"402878700894","displayName":"JesusIsKing","name":"projects/jesusisking-fb576","resources":{"hostingSite":"jesusisking-fb576","realtimeDatabaseInstance":"jesusisking-fb576-default-rtdb","storageBucket":"jesusisking-fb576.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_42ca2565-d063-4112-bc3f-00aa668ad40b"}
+[info] i  hosting[jesusisking-fb576]: Serving hosting files from: build {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mbuild\u001b[22m"}}
+[info] +  hosting[jesusisking-fb576]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[debug] [2024-06-20T09:26:20.527Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-06-20T09:26:20.528Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-06-20T09:26:20.528Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\mati\\.cache\\firebase\\emulators\\ui-v1.11.8\\server\\server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\mati\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.11.8\\\\server\\\\server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-06-20T09:26:20.719Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2024-06-20T09:26:20.719Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "D:\Projects\jesusisking-project\jesusiskingfinal\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"D:\\Projects\\jesusisking-project\\jesusiskingfinal\\functions\" for Cloud Functions..."}}
+[debug] [2024-06-20T09:26:21.479Z] Validating nodejs source
+[debug] [2024-06-20T09:26:31.675Z] checkFunctionsSDKVersion was unable to fetch information from NPM Error: spawnSync C:\Windows\system32\cmd.exe ETIMEDOUT
+    at Object.spawnSync (node:internal/child_process:1124:20)
+    at Object.spawnSync (node:child_process:876:24)
+    at Function.spawnSync [as sync] (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\node_modules\cross-spawn\index.js:26:23)
+    at Object.getLatestSDKVersion (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\runtimes\node\versioning.js:54:25)
+    at Object.checkFunctionsSDKVersion (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\runtimes\node\versioning.js:74:32)
+    at Delegate.validate (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\functions\runtimes\node\index.js:85:20)
+    at FunctionsEmulator.discoverTriggers (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\functionsEmulator.js:301:35)
+    at async FunctionsEmulator.loadTriggers (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\functionsEmulator.js:330:34)
+    at async FunctionsEmulator.connect (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\functionsEmulator.js:267:13)
+    at async Object.startAll (C:\Users\mati\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\controller.js:596:13)
+[debug] [2024-06-20T09:26:31.676Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-06-20T09:26:31.720Z] Building nodejs source
+[debug] [2024-06-20T09:26:31.721Z] Failed to find version of module node: reached end of search path D:\Projects\jesusisking-project\jesusiskingfinal\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-06-20T09:26:31.724Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-06-20T09:26:31.756Z] Found firebase-functions binary at 'D:\Projects\jesusisking-project\jesusiskingfinal\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8187
+
+[error] !!  functions: Failed to load function definition from source: FirebaseError: User code failed to load. Cannot determine backend specification {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: User code failed to load. Cannot determine backend specification"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Firestore │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Hosting   │ 127.0.0.1:5000 │ n/a                             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Storage   │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage   │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

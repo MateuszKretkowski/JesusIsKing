@@ -30,6 +30,12 @@
     margin-bottom: 12px;
 }
 
+.description-settings {
+    font-family: "Forum", serif;
+    font-weight: 10000 !important;
+    font-style: normal;
+}
+
 .desc-wrapper-account-settings {
     display: flex;
     justify-content: start;

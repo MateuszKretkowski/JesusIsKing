@@ -145,6 +145,10 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
     console.log("blogModal: ", showModal);
   }, [showModal]);
 
+  function dodajPrzerwy(tekst: string): string {
+    return tekst.split('/przerwa/').join('\n\n');
+  }
+
   return (
     <motion.div
       className="blog"
@@ -172,7 +176,7 @@ function Blog({ id, author, authorId, date, description, name }: Blog) {
           transition={{delay: 1}}
         >
           <motion.h3 className="blog_description">
-            {blogData.description.toUpperCase()}
+            {dodajPrzerwy(blogData.description)}
           </motion.h3>
         </motion.div>
         <motion.div className="blog_lower-wrapper">
