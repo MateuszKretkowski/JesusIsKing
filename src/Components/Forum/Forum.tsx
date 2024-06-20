@@ -25,6 +25,7 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { UserAuth } from "../Contexts/AuthContext.tsx";
+import BusinessCard from "./BusinessCard.tsx";
 const defaultAvatar = require("../../Images/avatar.webp");
 
 function Forum() {
@@ -310,21 +311,7 @@ function Forum() {
                 initial={controls}
                 animate={controls}
                 >
-                <motion.img
-                  src={defaultAvatar}
-                  className="author_img"
-                  variants={addPostAuthorVariants}
-                  initial={controls}
-                  animate={controls}
-                />
-                <motion.h5
-                  className="author_name"
-                  variants={addPostAuthorVariants}
-                  initial={controls}
-                  animate={controls}
-                  >
-                  {author}
-                </motion.h5>
+                {isApplied ? <BusinessCard email={userEmail || ""} isPosts={true} isEven={false} /> : ""}
               </motion.div>
               <motion.div
                 variants={gradientVariants}

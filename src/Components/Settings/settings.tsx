@@ -235,6 +235,10 @@ function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
     setIsSmallLoading(newData);
   };
 
+  function dodajPrzerwy(tekst: string, n: number): string {
+    return tekst.split('/przerwa/').join('\n');
+  }
+
   return (
     <div className="settings">
       <AnimatePresence>
@@ -299,7 +303,7 @@ function wrapWordsAndLettersInSpan(name: string): JSX.Element[] {
                 exit={controls}
                 transition={{ type: "spring", bounce: 1, damping: 12 }}
               >
-                {userData.description}
+                {dodajPrzerwy(userData.description)}
               </motion.h2>
             </motion.div>
             <div className="links-wrapper">
