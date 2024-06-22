@@ -2,7 +2,7 @@
 
 ## Welcome to the GitHub Repository for JESUSISKING
 
-Created and meticulously curated by Mateusz Kretkowski, JESUSISKING stands as a beacon of innovation and spiritual nourishment in the digital realm. Embarking on a journey to blend the timeless teachings of Christianity with the dynamic potential of modern technology, JESUSISKING emerges as a project with a heartfelt mission. Here, we aim not only to bridge communities but also to foster an environment of learning, sharing, and growth through faith.
+Created and meticulously curated by Mateusz Kretkowski, JESUSISKING stands as a beacon of innovation and spiritual nourishment in the digital realm. Embarking on a journey to blend the timeless teachings of Christianity with the dynamic potential of modern technology, JESUSISKING emerges as a project with a heartfelt mission. Here, we aim not only to bridge communities but also to foster an environment of learning, sharing, and growth through faith..
 
 ### Project Vision
 
